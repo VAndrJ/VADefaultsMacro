@@ -260,6 +260,7 @@ indirect enum VariableType: Equatable {
         case "Int16": self = .int16
         case "Int32": self = .int32
         case "Int64": self = .int64
+        case "UInt": self = .uInt
         case "UInt8": self = .uInt8
         case "UInt16": self = .uInt16
         case "UInt32": self = .uInt32
@@ -275,7 +276,7 @@ indirect enum VariableType: Equatable {
 
     func addingCastIfNeeded(defaultValue: String?) -> String {
         switch self {
-        case .array, .dictionary, .int8, .int16, .int32, .int64, .uInt8, .uInt16, .uInt32, .uInt64, .nsString, .nsNumber, .date, .nsDate, .nsData:
+        case .array, .dictionary, .int8, .int16, .int32, .int64, .uInt8, .uInt16, .uInt32, .uInt64, .nsString, .nsNumber, .date, .nsDate, .nsData, .uInt:
             return " as? \(nativeType)"
         case let .optional(wrappedType):
             if wrappedType.isNilable {
@@ -283,7 +284,7 @@ indirect enum VariableType: Equatable {
             }
 
             return " as? \(wrappedType.nativeType)"
-        case .int, .bool, .uInt, .float, .double, .string, .url, .data:
+        case .int, .bool, .float, .double, .string, .url, .data:
             return ""
         }
     }
