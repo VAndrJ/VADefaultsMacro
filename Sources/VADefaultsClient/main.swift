@@ -144,6 +144,12 @@ int64Test = 42
 assert(int64Test == 42)
 
 @UserDefaultValue(defaultValue: 2)
+var uIntTest: UInt
+assert(uIntTest == 2)
+uIntTest = 42
+assert(uIntTest == 42)
+
+@UserDefaultValue(defaultValue: 2)
 var uInt8Test: UInt8
 assert(uInt8Test == 2)
 uInt8Test = 42

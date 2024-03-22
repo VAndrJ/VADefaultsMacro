@@ -386,6 +386,40 @@ extension VADefaultsTests {
         )
     }
 
+    func test_defaultMacro_uInt_failure() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue()
+            var value: UInt
+            """,
+            expandedSource: """
+            var value: UInt
+            """,
+            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_uInt() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue(defaultValue: 4)
+            var value: UInt
+            """,
+            expandedSource: """
+            var value: UInt {
+                get {
+                    UserDefaults.standard.object(forKey: "value") as? UInt ?? 4
+                }
+                set {
+                    UserDefaults.standard.setValue(newValue, forKey: "value")
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
     func test_defaultMacro_int8_failure() throws {
         assertMacroExpansion(
             """
