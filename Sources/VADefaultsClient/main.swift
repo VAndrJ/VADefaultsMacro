@@ -65,6 +65,12 @@ assert(stringTest == "a")
 stringTest = "42"
 assert(stringTest == "42")
 
+@UserDefaultValue()
+var stringOptionalTest: String?
+assert(stringOptionalTest == nil)
+stringOptionalTest = "42"
+assert(stringOptionalTest == "42")
+
 @UserDefaultValue(defaultValue: "a")
 var nsStringTest: NSString
 assert(nsStringTest == "a")
