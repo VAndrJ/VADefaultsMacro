@@ -1,0 +1,2 @@
+# VADefaultsMacro
+UserDefaults Macro.
