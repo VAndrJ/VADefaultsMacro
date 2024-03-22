@@ -759,5 +759,23 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
+
+    func test_defaultMacro_customType_failure() throws {
+        #if canImport(VADefaultsMacros)
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue()
+            var value: CustomType
+            """#,
+            expandedSource: #"""
+            var value: CustomType
+            """#,
+            diagnostics: [.init(message: UserDefaultValueError.unsupportedType.description, line: 1, column: 1)],
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
 }
 #endif
