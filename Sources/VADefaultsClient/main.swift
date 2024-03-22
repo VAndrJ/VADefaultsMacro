@@ -11,6 +11,18 @@ assert(boolTest == false)
 boolTest = true
 assert(boolTest == true)
 
+@UserDefaultValue(defaultValue: true)
+var boolDefaultTest: Bool
+assert(boolDefaultTest == true)
+boolDefaultTest = false
+assert(boolDefaultTest == false)
+
+@UserDefaultValue(defaultValue: true)
+var boolOptionalDefaultTest: Bool?
+assert(boolOptionalDefaultTest == true)
+boolOptionalDefaultTest = false
+assert(boolOptionalDefaultTest == false)
+
 @UserDefaultValue(defaultValue: Date(timeIntervalSince1970: 23))
 var dateTest: Date
 assert(dateTest == Date(timeIntervalSince1970: 23))
@@ -77,11 +89,29 @@ assert(nsStringTest == "a")
 nsStringTest = "42"
 assert(nsStringTest == "42")
 
+@UserDefaultValue(defaultValue: "a")
+var nsStringOptionalTest: NSString
+assert(nsStringOptionalTest == "a")
+nsStringOptionalTest = "42"
+assert(nsStringOptionalTest == "42")
+
 @UserDefaultValue(defaultValue: 4)
 var nsNumberTest: NSNumber
 assert(nsNumberTest == 4)
 nsNumberTest = 42
 assert(nsNumberTest == 42)
+
+@UserDefaultValue(defaultValue: 4)
+var nsNumberOptionalTest: NSNumber?
+assert(nsNumberOptionalTest == 4)
+nsNumberOptionalTest = 42
+assert(nsNumberOptionalTest == 42)
+
+@UserDefaultValue(defaultValue: 4.0)
+var nsNumberDeaultTest: NSNumber
+assert(nsNumberDeaultTest == 4)
+nsNumberDeaultTest = 42
+assert(nsNumberDeaultTest == 42)
 
 @UserDefaultValue(defaultValue: URL(string: "https://apple.com")!)
 var urlTest: URL
