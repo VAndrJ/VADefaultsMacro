@@ -64,7 +64,7 @@ var value: Int {
 - Codable
 
 
-- Value and `defaultValue` types comparison.
+- Value and `defaultValue` types comparison improvements.
 
 
 ## Author
