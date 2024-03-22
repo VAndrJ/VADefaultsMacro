@@ -51,7 +51,7 @@ public struct UserDefaultValue: AccessorMacro {
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-                "\(raw: defaultRegisteredValue)\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastAndDefaultValueIfNeeded(defaultValue: defaultValueParam))\(raw: defaultValue)"
+                "\(raw: defaultRegisteredValue)\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
@@ -273,13 +273,13 @@ indirect enum VariableType: Equatable {
         }
     }
 
-    func addingCastAndDefaultValueIfNeeded(defaultValue: String?) -> String {
+    func addingCastIfNeeded(defaultValue: String?) -> String {
         switch self {
         case .array, .dictionary, .int8, .int16, .int32, .int64, .uInt8, .uInt16, .uInt32, .uInt64, .nsString, .nsNumber, .date, .nsDate, .nsData:
             return " as? \(nativeType)"
         case let .optional(wrappedType):
             if wrappedType.isNilable {
-                return wrappedType.addingCastAndDefaultValueIfNeeded(defaultValue: defaultValue)
+                return wrappedType.addingCastIfNeeded(defaultValue: defaultValue)
             }
 
             return " as? \(wrappedType.nativeType)"
@@ -341,7 +341,7 @@ extension LabeledExprListSyntax {
         }
     }
     var defaultValueExpr: LabeledExprSyntax? { getLabeledExprSyntax("defaultValue") }
-    var defaultValueParam: String? { defaultValueExpr?.expression.description }
+    var defaultValueParam: String? { defaultValueExpr?.expression.trimmedDescription }
 
     private func getLabeledExprSyntax(_ text: String) -> LabeledExprSyntax? {
         first(where: { $0.label?.text == text })
@@ -349,9 +349,9 @@ extension LabeledExprListSyntax {
 }
 
 extension LabeledExprSyntax {
-    var string: String? { self.expression.as(StringLiteralExprSyntax.self)?.segments.first?.trimmed.description }
-    var member: String? { self.expression.as(MemberAccessExprSyntax.self)?.trimmed.description }
-    var decl: String? { self.expression.as(DeclReferenceExprSyntax.self)?.trimmed.description }
+    var string: String? { self.expression.as(StringLiteralExprSyntax.self)?.segments.first?.trimmedDescription }
+    var member: String? { self.expression.as(MemberAccessExprSyntax.self)?.trimmedDescription }
+    var decl: String? { self.expression.as(DeclReferenceExprSyntax.self)?.trimmedDescription }
 }
 
 extension VariableDeclSyntax {
