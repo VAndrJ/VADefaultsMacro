@@ -21,9 +21,9 @@ extension LabeledExprListSyntax {
             }
         } else if let decl = defaults.decl {
             return decl
-        } else {
-            return nil
-        }
+        } 
+
+        return nil
     }
     var keyParam: String? {
         guard let key = getLabeledExprSyntax("key") else {
@@ -36,9 +36,9 @@ extension LabeledExprListSyntax {
             return member
         } else if let decl = key.decl {
             return decl
-        } else {
-            return nil
         }
+
+        return nil
     }
     var defaultValueExpr: LabeledExprSyntax? { getLabeledExprSyntax("defaultValue") }
     var defaultValueParam: String? { defaultValueExpr?.expression.trimmedDescription }
@@ -53,9 +53,9 @@ extension LabeledExprListSyntax {
             return decl
         } else if let function = encoder.function {
             return function.asEncoder
-        } else {
-            return nil
-        }
+        } 
+
+        return nil
     }
     var decoderParam: String? {
         guard let decoder = getLabeledExprSyntax("decoder") else {
@@ -68,9 +68,9 @@ extension LabeledExprListSyntax {
             return decl
         } else if let function = decoder.function {
             return function.asDecoder
-        } else {
-            return nil
         }
+
+        return nil
     }
     var rawTypeParam: String? {
         guard let rawType = getLabeledExprSyntax("rawType") else {
@@ -79,9 +79,9 @@ extension LabeledExprListSyntax {
 
         if let member = rawType.memberBase {
             return member
-        } else {
-            return nil
-        }
+        } 
+
+        return nil
     }
 
     private func getLabeledExprSyntax(_ text: String) -> LabeledExprSyntax? {
