@@ -235,6 +235,18 @@ assert(codableEncoderDecoderTest == codableStruct)
 codableEncoderDecoderTest = CodableStruct()
 assert(codableEncoderDecoderTest == CodableStruct())
 
+enum ExampleEnum: Int {
+    case undefined = 0
+    case question = -1
+    case answer = 42
+}
+
+@RawUserDefaultValue(rawType: Int.self)
+var representableTest: ExampleEnum?
+
+@RawUserDefaultValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
+var representableDefaultTest: ExampleEnum
+
 UserDefaults.standard.clear()
 testDefaults.clear()
 
