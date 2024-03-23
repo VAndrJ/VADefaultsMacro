@@ -26,7 +26,7 @@ public struct UserDefaultValue: AccessorMacro {
             throw UserDefaultValueError.notVariable
         }
 
-        let variableType = try getVariableType(typeSyntax: typeAnnotation.type)
+        let variableType = try typeAnnotation.type.defaultsVariableType
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
         let defaultValueExpr = labeledExprListSyntax?.defaultValueExpr
         if let defaultValueExpr,
@@ -57,47 +57,5 @@ public struct UserDefaultValue: AccessorMacro {
                 "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
             }
         ]
-    }
-
-    private static func getVariableType(typeSyntax: TypeSyntax?) throws -> VariableType {
-        guard let typeSyntax else {
-            throw UserDefaultValueError.notVariable
-        }
-
-        if let identifierTypeSyntax = typeSyntax.as(IdentifierTypeSyntax.self) {
-            guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
-                throw UserDefaultValueError.notVariable
-            }
-            guard let variableType = VariableType(name: typeName) else {
-                throw UserDefaultValueError.unsupportedType
-            }
-
-            return variableType
-        }
-
-        if let optionalTypeSyntax = typeSyntax.as(OptionalTypeSyntax.self) {
-            let wrappedType = try getVariableType(typeSyntax: optionalTypeSyntax.wrappedType)
-
-            return .optional(wrapped: wrappedType)
-        }
-
-        if let arrayTypeSyntax = typeSyntax.as(ArrayTypeSyntax.self) {
-            let elementTypeName = try getVariableType(typeSyntax: arrayTypeSyntax.element)
-
-            return .array(element: elementTypeName)
-        }
-
-        if let dictionaryTypeSyntax = typeSyntax.as(DictionaryTypeSyntax.self) {
-            let keyType = try getVariableType(typeSyntax: dictionaryTypeSyntax.key)
-            guard keyType == .string else {
-                throw UserDefaultValueError.dictKeyType
-            }
-
-            let valueType = try getVariableType(typeSyntax: dictionaryTypeSyntax.value)
-
-            return .dictionary(key: keyType, value: valueType)
-        }
-
-        throw UserDefaultValueError.notVariable
     }
 }

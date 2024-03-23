@@ -5,7 +5,7 @@
 //  Created by Volodymyr Andriienko on 23.03.2024.
 //
 
-import Foundation
+import SwiftSyntax
 
 indirect enum LiteralExprType {
     enum VariableTypeMatching {

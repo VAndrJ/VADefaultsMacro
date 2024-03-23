@@ -95,6 +95,64 @@ extension VariableDeclSyntax {
 
 extension TypeSyntax {
     var isOptional: Bool { self.as(OptionalTypeSyntax.self) != nil }
+    var codableVariableType: String {
+        get throws {
+            if let identifierTypeSyntax = self.as(IdentifierTypeSyntax.self) {
+                guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
+                    throw UserDefaultValueError.notVariable
+                }
+
+                return typeName
+            }
+
+            if let optionalTypeSyntax = self.as(OptionalTypeSyntax.self) {
+                let wrappedType = try optionalTypeSyntax.wrappedType.codableVariableType
+
+                return wrappedType
+            }
+
+            throw UserDefaultValueError.notVariable
+        }
+    }
+    var defaultsVariableType: VariableType {
+        get throws {
+            if let identifierTypeSyntax = self.as(IdentifierTypeSyntax.self) {
+                guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
+                    throw UserDefaultValueError.notVariable
+                }
+                guard let variableType = VariableType(name: typeName) else {
+                    throw UserDefaultValueError.unsupportedType
+                }
+
+                return variableType
+            }
+
+            if let optionalTypeSyntax = self.as(OptionalTypeSyntax.self) {
+                let wrappedType = try optionalTypeSyntax.wrappedType.defaultsVariableType
+
+                return .optional(wrapped: wrappedType)
+            }
+
+            if let arrayTypeSyntax = self.as(ArrayTypeSyntax.self) {
+                let elementTypeName = try arrayTypeSyntax.element.defaultsVariableType
+
+                return .array(element: elementTypeName)
+            }
+
+            if let dictionaryTypeSyntax = self.as(DictionaryTypeSyntax.self) {
+                let keyType = try dictionaryTypeSyntax.key.defaultsVariableType
+                guard keyType == .string else {
+                    throw UserDefaultValueError.dictKeyType
+                }
+
+                let valueType = try dictionaryTypeSyntax.value.defaultsVariableType
+
+                return .dictionary(key: keyType, value: valueType)
+            }
+
+            throw UserDefaultValueError.notVariable
+        }
+    }
 }
 
 extension TypeAnnotationSyntax {

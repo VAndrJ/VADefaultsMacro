@@ -32,7 +32,7 @@ public struct CodableUserDefaultValue: AccessorMacro {
             throw UserDefaultValueError.defaultValueNeeded
         }
 
-        let variableType = try getVariableType(typeSyntax: typeAnnotation.type)
+        let variableType = try typeAnnotation.type.codableVariableType
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
         let encoderParam = labeledExprListSyntax?.encoderParam ?? .encoder
@@ -47,27 +47,5 @@ public struct CodableUserDefaultValue: AccessorMacro {
                 "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
             }
         ]
-    }
-
-    private static func getVariableType(typeSyntax: TypeSyntax?) throws -> String {
-        guard let typeSyntax else {
-            throw UserDefaultValueError.notVariable
-        }
-
-        if let identifierTypeSyntax = typeSyntax.as(IdentifierTypeSyntax.self) {
-            guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
-                throw UserDefaultValueError.notVariable
-            }
-
-            return typeName
-        }
-
-        if let optionalTypeSyntax = typeSyntax.as(OptionalTypeSyntax.self) {
-            let wrappedType = try getVariableType(typeSyntax: optionalTypeSyntax.wrappedType)
-
-            return wrappedType
-        }
-
-        throw UserDefaultValueError.notVariable
     }
 }
