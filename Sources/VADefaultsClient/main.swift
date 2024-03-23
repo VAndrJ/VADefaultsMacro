@@ -1,9 +1,18 @@
 import VADefaults
 import Foundation
 
-UserDefaults.standard.dictionaryRepresentation().forEach {
-    UserDefaults.standard.removeObject(forKey: $0.key)
+extension UserDefaults {
+
+    func clear() {
+        dictionaryRepresentation().forEach {
+            UserDefaults.standard.removeObject(forKey: $0.key)
+        }
+    }
 }
+
+let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
+testDefaults.clear()
+UserDefaults.standard.clear()
 
 @UserDefaultValue()
 var boolTest: Bool
@@ -204,6 +213,7 @@ struct NotCodableStruct: Equatable {
     var value = 2
 }
 let codableStruct = CodableStruct(value: 42)
+let notCodableStruct = NotCodableStruct(value: 42)
 let encoder = JSONEncoder()
 let decoder = JSONDecoder()
 
@@ -224,5 +234,8 @@ var codableEncoderDecoderTest: CodableStruct
 assert(codableEncoderDecoderTest == codableStruct)
 codableEncoderDecoderTest = CodableStruct()
 assert(codableEncoderDecoderTest == CodableStruct())
+
+UserDefaults.standard.clear()
+testDefaults.clear()
 
 print("success")
