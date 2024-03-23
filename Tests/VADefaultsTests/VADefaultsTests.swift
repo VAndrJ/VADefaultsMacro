@@ -10,6 +10,7 @@ import VADefaultsMacros
 
 let testMacros: [String: Macro.Type] = [
     "UserDefaultValue": UserDefaultValue.self,
+    "CodableUserDefaultValue": CodableUserDefaultValue.self,
 ]
 #endif
 

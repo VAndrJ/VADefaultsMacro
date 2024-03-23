@@ -197,4 +197,32 @@ assert(dictOptionalTest == nil)
 dictOptionalTest = ["4": 42]
 assert(dictOptionalTest == ["4": 42])
 
+struct CodableStruct: Codable, Equatable {
+    var value = 2
+}
+struct NotCodableStruct: Equatable {
+    var value = 2
+}
+let codableStruct = CodableStruct(value: 42)
+let encoder = JSONEncoder()
+let decoder = JSONDecoder()
+
+@CodableUserDefaultValue()
+var codableTest: CodableStruct?
+assert(codableTest == nil)
+codableTest = CodableStruct()
+assert(codableTest == CodableStruct())
+
+@CodableUserDefaultValue(defaultValue: codableStruct)
+var codableDefaultTest: CodableStruct
+assert(codableDefaultTest == codableStruct)
+codableDefaultTest = CodableStruct()
+assert(codableDefaultTest == CodableStruct())
+
+@CodableUserDefaultValue(key: "customKey", defaultValue: codableStruct, encoder: encoder, decoder: decoder)
+var codableEncoderDecoderTest: CodableStruct
+assert(codableEncoderDecoderTest == codableStruct)
+codableEncoderDecoderTest = CodableStruct()
+assert(codableEncoderDecoderTest == CodableStruct())
+
 print("success")
