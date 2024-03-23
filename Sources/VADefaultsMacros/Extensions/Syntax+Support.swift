@@ -72,6 +72,17 @@ extension LabeledExprListSyntax {
             return nil
         }
     }
+    var rawTypeParam: String? {
+        guard let rawType = getLabeledExprSyntax("rawType") else {
+            return nil
+        }
+
+        if let member = rawType.memberBase {
+            return member
+        } else {
+            return nil
+        }
+    }
 
     private func getLabeledExprSyntax(_ text: String) -> LabeledExprSyntax? {
         first(where: { $0.label?.text == text })
@@ -80,7 +91,9 @@ extension LabeledExprListSyntax {
 
 extension LabeledExprSyntax {
     var string: String? { self.expression.as(StringLiteralExprSyntax.self)?.segments.first?.trimmedDescription }
-    var member: String? { self.expression.as(MemberAccessExprSyntax.self)?.trimmedDescription }
+    var memberExpr: MemberAccessExprSyntax? { self.expression.as(MemberAccessExprSyntax.self) }
+    var member: String? { memberExpr?.trimmedDescription }
+    var memberBase: String? { memberExpr?.base?.trimmedDescription }
     var decl: String? { self.expression.as(DeclReferenceExprSyntax.self)?.trimmedDescription }
     var function: String? { self.expression.as(FunctionCallExprSyntax.self)?.trimmedDescription }
 }
@@ -157,4 +170,11 @@ extension TypeSyntax {
 
 extension TypeAnnotationSyntax {
     var isOptional: Bool { self.type.isOptional }
+    var orWrapped: String {
+        if let optionalTypeSyntax = self.type.as(OptionalTypeSyntax.self) {
+            return optionalTypeSyntax.wrappedType.trimmedDescription
+        } else {
+            return self.type.trimmedDescription
+        }
+    }
 }

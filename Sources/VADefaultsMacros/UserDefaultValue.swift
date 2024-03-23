@@ -55,7 +55,7 @@ public struct UserDefaultValue: AccessorMacro {
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
-            }
+            },
         ]
     }
 }

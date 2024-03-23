@@ -6,5 +6,6 @@ struct VADefaultsPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         UserDefaultValue.self,
         CodableUserDefaultValue.self,
+        RawUserDefaultValue.self,
     ]
 }

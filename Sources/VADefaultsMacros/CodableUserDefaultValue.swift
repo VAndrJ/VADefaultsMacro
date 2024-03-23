@@ -45,7 +45,7 @@ public struct CodableUserDefaultValue: AccessorMacro {
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
-            }
+            },
         ]
     }
 }
