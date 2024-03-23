@@ -40,8 +40,3 @@ extension String {
         }
     }
 }
-
-extension String? {
-    var isEmpty: Bool { self?.isEmpty ?? true }
-    var isNotEmpty: Bool { !isEmpty }
-}

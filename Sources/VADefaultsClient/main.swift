@@ -206,6 +206,18 @@ assert(dictOptionalTest == nil)
 dictOptionalTest = ["4": 42]
 assert(dictOptionalTest == ["4": 42])
 
+class StaticTestClass {
+    @UserDefaultValue(defaultValue: 42)
+    static var value: Int
+
+    static func check() {
+        assert(value == 42)
+        value = 1
+        assert(value == 1)
+    }
+}
+StaticTestClass.check()
+
 struct CodableStruct: Codable, Equatable {
     var value = 2
 }

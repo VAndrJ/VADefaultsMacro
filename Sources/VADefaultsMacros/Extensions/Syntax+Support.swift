@@ -14,7 +14,7 @@ extension LabeledExprListSyntax {
         }
 
         if let member = defaults.member {
-            if member == "standard" {
+            if member == ".standard" {
                 return nil
             } else {
                 return member.asDefaults
@@ -99,11 +99,7 @@ extension LabeledExprSyntax {
 }
 
 extension VariableDeclSyntax {
-    public var isLet: Bool { bindingSpecifier.tokenKind == .keyword(.let) }
     public var isVar: Bool { bindingSpecifier.tokenKind == .keyword(.var) }
-    public var isStatic: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.static) } }
-    public var isClass: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.class) } }
-    public var isInstance: Bool { !isClass && !isStatic }
 }
 
 extension TypeSyntax {

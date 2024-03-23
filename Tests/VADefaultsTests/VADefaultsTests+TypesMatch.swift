@@ -5,13 +5,13 @@
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
 
+#if canImport(VADefaultsMacros)
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 import Foundation
 import VADefaultsMacros
 
-#if canImport(VADefaultsMacros)
 extension VADefaultsTests {
 
     func test_defaultMacro_boolLiteral_bool_match() throws {

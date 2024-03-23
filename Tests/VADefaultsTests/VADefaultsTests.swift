@@ -1,11 +1,10 @@
+#if canImport(VADefaultsMacros)
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 import Foundation
 import VADefaultsMacros
 
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
-#if canImport(VADefaultsMacros)
 import VADefaultsMacros
 
 let testMacros: [String: Macro.Type] = [
@@ -13,13 +12,11 @@ let testMacros: [String: Macro.Type] = [
     "CodableUserDefaultValue": CodableUserDefaultValue.self,
     "RawUserDefaultValue": RawUserDefaultValue.self,
 ]
-#endif
 
 final class VADefaultsTests: XCTestCase {
     let testDefaults = UserDefaults(suiteName: "com.vandrj.test")
 
     func test_defaultMacro_standard() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue()
@@ -37,13 +34,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standardExplicit() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaults: .standard)
@@ -61,13 +54,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_nilableValue() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue()
@@ -85,13 +74,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_nilableValue_defaultValue() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaultValue: 42)
@@ -109,13 +94,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customKey() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(key: "key")
@@ -133,13 +114,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customKeyProperty() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(key: key)
@@ -157,13 +134,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customKeyStaticProperty() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(key: Self.key)
@@ -181,13 +154,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customKeyOtherClassStaticProperty() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(key: SomeClass.key)
@@ -205,13 +174,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customDefaultValue() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaultValue: 42)
@@ -230,13 +195,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customDefaultValueParamter() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaultValue: value)
@@ -255,13 +216,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customDefaultValueStaticParameter() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaultValue: Self.value)
@@ -280,13 +237,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_standard_customDefaultValueOtherClassStaticParameter() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             """
             @UserDefaultValue(defaultValue: SomeAwesomeClass.value)
@@ -305,13 +258,9 @@ final class VADefaultsTests: XCTestCase {
             """,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_custom() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             #"""
             @UserDefaultValue(defaults: testDefaults)
@@ -329,13 +278,9 @@ final class VADefaultsTests: XCTestCase {
             """#,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_customMember() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             #"""
             @UserDefaultValue(defaults: .testDefaults)
@@ -353,13 +298,9 @@ final class VADefaultsTests: XCTestCase {
             """#,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
     }
 
     func test_defaultMacro_customMemberExplicit() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             #"""
             @UserDefaultValue(defaults: UserDefaults.testDefaults)
@@ -377,13 +318,104 @@ final class VADefaultsTests: XCTestCase {
             """#,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
+    }
+
+    func test_defaultMacro_floatLiteral() throws {
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            var value: NSNumber
+            """#,
+            expandedSource: #"""
+            var value: NSNumber {
+                get {
+                    UserDefaults.testDefaults.object(forKey: "value") as? NSNumber ?? 3.14
+                }
+                set {
+                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                }
+            }
+            """#,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_stringLiteral() throws {
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: "A")
+            var value: NSString?
+            """#,
+            expandedSource: #"""
+            var value: NSString? {
+                get {
+                    UserDefaults.testDefaults.object(forKey: "value") as? NSString ?? "A"
+                }
+                set {
+                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                }
+            }
+            """#,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_floatLiteral_matchOptional() throws {
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            var value: Double?
+            """#,
+            expandedSource: #"""
+            var value: Double? {
+                get {
+                    UserDefaults.testDefaults.object(forKey: "value") as? Double ?? 3.14
+                }
+                set {
+                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                }
+            }
+            """#,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_floatLiteral_match() throws {
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            var value: Float
+            """#,
+            expandedSource: #"""
+            var value: Float {
+                get {
+                    UserDefaults.testDefaults.register(defaults: ["value": 3.14])
+                    return UserDefaults.testDefaults.float(forKey: "value")
+                }
+                set {
+                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                }
+            }
+            """#,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_floatLiteral_mismatch() throws {
+        assertMacroExpansion(
+            #"""
+            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            var value: Int
+            """#,
+            expandedSource: #"""
+            var value: Int
+            """#,
+            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            macros: testMacros
+        )
     }
 
     func test_defaultMacro_mixed() throws {
-        #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             #"""
             @UserDefaultValue(key: "customKey", defaultValue: 3, defaults: .testDefaults)
@@ -402,8 +434,34 @@ final class VADefaultsTests: XCTestCase {
             """#,
             macros: testMacros
         )
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
+    }
+
+    func test_defaultMacro_notVariable() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue()
+            var (a, b): Int
+            """,
+            expandedSource: """
+            var (a, b): Int
+            """,
+            diagnostics: [.init(message: UserDefaultValueError.notVariable.description, line: 1, column: 1)],
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_typesMismatch_int_string() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue(defaultValue: 1)
+            var value: String
+            """,
+            expandedSource: """
+            var value: String
+            """,
+            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            macros: testMacros
+        )
     }
 }
+#endif
