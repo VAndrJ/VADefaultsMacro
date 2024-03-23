@@ -9,3 +9,11 @@ public macro UserDefaultValue<T>(
     defaultValue: T? = Optional<Void>.none,
     defaults: UserDefaults = .standard
 ) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultValue")
+@attached(accessor)
+public macro CodableUserDefaultValue<T: Codable>(
+    key: String? = nil,
+    defaultValue: T? = Optional<String>.none,
+    defaults: UserDefaults = .standard,
+    encoder: JSONEncoder = .init(),
+    decoder: JSONDecoder = .init()
+) = #externalMacro(module: "VADefaultsMacros", type: "CodableUserDefaultValue")

@@ -10,8 +10,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-// TODO: - TBD
-
 public struct CodableUserDefaultValue: AccessorMacro {
 
     public static func expansion(
@@ -19,6 +17,57 @@ public struct CodableUserDefaultValue: AccessorMacro {
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
-        []
+        guard let variableDeclSyntax = declaration.as(VariableDeclSyntax.self),
+              variableDeclSyntax.isVar,
+              variableDeclSyntax.bindings.count == 1,
+              let firstBinding = variableDeclSyntax.bindings.first,
+              let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
+              let typeAnnotation = firstBinding.typeAnnotation else {
+            throw UserDefaultValueError.notVariable
+        }
+
+        let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
+        let defaultValueParam = labeledExprListSyntax?.defaultValueParam
+        if !typeAnnotation.isOptional && defaultValueParam == nil {
+            throw UserDefaultValueError.defaultValueNeeded
+        }
+
+        let variableType = try getVariableType(typeSyntax: typeAnnotation.type)
+        let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
+        let defaultsParam = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
+        let encoderParam = labeledExprListSyntax?.encoderParam ?? .encoder
+        let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
+        let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
+
+        return [
+            AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+                "\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
+            },
+            AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
+                "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
+            }
+        ]
+    }
+
+    private static func getVariableType(typeSyntax: TypeSyntax?) throws -> String {
+        guard let typeSyntax else {
+            throw UserDefaultValueError.notVariable
+        }
+
+        if let identifierTypeSyntax = typeSyntax.as(IdentifierTypeSyntax.self) {
+            guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
+                throw UserDefaultValueError.notVariable
+            }
+
+            return typeName
+        }
+
+        if let optionalTypeSyntax = typeSyntax.as(OptionalTypeSyntax.self) {
+            let wrappedType = try getVariableType(typeSyntax: optionalTypeSyntax.wrappedType)
+
+            return wrappedType
+        }
+
+        throw UserDefaultValueError.notVariable
     }
 }

@@ -42,6 +42,36 @@ extension LabeledExprListSyntax {
     }
     var defaultValueExpr: LabeledExprSyntax? { getLabeledExprSyntax("defaultValue") }
     var defaultValueParam: String? { defaultValueExpr?.expression.trimmedDescription }
+    var encoderParam: String? {
+        guard let encoder = getLabeledExprSyntax("encoder") else {
+            return nil
+        }
+
+        if let member = encoder.member {
+            return member.asEncoder
+        } else if let decl = encoder.decl {
+            return decl
+        } else if let function = encoder.function {
+            return function.asEncoder
+        } else {
+            return nil
+        }
+    }
+    var decoderParam: String? {
+        guard let decoder = getLabeledExprSyntax("decoder") else {
+            return nil
+        }
+
+        if let member = decoder.member {
+            return member.asDecoder
+        } else if let decl = decoder.decl {
+            return decl
+        } else if let function = decoder.function {
+            return function.asDecoder
+        } else {
+            return nil
+        }
+    }
 
     private func getLabeledExprSyntax(_ text: String) -> LabeledExprSyntax? {
         first(where: { $0.label?.text == text })
@@ -52,6 +82,7 @@ extension LabeledExprSyntax {
     var string: String? { self.expression.as(StringLiteralExprSyntax.self)?.segments.first?.trimmedDescription }
     var member: String? { self.expression.as(MemberAccessExprSyntax.self)?.trimmedDescription }
     var decl: String? { self.expression.as(DeclReferenceExprSyntax.self)?.trimmedDescription }
+    var function: String? { self.expression.as(FunctionCallExprSyntax.self)?.trimmedDescription }
 }
 
 extension VariableDeclSyntax {
@@ -60,4 +91,12 @@ extension VariableDeclSyntax {
     public var isStatic: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.static) } }
     public var isClass: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.class) } }
     public var isInstance: Bool { !isClass && !isStatic }
+}
+
+extension TypeSyntax {
+    var isOptional: Bool { self.as(OptionalTypeSyntax.self) != nil }
+}
+
+extension TypeAnnotationSyntax {
+    var isOptional: Bool { self.type.isOptional }
 }
