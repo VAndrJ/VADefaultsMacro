@@ -42,16 +42,19 @@ public struct UserDefaultValue: AccessorMacro {
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
-        let defaultRegisteredValue = defaultValueParam.flatMap {
-            variableType.isDefaultsNilable ? nil : "\(defaultsParam).register(defaults: [\(keyParam): \($0)])\n    return "
-        } ?? ""
-        let defaultValue = defaultValueParam.flatMap {
-            variableType.isDefaultsNilable ? " ?? \($0)" : nil
-        } ?? ""
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-                "\(raw: defaultRegisteredValue)\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))\(raw: defaultValue)"
+                if let defaultValueParam {
+                    if variableType.isDefaultsNilable {
+                        "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
+                    } else  {
+                        "\(raw: defaultsParam).register(defaults: [\(raw: keyParam): \(raw: defaultValueParam)])"
+                        "return \(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
+                    }
+                } else {
+                    "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
+                }
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
