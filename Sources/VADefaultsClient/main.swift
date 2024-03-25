@@ -1,9 +1,18 @@
 import VADefaults
 import Foundation
 
-UserDefaults.standard.dictionaryRepresentation().forEach {
-    UserDefaults.standard.removeObject(forKey: $0.key)
+extension UserDefaults {
+
+    func clear() {
+        dictionaryRepresentation().forEach {
+            UserDefaults.standard.removeObject(forKey: $0.key)
+        }
+    }
 }
+
+let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
+testDefaults.clear()
+UserDefaults.standard.clear()
 
 @UserDefaultValue()
 var boolTest: Bool
@@ -144,6 +153,12 @@ int64Test = 42
 assert(int64Test == 42)
 
 @UserDefaultValue(defaultValue: 2)
+var uIntTest: UInt
+assert(uIntTest == 2)
+uIntTest = 42
+assert(uIntTest == 42)
+
+@UserDefaultValue(defaultValue: 2)
 var uInt8Test: UInt8
 assert(uInt8Test == 2)
 uInt8Test = 42
@@ -190,5 +205,61 @@ var dictOptionalTest: [String: Int]?
 assert(dictOptionalTest == nil)
 dictOptionalTest = ["4": 42]
 assert(dictOptionalTest == ["4": 42])
+
+class StaticTestClass {
+    @UserDefaultValue(defaultValue: 42)
+    static var value: Int
+
+    static func check() {
+        assert(value == 42)
+        value = 1
+        assert(value == 1)
+    }
+}
+StaticTestClass.check()
+
+struct CodableStruct: Codable, Equatable {
+    var value = 2
+}
+struct NotCodableStruct: Equatable {
+    var value = 2
+}
+let codableStruct = CodableStruct(value: 42)
+let notCodableStruct = NotCodableStruct(value: 42)
+let encoder = JSONEncoder()
+let decoder = JSONDecoder()
+
+@CodableUserDefaultValue()
+var codableTest: CodableStruct?
+assert(codableTest == nil)
+codableTest = CodableStruct()
+assert(codableTest == CodableStruct())
+
+@CodableUserDefaultValue(defaultValue: codableStruct)
+var codableDefaultTest: CodableStruct
+assert(codableDefaultTest == codableStruct)
+codableDefaultTest = CodableStruct()
+assert(codableDefaultTest == CodableStruct())
+
+@CodableUserDefaultValue(key: "customKey", defaultValue: codableStruct, encoder: encoder, decoder: decoder)
+var codableEncoderDecoderTest: CodableStruct
+assert(codableEncoderDecoderTest == codableStruct)
+codableEncoderDecoderTest = CodableStruct()
+assert(codableEncoderDecoderTest == CodableStruct())
+
+enum ExampleEnum: Int {
+    case undefined = 0
+    case question = -1
+    case answer = 42
+}
+
+@RawUserDefaultValue(rawType: Int.self)
+var representableTest: ExampleEnum?
+
+@RawUserDefaultValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
+var representableDefaultTest: ExampleEnum
+
+UserDefaults.standard.clear()
+testDefaults.clear()
 
 print("success")

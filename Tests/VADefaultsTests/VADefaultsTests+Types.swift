@@ -5,13 +5,13 @@
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
 
+#if canImport(VADefaultsMacros)
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 import Foundation
 import VADefaultsMacros
 
-#if canImport(VADefaultsMacros)
 extension VADefaultsTests {
 
     func test_defaultMacro_bool() throws {
@@ -376,6 +376,40 @@ extension VADefaultsTests {
             var value: NSData {
                 get {
                     UserDefaults.standard.object(forKey: "value") as? NSData ?? NSData()
+                }
+                set {
+                    UserDefaults.standard.setValue(newValue, forKey: "value")
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_uInt_failure() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue()
+            var value: UInt
+            """,
+            expandedSource: """
+            var value: UInt
+            """,
+            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_uInt() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultValue(defaultValue: 4)
+            var value: UInt
+            """,
+            expandedSource: """
+            var value: UInt {
+                get {
+                    UserDefaults.standard.object(forKey: "value") as? UInt ?? 4
                 }
                 set {
                     UserDefaults.standard.setValue(newValue, forKey: "value")
