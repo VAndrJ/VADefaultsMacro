@@ -58,13 +58,66 @@ var value: Int {
 ```
 
 
-#### Future improvements under development:
+### @CodableUserDefaultValue
 
 
-- Codable
+Adds a getter and setter wrapping `UserDefaults` for `Codable` values.
+
+
+Example 1:
+
+
+```swift
+@CodableUserDefaultValue()
+var myCodableValue: MyCodable?
+
+// expands to 
+
+var value: MyCodable? {
+    get {
+        UserDefaults.standard.data(forKey: "myCodableValue").flatMap {
+            try? JSONDecoder().decode(MyCodable.self, from: $0)
+        }
+    }
+    set {
+        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "myCodableValue")
+    }
+}
+```
+
+
+Example 2:
+
+
+```swift
+@CodableUserDefaultValue(encoder: customEncoder, decoder: customDecoder)
+var myCodableValue: MyCodable?
+
+// expands to 
+
+var value: MyCodable? {
+    get {
+        UserDefaults.standard.data(forKey: "myCodableValue").flatMap {
+            try? customDecoder.decode(MyCodable.self, from: $0)
+        }
+    }
+    set {
+        UserDefaults.standard.set(try? customEncoder.encode(newValue), forKey: "myCodableValue")
+    }
+}
+```
+
+
+#### TBD:
 
 
 - Value and `defaultValue` types comparison improvements.
+
+
+- `Codable` check. Throwable.
+
+
+- `RawRepresentable` improvements.
 
 
 ## Author
