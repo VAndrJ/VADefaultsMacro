@@ -73,7 +73,7 @@ var myCodableValue: MyCodable?
 
 // expands to 
 
-var value: MyCodable? {
+var myCodableValue: MyCodable? {
     get {
         UserDefaults.standard.data(forKey: "myCodableValue").flatMap {
             try? JSONDecoder().decode(MyCodable.self, from: $0)
@@ -95,7 +95,7 @@ var myCodableValue: MyCodable?
 
 // expands to 
 
-var value: MyCodable? {
+var myCodableValue: MyCodable? {
     get {
         UserDefaults.standard.data(forKey: "myCodableValue").flatMap {
             try? customDecoder.decode(MyCodable.self, from: $0)
@@ -103,6 +103,52 @@ var value: MyCodable? {
     }
     set {
         UserDefaults.standard.set(try? customEncoder.encode(newValue), forKey: "myCodableValue")
+    }
+}
+```
+
+
+### @RawUserDefaultValue
+
+
+Adds a getter and setter wrapping `UserDefaults` for `RawRepresentable` values.
+
+
+Example 1:
+
+
+```swift
+@RawUserDefaultValue(rawType: Int.self)
+var value: MyRawRepresentable?
+
+// expands to 
+
+var value: MyRawRepresentable? {
+    get {
+        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(MyRawRepresentable.init(rawValue:))
+    }
+    set {
+        UserDefaults.standard.setValue(newValue?.rawValue, forKey: "value")
+    }
+}
+```
+
+
+Example 2:
+
+
+```swift
+@RawUserDefaultValue(rawType: Int.self, defaultValue: MyRawRepresentable.undefined)
+var value: MyRawRepresentable
+
+// expands to 
+
+var value: MyRawRepresentable {
+    get {
+        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(MyRawRepresentable.init(rawValue:)) ?? MyRawRepresentable.undefined
+    }
+    set {
+        UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
     }
 }
 ```

@@ -255,9 +255,15 @@ enum ExampleEnum: Int {
 
 @RawUserDefaultValue(rawType: Int.self)
 var representableTest: ExampleEnum?
+assert(representableTest == nil)
+representableTest = .question
+assert(representableTest == .question)
 
 @RawUserDefaultValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
 var representableDefaultTest: ExampleEnum
+assert(representableDefaultTest == .undefined)
+representableDefaultTest = .answer
+assert(representableDefaultTest == .answer)
 
 UserDefaults.standard.clear()
 testDefaults.clear()
