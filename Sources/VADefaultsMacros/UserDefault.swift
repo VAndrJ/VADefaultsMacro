@@ -26,7 +26,7 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
               variableDeclSyntax.bindings.count == 1,
               !variableDeclSyntax.bindings.contains(where: {
                   $0.initializer != nil || $0.accessorBlock != nil
-              })  else {
+              }) else {
             return []
         }
 
@@ -51,8 +51,9 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
         }
         
         return [
-            "private let \(raw: variableName): \(raw: self.defaults)",
             """
+            private let \(raw: variableName): \(raw: self.defaults)
+
             \(raw: modifier)init(\(raw: variableName): \(raw: self.defaults) = \(raw: defaults)) {
                 self.\(raw: variableName) = \(raw: variableName)
             }

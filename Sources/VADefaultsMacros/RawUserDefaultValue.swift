@@ -50,11 +50,10 @@ public struct RawUserDefaultValue: AccessorMacro {
             throw UserDefaultValueError.defaultValueNeeded
         }
 
-        
-        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultValue = defaultValueParam.map { " ?? \($0)" } ?? ""
-        
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
+
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
                 "(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"

@@ -48,10 +48,10 @@ public struct CodableUserDefaultValue: AccessorMacro {
 
         let variableType = try typeAnnotation.type.codableVariableType
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
         let encoderParam = labeledExprListSyntax?.encoderParam ?? .encoder
         let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
         let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

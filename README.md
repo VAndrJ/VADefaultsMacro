@@ -154,10 +154,93 @@ var value: MyRawRepresentable {
 ```
 
 
+### @UserDefault
+
+
+Adds a variable and initializer to the class, and adds getters and setters to the variables wrapping `UserDefaults`.
+
+
+Example 1:
+
+
+```swift
+@UserDefault
+class Defaults {
+    var someVariable: Int
+    let someConstant = true
+}
+
+// expands to 
+
+class Defaults {
+    var someVariable: Int {
+        get {
+            userDefaults.integer(forKey: "someVariable")
+        }
+        set {
+            userDefaults.setValue(newValue, forKey: "someVariable")
+        }
+    }
+    let someConstant = true
+
+    private let userDefaults: UserDefaults
+
+    init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.userDefaults = userDefaults
+    }
+}
+```
+
+
+Example 2:
+
+
+```swift
+@UserDefault(defaults: .test)
+public class Defaults {
+    static var staticVariable: Int
+    @DefaultValue(key: "customKey")
+    var someVariable: Int
+    var computedVariable: Bool { true }
+}
+
+// expands to 
+
+public class Defaults {
+    static var staticVariable: Int {
+        get {
+            userDefaults.integer(forKey: "staticVariable")
+        }
+        set {
+            userDefaults.setValue(newValue, forKey: "staticVariable")
+        }
+    }
+    var someVariable: Int {
+        get {
+            userDefaults.integer(forKey: "customKey")
+        }
+        set {
+            userDefaults.setValue(newValue, forKey: "customKey")
+        }
+    }
+    var computedVariable: Bool { true }
+
+    private let userDefaults: UserDefaults
+
+    public init(userDefaults: UserDefaults = UserDefaults.test) {
+        self.userDefaults = userDefaults
+    }
+}
+```
+
+
 #### TBD:
 
 
 - Value and `defaultValue` types comparison improvements.
+
+
+- `UserDefault` additions.
 
 
 - `Codable` check. Throwable.
