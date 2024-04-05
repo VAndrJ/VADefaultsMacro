@@ -1,5 +1,5 @@
 //
-//  UserDefault.swift
+//  UserDefaultsData.swift
 //
 //
 //  Created by Volodymyr Andriienko on 05.04.2024.
@@ -10,7 +10,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct UserDefault: MemberMacro, MemberAttributeMacro {
+public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
     public static let variableName = "userDefaults"
     public static let defaults = "UserDefaults"
 
@@ -23,7 +23,7 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
         guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
               variableDeclSyntax.isVar,
               !variableDeclSyntax.isStatic,
-              !variableDeclSyntax.attributes.isDefaultValueMacro,
+              !variableDeclSyntax.attributes.isDefaultsValueMacro,
               variableDeclSyntax.bindings.count == 1,
               !variableDeclSyntax.bindings.contains(where: {
                   $0.initializer != nil || $0.accessorBlock != nil
@@ -31,7 +31,7 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
             return []
         }
 
-        return ["@\(raw: String(describing: DefaultValue.self))"]
+        return ["@\(raw: String(describing: DefaultsValue.self))"]
     }
 
     public static func expansion(
@@ -48,7 +48,7 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
         } else if let initModifier = declaration.as(StructDeclSyntax.self)?.modifiers.initModifier {
             modifier = initModifier
         } else {
-            throw UserDefaultValueError.classOfStructNeeded
+            throw UserDefaultsValueError.classOfStructNeeded
         }
         
         return [

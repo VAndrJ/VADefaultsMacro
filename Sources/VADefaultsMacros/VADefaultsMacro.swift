@@ -4,12 +4,12 @@ import SwiftSyntaxMacros
 @main
 struct VADefaultsPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        UserDefaultValue.self,
-        CodableUserDefaultValue.self,
-        RawUserDefaultValue.self,
-        UserDefault.self,
-        DefaultValue.self,
-        CodableDefaultValue.self,
-        RawDefaultValue.self,
+        UserDefaultsValue.self,
+        CodableUserDefaultsValue.self,
+        RawUserDefaultsValue.self,
+        UserDefaultsData.self,
+        DefaultsValue.self,
+        CodableDefaultsValue.self,
+        RawDefaultsValue.self,
     ]
 }

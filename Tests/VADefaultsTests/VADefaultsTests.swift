@@ -8,13 +8,13 @@ import VADefaultsMacros
 import VADefaultsMacros
 
 let testMacros: [String: Macro.Type] = [
-    "UserDefaultValue": UserDefaultValue.self,
-    "CodableUserDefaultValue": CodableUserDefaultValue.self,
-    "RawUserDefaultValue": RawUserDefaultValue.self,
-    "UserDefault": UserDefault.self,
-    "DefaultValue": DefaultValue.self,
-    "CodableDefaultValue": CodableDefaultValue.self,
-    "RawDefaultValue": RawDefaultValue.self,
+    "UserDefaultsValue": UserDefaultsValue.self,
+    "CodableUserDefaultsValue": CodableUserDefaultsValue.self,
+    "RawUserDefaultsValue": RawUserDefaultsValue.self,
+    "UserDefaultsData": UserDefaultsData.self,
+    "DefaultsValue": DefaultsValue.self,
+    "CodableDefaultsValue": CodableDefaultsValue.self,
+    "RawDefaultsValue": RawDefaultsValue.self,
 ]
 
 final class VADefaultsTests: XCTestCase {
@@ -23,7 +23,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var launchesCount: Int
             """,
             expandedSource: """
@@ -43,7 +43,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standardExplicit() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaults: .standard)
+            @UserDefaultsValue(defaults: .standard)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -63,7 +63,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_nilableValue() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var launchesCount: Int?
             """,
             expandedSource: """
@@ -83,7 +83,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_nilableValue_defaultValue() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 42)
+            @UserDefaultsValue(defaultValue: 42)
             var launchesCount: Int?
             """,
             expandedSource: """
@@ -103,7 +103,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_customKey() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(key: "key")
+            @UserDefaultsValue(key: "key")
             var launchesCount: Int
             """,
             expandedSource: """
@@ -123,7 +123,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_customKeyProperty() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(key: key)
+            @UserDefaultsValue(key: key)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -143,7 +143,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_customKeyStaticProperty() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(key: Self.key)
+            @UserDefaultsValue(key: Self.key)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -163,7 +163,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_customKeyOtherClassStaticProperty() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(key: SomeClass.key)
+            @UserDefaultsValue(key: SomeClass.key)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -180,10 +180,10 @@ final class VADefaultsTests: XCTestCase {
         )
     }
 
-    func test_defaultMacro_standard_customDefaultValue() throws {
+    func test_defaultMacro_standard_customDefaultsValue() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 42)
+            @UserDefaultsValue(defaultValue: 42)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -201,10 +201,10 @@ final class VADefaultsTests: XCTestCase {
         )
     }
 
-    func test_defaultMacro_standard_customDefaultValueParamter() throws {
+    func test_defaultMacro_standard_customDefaultsValueParamter() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: value)
+            @UserDefaultsValue(defaultValue: value)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -222,10 +222,10 @@ final class VADefaultsTests: XCTestCase {
         )
     }
 
-    func test_defaultMacro_standard_customDefaultValueStaticParameter() throws {
+    func test_defaultMacro_standard_customDefaultsValueStaticParameter() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: Self.value)
+            @UserDefaultsValue(defaultValue: Self.value)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -243,10 +243,10 @@ final class VADefaultsTests: XCTestCase {
         )
     }
 
-    func test_defaultMacro_standard_customDefaultValueOtherClassStaticParameter() throws {
+    func test_defaultMacro_standard_customDefaultsValueOtherClassStaticParameter() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: SomeAwesomeClass.value)
+            @UserDefaultsValue(defaultValue: SomeAwesomeClass.value)
             var launchesCount: Int
             """,
             expandedSource: """
@@ -267,7 +267,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_custom() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: testDefaults)
+            @UserDefaultsValue(defaults: testDefaults)
             var launchesCount: Int
             """#,
             expandedSource: #"""
@@ -287,7 +287,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_customMember() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: .testDefaults)
+            @UserDefaultsValue(defaults: .testDefaults)
             var launchesCount: Int
             """#,
             expandedSource: #"""
@@ -307,7 +307,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_customMemberExplicit() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults)
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults)
             var launchesCount: Int
             """#,
             expandedSource: #"""
@@ -327,7 +327,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_floatLiteral() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
             var value: NSNumber
             """#,
             expandedSource: #"""
@@ -347,7 +347,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_stringLiteral() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: "A")
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults, defaultValue: "A")
             var value: NSString?
             """#,
             expandedSource: #"""
@@ -367,7 +367,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_floatLiteral_matchOptional() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
             var value: Double?
             """#,
             expandedSource: #"""
@@ -387,7 +387,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_floatLiteral_match() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
             var value: Float
             """#,
             expandedSource: #"""
@@ -408,13 +408,13 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_floatLiteral_mismatch() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
+            @UserDefaultsValue(defaults: UserDefaults.testDefaults, defaultValue: 3.14)
             var value: Int
             """#,
             expandedSource: #"""
             var value: Int
             """#,
-            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -422,7 +422,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_mixed() throws {
         assertMacroExpansion(
             #"""
-            @UserDefaultValue(key: "customKey", defaultValue: 3, defaults: .testDefaults)
+            @UserDefaultsValue(key: "customKey", defaultValue: 3, defaults: .testDefaults)
             var launchesCount: Int
             """#,
             expandedSource: #"""
@@ -443,13 +443,13 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_notVariable() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var (a, b): Int
             """,
             expandedSource: """
             var (a, b): Int
             """,
-            diagnostics: [.init(message: UserDefaultValueError.notVariable.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -457,13 +457,13 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_typesMismatch_int_string() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 1)
+            @UserDefaultsValue(defaultValue: 1)
             var value: String
             """,
             expandedSource: """
             var value: String
             """,
-            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
     }

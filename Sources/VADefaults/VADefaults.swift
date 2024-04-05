@@ -4,91 +4,91 @@
 import Foundation
 
 @attached(accessor)
-public macro UserDefaultValue(
+public macro UserDefaultsValue(
     key: String? = nil,
     defaults: UserDefaults = .standard
-) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultsValue")
 
 @attached(accessor)
-public macro UserDefaultValue<T>(
+public macro UserDefaultsValue<T>(
     key: String? = nil,
     defaultValue: T?,
     defaults: UserDefaults = .standard
-) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultsValue")
 
 @attached(accessor)
-public macro DefaultValue(
+public macro DefaultsValue(
     key: String? = nil
-) = #externalMacro(module: "VADefaultsMacros", type: "DefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "DefaultsValue")
 
 @attached(accessor)
-public macro DefaultValue<T>(
+public macro DefaultsValue<T>(
     key: String? = nil,
     defaultValue: T?
-) = #externalMacro(module: "VADefaultsMacros", type: "DefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "DefaultsValue")
 
 @attached(accessor)
-public macro CodableUserDefaultValue(
+public macro CodableUserDefaultsValue(
     key: String? = nil,
     defaults: UserDefaults = .standard,
     encoder: JSONEncoder = .init(),
     decoder: JSONDecoder = .init()
-) = #externalMacro(module: "VADefaultsMacros", type: "CodableUserDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "CodableUserDefaultsValue")
 
 @attached(accessor)
-public macro CodableUserDefaultValue<T: Codable>(
+public macro CodableUserDefaultsValue<T: Codable>(
     key: String? = nil,
     defaultValue: T?,
     defaults: UserDefaults = .standard,
     encoder: JSONEncoder = .init(),
     decoder: JSONDecoder = .init()
-) = #externalMacro(module: "VADefaultsMacros", type: "CodableUserDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "CodableUserDefaultsValue")
 
 @attached(accessor)
-public macro CodableDefaultValue(
+public macro CodableDefaultsValue(
     key: String? = nil,
     encoder: JSONEncoder = .init(),
     decoder: JSONDecoder = .init()
-) = #externalMacro(module: "VADefaultsMacros", type: "CodableDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "CodableDefaultsValue")
 
 @attached(accessor)
-public macro CodableDefaultValue<T: Codable>(
+public macro CodableDefaultsValue<T: Codable>(
     key: String? = nil,
     defaultValue: T?,
     encoder: JSONEncoder = .init(),
     decoder: JSONDecoder = .init()
-) = #externalMacro(module: "VADefaultsMacros", type: "CodableDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "CodableDefaultsValue")
 
 @attached(accessor)
-public macro RawUserDefaultValue<R>(
+public macro RawUserDefaultsValue<R>(
     rawType: R.Type,
     key: String? = nil,
     defaults: UserDefaults = .standard
-) = #externalMacro(module: "VADefaultsMacros", type: "RawUserDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "RawUserDefaultsValue")
 
 @attached(accessor)
-public macro RawUserDefaultValue<T: RawRepresentable, R>(
+public macro RawUserDefaultsValue<T: RawRepresentable, R>(
     rawType: R.Type,
     key: String? = nil,
     defaultValue: T?,
     defaults: UserDefaults = .standard
-) = #externalMacro(module: "VADefaultsMacros", type: "RawUserDefaultValue") where T.RawValue == R
+) = #externalMacro(module: "VADefaultsMacros", type: "RawUserDefaultsValue") where T.RawValue == R
 
 @attached(accessor)
-public macro RawDefaultValue<R>(
+public macro RawDefaultsValue<R>(
     rawType: R.Type,
     key: String? = nil
-) = #externalMacro(module: "VADefaultsMacros", type: "RawDefaultValue")
+) = #externalMacro(module: "VADefaultsMacros", type: "RawDefaultsValue")
 
 @attached(accessor)
-public macro RawDefaultValue<T: RawRepresentable, R>(
+public macro RawDefaultsValue<T: RawRepresentable, R>(
     rawType: R.Type,
     key: String? = nil,
     defaultValue: T?
-) = #externalMacro(module: "VADefaultsMacros", type: "RawDefaultValue") where T.RawValue == R
+) = #externalMacro(module: "VADefaultsMacros", type: "RawDefaultsValue") where T.RawValue == R
 
 @attached(member, names: named(userDefaults), named(init(userDefaults:)))
 @attached(memberAttribute)
-public macro UserDefault(
+public macro UserDefaultsData(
     defaults: UserDefaults = .standard
-) = #externalMacro(module: "VADefaultsMacros", type: "UserDefault")
+) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultsData")

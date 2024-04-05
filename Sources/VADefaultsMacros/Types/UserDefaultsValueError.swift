@@ -1,5 +1,5 @@
 //
-//  UserDefaultValueError.swift
+//  UserDefaultsValueError.swift
 //  
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum UserDefaultValueError: Error, CustomStringConvertible {
+public enum UserDefaultsValueError: Error, CustomStringConvertible {
     case notVariable
     case defaultValueNeeded
     case dictKeyType

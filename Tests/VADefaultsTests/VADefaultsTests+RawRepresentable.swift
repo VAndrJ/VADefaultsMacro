@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_defaultMacro_representable() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self)
+            @RawUserDefaultsValue(rawType: Int.self)
             var value: ExampleEnum?
             """,
             expandedSource: """
@@ -37,13 +37,13 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_failure() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self)
+            @RawUserDefaultsValue(rawType: Int.self)
             var value: ExampleEnum
             """,
             expandedSource: """
             var value: ExampleEnum
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -51,7 +51,7 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_defaultValue() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
+            @RawUserDefaultsValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
             var value: ExampleEnum
             """,
             expandedSource: """
@@ -71,7 +71,7 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_defaultValueMember() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self, defaultValue: parameter)
+            @RawUserDefaultsValue(rawType: Int.self, defaultValue: parameter)
             var value: ExampleEnum
             """,
             expandedSource: """
@@ -91,7 +91,7 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_defaultValueDecl() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self, defaultValue: Self.parameter)
+            @RawUserDefaultsValue(rawType: Int.self, defaultValue: Self.parameter)
             var value: ExampleEnum
             """,
             expandedSource: """
@@ -111,13 +111,13 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_notVariable() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: Int.self)
+            @RawUserDefaultsValue(rawType: Int.self)
             var (a, b): ExampleEnum
             """,
             expandedSource: """
             var (a, b): ExampleEnum
             """,
-            diagnostics: [.init(message: UserDefaultValueError.notVariable.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -125,13 +125,13 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_unsupportedType() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue(rawType: SomeCustomType.self)
+            @RawUserDefaultsValue(rawType: SomeCustomType.self)
             var value: ExampleEnum
             """,
             expandedSource: """
             var value: ExampleEnum
             """,
-            diagnostics: [.init(message: UserDefaultValueError.unsupportedType.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -139,13 +139,13 @@ extension VADefaultsTests {
     func test_defaultMacro_representable_rawTypeRequired_unsupportedType() throws {
         assertMacroExpansion(
             """
-            @RawUserDefaultValue()
+            @RawUserDefaultsValue()
             var value: ExampleEnum
             """,
             expandedSource: """
             var value: ExampleEnum
             """,
-            diagnostics: [.init(message: UserDefaultValueError.unsupportedType.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )
     }

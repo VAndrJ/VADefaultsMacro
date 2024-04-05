@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_defaultMacro_bool() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Bool
             """,
             expandedSource: """
@@ -37,7 +37,7 @@ extension VADefaultsTests {
     func test_defaultMacro_bool_optional() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Bool?
             """,
             expandedSource: """
@@ -57,7 +57,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Int
             """,
             expandedSource: """
@@ -77,7 +77,7 @@ extension VADefaultsTests {
     func test_defaultMacro_float() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Float
             """,
             expandedSource: """
@@ -97,7 +97,7 @@ extension VADefaultsTests {
     func test_defaultMacro_double() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Double
             """,
             expandedSource: """
@@ -117,13 +117,13 @@ extension VADefaultsTests {
     func test_defaultMacro_string_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: String
             """,
             expandedSource: """
             var value: String
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -131,7 +131,7 @@ extension VADefaultsTests {
     func test_defaultMacro_string() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: "a")
+            @UserDefaultsValue(defaultValue: "a")
             var value: String
             """,
             expandedSource: """
@@ -151,13 +151,13 @@ extension VADefaultsTests {
     func test_defaultMacro_nsString_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: NSString
             """,
             expandedSource: """
             var value: NSString
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -165,7 +165,7 @@ extension VADefaultsTests {
     func test_defaultMacro_nsString() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: "a")
+            @UserDefaultsValue(defaultValue: "a")
             var value: NSString
             """,
             expandedSource: """
@@ -185,13 +185,13 @@ extension VADefaultsTests {
     func test_defaultMacro_nsNumber_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: NSNumber
             """,
             expandedSource: """
             var value: NSNumber
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -199,7 +199,7 @@ extension VADefaultsTests {
     func test_defaultMacro_nsNumber() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 42)
+            @UserDefaultsValue(defaultValue: 42)
             var value: NSNumber
             """,
             expandedSource: """
@@ -219,13 +219,13 @@ extension VADefaultsTests {
     func test_defaultMacro_url_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: URL
             """,
             expandedSource: """
             var value: URL
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -233,7 +233,7 @@ extension VADefaultsTests {
     func test_defaultMacro_url() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: someURL)
+            @UserDefaultsValue(defaultValue: someURL)
             var value: URL
             """,
             expandedSource: """
@@ -253,13 +253,13 @@ extension VADefaultsTests {
     func test_defaultMacro_date_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Date
             """,
             expandedSource: """
             var value: Date
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -267,7 +267,7 @@ extension VADefaultsTests {
     func test_defaultMacro_date() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: Date(timeIntervalSince1970: 23))
+            @UserDefaultsValue(defaultValue: Date(timeIntervalSince1970: 23))
             var value: Date
             """,
             expandedSource: """
@@ -287,13 +287,13 @@ extension VADefaultsTests {
     func test_defaultMacro_nsDate_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: NSDate
             """,
             expandedSource: """
             var value: NSDate
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -301,7 +301,7 @@ extension VADefaultsTests {
     func test_defaultMacro_nsDate() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: NSDate(timeIntervalSince1970: 23))
+            @UserDefaultsValue(defaultValue: NSDate(timeIntervalSince1970: 23))
             var value: NSDate
             """,
             expandedSource: """
@@ -321,13 +321,13 @@ extension VADefaultsTests {
     func test_defaultMacro_data_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Data
             """,
             expandedSource: """
             var value: Data
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -335,7 +335,7 @@ extension VADefaultsTests {
     func test_defaultMacro_data() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: Data())
+            @UserDefaultsValue(defaultValue: Data())
             var value: Data
             """,
             expandedSource: """
@@ -355,13 +355,13 @@ extension VADefaultsTests {
     func test_defaultMacro_nsData_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: NSData
             """,
             expandedSource: """
             var value: NSData
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -369,7 +369,7 @@ extension VADefaultsTests {
     func test_defaultMacro_nsData() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: NSData())
+            @UserDefaultsValue(defaultValue: NSData())
             var value: NSData
             """,
             expandedSource: """
@@ -389,13 +389,13 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: UInt
             """,
             expandedSource: """
             var value: UInt
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -403,7 +403,7 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 4)
+            @UserDefaultsValue(defaultValue: 4)
             var value: UInt
             """,
             expandedSource: """
@@ -423,13 +423,13 @@ extension VADefaultsTests {
     func test_defaultMacro_int8_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Int8
             """,
             expandedSource: """
             var value: Int8
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -437,7 +437,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int8() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: Int8
             """,
             expandedSource: """
@@ -457,13 +457,13 @@ extension VADefaultsTests {
     func test_defaultMacro_int16_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Int16
             """,
             expandedSource: """
             var value: Int16
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -471,7 +471,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int16() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: Int16
             """,
             expandedSource: """
@@ -491,13 +491,13 @@ extension VADefaultsTests {
     func test_defaultMacro_int32_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Int32
             """,
             expandedSource: """
             var value: Int32
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -505,7 +505,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int32() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: Int32
             """,
             expandedSource: """
@@ -525,13 +525,13 @@ extension VADefaultsTests {
     func test_defaultMacro_int64_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: Int64
             """,
             expandedSource: """
             var value: Int64
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -539,7 +539,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int64() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: Int64
             """,
             expandedSource: """
@@ -559,13 +559,13 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt8_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: UInt8
             """,
             expandedSource: """
             var value: UInt8
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -573,7 +573,7 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt8() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: UInt8
             """,
             expandedSource: """
@@ -593,13 +593,13 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt16_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: UInt16
             """,
             expandedSource: """
             var value: UInt16
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -607,7 +607,7 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt16() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: UInt16
             """,
             expandedSource: """
@@ -627,13 +627,13 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt32_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: UInt32
             """,
             expandedSource: """
             var value: UInt32
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -641,7 +641,7 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt32() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: UInt32
             """,
             expandedSource: """
@@ -661,13 +661,13 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt64_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: UInt64
             """,
             expandedSource: """
             var value: UInt64
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -675,7 +675,7 @@ extension VADefaultsTests {
     func test_defaultMacro_uInt64() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: 0)
+            @UserDefaultsValue(defaultValue: 0)
             var value: UInt64
             """,
             expandedSource: """
@@ -695,13 +695,13 @@ extension VADefaultsTests {
     func test_defaultMacro_array_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: [Int]
             """,
             expandedSource: """
             var value: [Int]
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -709,7 +709,7 @@ extension VADefaultsTests {
     func test_defaultMacro_array() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: [0])
+            @UserDefaultsValue(defaultValue: [0])
             var value: [Int]
             """,
             expandedSource: """
@@ -729,13 +729,13 @@ extension VADefaultsTests {
     func test_defaultMacro_dict_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: [String: Int]
             """,
             expandedSource: """
             var value: [String: Int]
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -743,13 +743,13 @@ extension VADefaultsTests {
     func test_defaultMacro_dict_failureKeyType() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: [Int: Int]
             """,
             expandedSource: """
             var value: [Int: Int]
             """,
-            diagnostics: [.init(message: UserDefaultValueError.dictKeyType.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.dictKeyType.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -757,7 +757,7 @@ extension VADefaultsTests {
     func test_defaultMacro_dict() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: ["2": 42])
+            @UserDefaultsValue(defaultValue: ["2": 42])
             var value: [String: Int]
             """,
             expandedSource: """
@@ -777,7 +777,7 @@ extension VADefaultsTests {
     func test_defaultMacro_dict_optional() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: [String: Int]?
             """,
             expandedSource: """
@@ -798,13 +798,13 @@ extension VADefaultsTests {
         #if canImport(VADefaultsMacros)
         assertMacroExpansion(
             #"""
-            @UserDefaultValue()
+            @UserDefaultsValue()
             var value: CustomType
             """#,
             expandedSource: #"""
             var value: CustomType
             """#,
-            diagnostics: [.init(message: UserDefaultValueError.unsupportedType.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )
         #else

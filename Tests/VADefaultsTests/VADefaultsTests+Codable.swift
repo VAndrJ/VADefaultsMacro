@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue()
+            @CodableUserDefaultsValue()
             var value: MyCodable?
             """,
             expandedSource: """
@@ -39,7 +39,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_encoder() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(encoder: myEncoder)
+            @CodableUserDefaultsValue(encoder: myEncoder)
             var value: MyCodable?
             """,
             expandedSource: """
@@ -61,7 +61,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_encoderDecl() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(key: "customKey", encoder: Self.myEncoder)
+            @CodableUserDefaultsValue(key: "customKey", encoder: Self.myEncoder)
             var value: MyCodable?
             """,
             expandedSource: """
@@ -83,7 +83,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_decoder() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(decoder: myDecoder)
+            @CodableUserDefaultsValue(decoder: myDecoder)
             var value: MyCodable?
             """,
             expandedSource: """
@@ -105,7 +105,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_decoderDecl() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaults: .testDefaults, decoder: SomeClass.myDecoder)
+            @CodableUserDefaultsValue(defaults: .testDefaults, decoder: SomeClass.myDecoder)
             var value: MyCodable?
             """,
             expandedSource: """
@@ -127,7 +127,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_defaultValue() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable())
+            @CodableUserDefaultsValue(defaultValue: MyCodable())
             var value: MyCodable
             """,
             expandedSource: """
@@ -149,7 +149,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_defaultValueMember() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: myCodable)
+            @CodableUserDefaultsValue(defaultValue: myCodable)
             var value: MyCodable
             """,
             expandedSource: """
@@ -171,7 +171,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_defaultValueDecl() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: Self.myCodable)
+            @CodableUserDefaultsValue(defaultValue: Self.myCodable)
             var value: MyCodable
             """,
             expandedSource: """
@@ -193,13 +193,13 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_failure() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue()
+            @CodableUserDefaultsValue()
             var value: MyCodable
             """,
             expandedSource: """
             var value: MyCodable
             """,
-            diagnostics: [.init(message: UserDefaultValueError.defaultValueNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -207,13 +207,13 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_notVariable() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue()
+            @CodableUserDefaultsValue()
             var (a, b): MyCodable
             """,
             expandedSource: """
             var (a, b): MyCodable
             """,
-            diagnostics: [.init(message: UserDefaultValueError.notVariable.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -221,13 +221,13 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_noType() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue()
+            @CodableUserDefaultsValue()
             var value
             """,
             expandedSource: """
             var value
             """,
-            diagnostics: [.init(message: UserDefaultValueError.notVariable.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -235,7 +235,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_encoder_init() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable(), encoder: .init())
+            @CodableUserDefaultsValue(defaultValue: MyCodable(), encoder: .init())
             var value: MyCodable
             """,
             expandedSource: """
@@ -257,7 +257,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_encoder_initStatic() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable(), encoder: .custom)
+            @CodableUserDefaultsValue(defaultValue: MyCodable(), encoder: .custom)
             var value: MyCodable
             """,
             expandedSource: """
@@ -279,7 +279,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_decoder_init() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable(), decoder: .init())
+            @CodableUserDefaultsValue(defaultValue: MyCodable(), decoder: .init())
             var value: MyCodable
             """,
             expandedSource: """
@@ -301,7 +301,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_decoder_initStatic() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable(), decoder: .custom)
+            @CodableUserDefaultsValue(defaultValue: MyCodable(), decoder: .custom)
             var value: MyCodable
             """,
             expandedSource: """
@@ -323,7 +323,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_encoder_init1() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultValue(defaultValue: MyCodable(), encoder: JSONEncoder())
+            @CodableUserDefaultsValue(defaultValue: MyCodable(), encoder: JSONEncoder())
             var value: MyCodable
             """,
             expandedSource: """

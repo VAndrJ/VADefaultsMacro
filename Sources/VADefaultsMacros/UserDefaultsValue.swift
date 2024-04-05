@@ -1,6 +1,6 @@
 //
-//  UserDefaultValue.swift
-//  
+//  UserDefaultsValue.swift
+//
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
@@ -10,13 +10,13 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct DefaultValue: AccessorMacro {
+public struct DefaultsValue: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
-        try UserDefaultValue.expansion(
+        try UserDefaultsValue.expansion(
             of: node,
             providingAccessorsOf: declaration,
             in: context
@@ -24,7 +24,7 @@ public struct DefaultValue: AccessorMacro {
     }
 }
 
-public struct UserDefaultValue: AccessorMacro {
+public struct UserDefaultsValue: AccessorMacro {
 
     public static func expansion(
         of node: AttributeSyntax,
@@ -37,7 +37,7 @@ public struct UserDefaultValue: AccessorMacro {
               let firstBinding = variableDeclSyntax.bindings.first,
               let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
               let typeAnnotation = firstBinding.typeAnnotation else {
-            throw UserDefaultValueError.notVariable
+            throw UserDefaultsValueError.notVariable
         }
 
         let variableType = try typeAnnotation.type.defaultsVariableType
@@ -46,16 +46,16 @@ public struct UserDefaultValue: AccessorMacro {
         if let defaultValueExpr,
            let literalType = LiteralExprType(expression: defaultValueExpr.expression),
            literalType.checkTypeMathing(variableType: variableType) == .doesNotMatch {
-            throw UserDefaultValueError.typesMismatch
+            throw UserDefaultsValueError.typesMismatch
         }
 
         let defaultValueParam = labeledExprListSyntax?.defaultValueParam
         guard !variableType.isNilable || (variableType.isNilable && defaultValueParam != nil) else {
-            throw UserDefaultValueError.defaultValueNeeded
+            throw UserDefaultsValueError.defaultValueNeeded
         }
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

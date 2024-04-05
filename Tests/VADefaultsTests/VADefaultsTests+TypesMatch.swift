@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_defaultMacro_boolLiteral_bool_match() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: true)
+            @UserDefaultsValue(defaultValue: true)
             var value: Bool
             """,
             expandedSource: """
@@ -38,7 +38,7 @@ extension VADefaultsTests {
     func test_defaultMacro_boolLiteral_boolOptional_match() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: true)
+            @UserDefaultsValue(defaultValue: true)
             var value: Bool?
             """,
             expandedSource: """
@@ -58,13 +58,13 @@ extension VADefaultsTests {
     func test_defaultMacro_boolLiteral_string_mismatch() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: true)
+            @UserDefaultsValue(defaultValue: true)
             var value: String
             """,
             expandedSource: """
             var value: String
             """,
-            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -73,7 +73,7 @@ extension VADefaultsTests {
     func test_defaultMacro_stringLiteral_string_match() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: "A")
+            @UserDefaultsValue(defaultValue: "A")
             var value: String
             """,
             expandedSource: """
@@ -94,13 +94,13 @@ extension VADefaultsTests {
     func test_defaultMacro_stringLiteral_int_mismatch() throws {
         assertMacroExpansion(
             """
-            @UserDefaultValue(defaultValue: "A")
+            @UserDefaultsValue(defaultValue: "A")
             var value: Int
             """,
             expandedSource: """
             var value: Int
             """,
-            diagnostics: [.init(message: UserDefaultValueError.typesMismatch.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
     }

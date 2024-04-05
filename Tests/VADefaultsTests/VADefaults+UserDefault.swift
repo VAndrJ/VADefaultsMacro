@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_class() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: .test)
+            @UserDefaultsData(defaults: .test)
             open class Defaults {
             }
             """,
@@ -38,7 +38,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_struct() throws {
         assertMacroExpansion(
             """
-            @UserDefault
+            @UserDefaultsData
             public struct Defaults {
             }
             """,
@@ -59,7 +59,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_failure() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: .test)
+            @UserDefaultsData(defaults: .test)
             public enum Defaults {
             }
             """,
@@ -67,7 +67,7 @@ extension VADefaultsTests {
             public enum Defaults {
             }
             """,
-            diagnostics: [.init(message: UserDefaultValueError.classOfStructNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.classOfStructNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -75,7 +75,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_variable() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: .test)
+            @UserDefaultsData(defaults: .test)
             internal class Defaults {
                 var someVariable: Int
                 let someConstant = true
@@ -107,9 +107,9 @@ extension VADefaultsTests {
     func test_userDefaultMacro_variableValue() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: SomeClass.staticDefaults)
+            @UserDefaultsData(defaults: SomeClass.staticDefaults)
             fileprivate class Defaults {
-                @DefaultValue(key: "customKey")
+                @DefaultsValue(key: "customKey")
                 var someVariable: Int
                 let someConstant = true
                 var someStandardVariable = true
@@ -144,11 +144,11 @@ extension VADefaultsTests {
     func test_userDefaultMacro_codableRaw() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: .test)
+            @UserDefaultsData(defaults: .test)
             private class Defaults {
-                @RawDefaultValue(rawType: Int.self)
+                @RawDefaultsValue(rawType: Int.self)
                 var rawRepresentableValue: MyRepresentableType?
-                @CodableDefaultValue(key: "customKey")
+                @CodableDefaultsValue(key: "customKey")
                 var codableValue: MyCodableType?
             }
             """,
@@ -187,7 +187,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_otherMacro() throws {
         assertMacroExpansion(
             """
-            @UserDefault(defaults: .test)
+            @UserDefaultsData(defaults: .test)
             final class Defaults {
                 @Observable
                 var someVariable: Int

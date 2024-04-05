@@ -95,17 +95,17 @@ extension VariableDeclSyntax {
 
 extension AttributeListSyntax {
     var isStandaloneMacro: Bool {
-        contains(type: UserDefaultValue.self) ||
-        contains(type: RawUserDefaultValue.self) ||
-        contains(type: CodableUserDefaultValue.self)
+        contains(type: UserDefaultsValue.self) ||
+        contains(type: RawUserDefaultsValue.self) ||
+        contains(type: CodableUserDefaultsValue.self)
     }
-    var isDefaultValueMacro: Bool {
-        contains(type: UserDefaultValue.self) ||
-        contains(type: RawUserDefaultValue.self) ||
-        contains(type: CodableUserDefaultValue.self) ||
-        contains(type: DefaultValue.self) ||
-        contains(type: RawDefaultValue.self) ||
-        contains(type: CodableDefaultValue.self)
+    var isDefaultsValueMacro: Bool {
+        contains(type: UserDefaultsValue.self) ||
+        contains(type: RawUserDefaultsValue.self) ||
+        contains(type: CodableUserDefaultsValue.self) ||
+        contains(type: DefaultsValue.self) ||
+        contains(type: RawDefaultsValue.self) ||
+        contains(type: CodableDefaultsValue.self)
     }
 
     private func contains<T>(type: T.Type) -> Bool {
@@ -133,7 +133,7 @@ extension TypeSyntax {
         get throws {
             if let identifierTypeSyntax = self.as(IdentifierTypeSyntax.self) {
                 guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
-                    throw UserDefaultValueError.notVariable
+                    throw UserDefaultsValueError.notVariable
                 }
 
                 return typeName
@@ -145,17 +145,17 @@ extension TypeSyntax {
                 return wrappedType
             }
 
-            throw UserDefaultValueError.notVariable
+            throw UserDefaultsValueError.notVariable
         }
     }
     var defaultsVariableType: VariableType {
         get throws {
             if let identifierTypeSyntax = self.as(IdentifierTypeSyntax.self) {
                 guard case let .identifier(typeName) = identifierTypeSyntax.name.tokenKind else {
-                    throw UserDefaultValueError.notVariable
+                    throw UserDefaultsValueError.notVariable
                 }
                 guard let variableType = VariableType(name: typeName) else {
-                    throw UserDefaultValueError.unsupportedType
+                    throw UserDefaultsValueError.unsupportedType
                 }
 
                 return variableType
@@ -176,7 +176,7 @@ extension TypeSyntax {
             if let dictionaryTypeSyntax = self.as(DictionaryTypeSyntax.self) {
                 let keyType = try dictionaryTypeSyntax.key.defaultsVariableType
                 guard keyType == .string else {
-                    throw UserDefaultValueError.dictKeyType
+                    throw UserDefaultsValueError.dictKeyType
                 }
 
                 let valueType = try dictionaryTypeSyntax.value.defaultsVariableType
@@ -184,7 +184,7 @@ extension TypeSyntax {
                 return .dictionary(key: keyType, value: valueType)
             }
 
-            throw UserDefaultValueError.notVariable
+            throw UserDefaultsValueError.notVariable
         }
     }
 }

@@ -12,7 +12,7 @@
 ### VADefaults introduces macro to simplify `UserDefaults` usage and errors prevention.
 
 
-### @UserDefaultValue
+### @UserDefaultsValue
 
 
 Adds a getter and setter wrapping `UserDefaults`.
@@ -22,7 +22,7 @@ Example 1:
 
 
 ```swift
-@UserDefaultValue(defaultValue: "Empty")
+@UserDefaultsValue(defaultValue: "Empty")
 var value: String
 
 // expands to 
@@ -42,7 +42,7 @@ Example 2:
 
 
 ```swift
-@UserDefaultValue(key: "customKey", defaults: .testDefaults)
+@UserDefaultsValue(key: "customKey", defaults: .testDefaults)
 var value: Int
 
 // expands to 
@@ -58,7 +58,7 @@ var value: Int {
 ```
 
 
-### @CodableUserDefaultValue
+### @CodableUserDefaultsValue
 
 
 Adds a getter and setter wrapping `UserDefaults` for `Codable` values.
@@ -68,7 +68,7 @@ Example 1:
 
 
 ```swift
-@CodableUserDefaultValue()
+@CodableUserDefaultsValue()
 var myCodableValue: MyCodable?
 
 // expands to 
@@ -90,7 +90,7 @@ Example 2:
 
 
 ```swift
-@CodableUserDefaultValue(encoder: customEncoder, decoder: customDecoder)
+@CodableUserDefaultsValue(encoder: customEncoder, decoder: customDecoder)
 var myCodableValue: MyCodable?
 
 // expands to 
@@ -108,7 +108,7 @@ var myCodableValue: MyCodable? {
 ```
 
 
-### @RawUserDefaultValue
+### @RawUserDefaultsValue
 
 
 Adds a getter and setter wrapping `UserDefaults` for `RawRepresentable` values.
@@ -118,7 +118,7 @@ Example 1:
 
 
 ```swift
-@RawUserDefaultValue(rawType: Int.self)
+@RawUserDefaultsValue(rawType: Int.self)
 var value: MyRawRepresentable?
 
 // expands to 
@@ -138,7 +138,7 @@ Example 2:
 
 
 ```swift
-@RawUserDefaultValue(rawType: Int.self, defaultValue: MyRawRepresentable.undefined)
+@RawUserDefaultsValue(rawType: Int.self, defaultValue: MyRawRepresentable.undefined)
 var value: MyRawRepresentable
 
 // expands to 
@@ -164,7 +164,7 @@ Example 1:
 
 
 ```swift
-@UserDefault
+@UserDefaultsData
 class Defaults {
     var someVariable: Int
     let someConstant = true
@@ -198,7 +198,7 @@ Example 2:
 ```swift
 @UserDefault(defaults: .test)
 public class Defaults {
-    @DefaultValue(key: "customKey")
+    @DefaultsValue(key: "customKey")
     var someVariable: Int
     var computedVariable: Bool { true }
 }

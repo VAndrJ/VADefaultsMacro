@@ -1,5 +1,5 @@
 //
-//  RawUserDefaultValue.swift
+//  CodableUserDefaultsValue.swift
 //
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
@@ -10,13 +10,13 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct RawDefaultValue: AccessorMacro {
+public struct CodableDefaultsValue: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
-        try RawUserDefaultValue.expansion(
+        try CodableUserDefaultsValue.expansion(
             of: node,
             providingAccessorsOf: declaration,
             in: context
@@ -24,7 +24,7 @@ public struct RawDefaultValue: AccessorMacro {
     }
 }
 
-public struct RawUserDefaultValue: AccessorMacro {
+public struct CodableUserDefaultsValue: AccessorMacro {
 
     public static func expansion(
         of node: AttributeSyntax,
@@ -37,29 +37,28 @@ public struct RawUserDefaultValue: AccessorMacro {
               let firstBinding = variableDeclSyntax.bindings.first,
               let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
               let typeAnnotation = firstBinding.typeAnnotation else {
-            throw UserDefaultValueError.notVariable
+            throw UserDefaultsValueError.notVariable
         }
-        
+
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
-        guard let rawTypeParam = labeledExprListSyntax?.rawTypeParam, let variableType = VariableType(name: rawTypeParam) else {
-            throw UserDefaultValueError.unsupportedType
-        }
-
         let defaultValueParam = labeledExprListSyntax?.defaultValueParam
-        guard typeAnnotation.isOptional || (!typeAnnotation.isOptional && defaultValueParam != nil) else {
-            throw UserDefaultValueError.defaultValueNeeded
+        if !typeAnnotation.isOptional && defaultValueParam == nil {
+            throw UserDefaultsValueError.defaultValueNeeded
         }
 
+        let variableType = try typeAnnotation.type.codableVariableType
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultValue = defaultValueParam.map { " ?? \($0)" } ?? ""
-        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
+        let encoderParam = labeledExprListSyntax?.encoderParam ?? .encoder
+        let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
+        let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-                "(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"
+                "\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
-                "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue\(raw: typeAnnotation.isOptional ? "?" : "").rawValue, forKey: \(raw: keyParam))"
+                "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
             },
         ]
     }
