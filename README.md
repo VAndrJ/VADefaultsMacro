@@ -158,6 +158,10 @@ var value: MyRawRepresentable {
 
 
 Adds a variable and initializer to the class, and adds getters and setters to the variables wrapping `UserDefaults`.
+Dependent macroses:
+- @DefaultsValue
+- @RawDefaultsValue
+- @CodableDefaultsValue
 
 
 Example 1:
@@ -196,7 +200,7 @@ Example 2:
 
 
 ```swift
-@UserDefault(defaults: .test)
+@UserDefaultsData(defaults: .test)
 public class Defaults {
     @DefaultsValue(key: "customKey")
     var someVariable: Int
@@ -221,6 +225,20 @@ public class Defaults {
     public init(userDefaults: UserDefaults = UserDefaults.test) {
         self.userDefaults = userDefaults
     }
+}
+```
+
+
+Example 3:
+
+
+```swift
+@UserDefaultsData
+public class Defaults {
+    @DefaultsValue
+    static var someVariable: Int // <-- error, not allowed
+    @DefaultsValue
+    class var someVariable: Int // <-- error, not allowed
 }
 ```
 
