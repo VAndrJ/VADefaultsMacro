@@ -9,5 +9,7 @@ struct VADefaultsPlugin: CompilerPlugin {
         RawUserDefaultValue.self,
         UserDefault.self,
         DefaultValue.self,
+        CodableDefaultValue.self,
+        RawDefaultValue.self,
     ]
 }

@@ -11,6 +11,10 @@ let testMacros: [String: Macro.Type] = [
     "UserDefaultValue": UserDefaultValue.self,
     "CodableUserDefaultValue": CodableUserDefaultValue.self,
     "RawUserDefaultValue": RawUserDefaultValue.self,
+    "UserDefault": UserDefault.self,
+    "DefaultValue": DefaultValue.self,
+    "CodableDefaultValue": CodableDefaultValue.self,
+    "RawDefaultValue": RawDefaultValue.self,
 ]
 
 final class VADefaultsTests: XCTestCase {

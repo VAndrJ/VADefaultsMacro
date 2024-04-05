@@ -51,9 +51,9 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
         }
         
         return [
-            "private let \(raw: variableName): \(raw: defaults)",
+            "private let \(raw: variableName): \(raw: self.defaults)",
             """
-            \(raw: modifier)init(\(raw: variableName): \(raw: defaults) = \(raw: defaults)) {
+            \(raw: modifier)init(\(raw: variableName): \(raw: self.defaults) = \(raw: defaults)) {
                 self.\(raw: variableName) = \(raw: variableName)
             }
             """,
