@@ -32,7 +32,7 @@ var value: String {
         UserDefaults.standard.string(forKey: "value") ?? "Empty"
     }
     set {
-        UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+        UserDefaults.standard.setValue(newValue, forKey: "value")
     }
 }
 ```
@@ -68,7 +68,7 @@ Example 1:
 
 
 ```swift
-@CodableUserDefaultsValue()
+@CodableUserDefaultsValue
 var myCodableValue: MyCodable?
 
 // expands to 
