@@ -17,6 +17,17 @@ public macro UserDefaultValue<T>(
 ) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultValue")
 
 @attached(accessor)
+public macro DefaultValue(
+    key: String? = nil
+) = #externalMacro(module: "VADefaultsMacros", type: "DefaultValue")
+
+@attached(accessor)
+public macro DefaultValue<T>(
+    key: String? = nil,
+    defaultValue: T?
+) = #externalMacro(module: "VADefaultsMacros", type: "DefaultValue")
+
+@attached(accessor)
 public macro CodableUserDefaultValue(
     key: String? = nil,
     defaults: UserDefaults = .standard,
@@ -48,3 +59,9 @@ public macro RawUserDefaultValue<T: RawRepresentable, R>(
     defaultValue: T?,
     defaults: UserDefaults = .standard
 ) = #externalMacro(module: "VADefaultsMacros", type: "RawUserDefaultValue") where T.RawValue == R
+
+@attached(member, names: named(userDefaults), named(init(userDefaults:)))
+@attached(memberAttribute)
+public macro UserDefault(
+    defaults: UserDefaults = .standard
+) = #externalMacro(module: "VADefaultsMacros", type: "UserDefault")
