@@ -18,11 +18,11 @@ extension VADefaultsTests {
         assertMacroExpansion(
             """
             @UserDefault(defaults: .test)
-            public class Defaults {
+            open class Defaults {
             }
             """,
             expandedSource: """
-            public class Defaults {
+            open class Defaults {
 
                 private let userDefaults: UserDefaults
 
@@ -76,13 +76,13 @@ extension VADefaultsTests {
         assertMacroExpansion(
             """
             @UserDefault(defaults: .test)
-            public class Defaults {
+            internal class Defaults {
                 var someVariable: Int
                 let someConstant = true
             }
             """,
             expandedSource: """
-            public class Defaults {
+            internal class Defaults {
                 var someVariable: Int {
                     get {
                         userDefaults.integer(forKey: "someVariable")
@@ -95,7 +95,7 @@ extension VADefaultsTests {
 
                 private let userDefaults: UserDefaults
 
-                public init(userDefaults: UserDefaults = UserDefaults.test) {
+                internal init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
             }
@@ -108,7 +108,7 @@ extension VADefaultsTests {
         assertMacroExpansion(
             """
             @UserDefault(defaults: SomeClass.staticDefaults)
-            public class Defaults {
+            fileprivate class Defaults {
                 static var staticVariable: Int
                 @DefaultValue(key: "customKey")
                 var someVariable: Int
@@ -118,7 +118,7 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            public class Defaults {
+            fileprivate class Defaults {
                 static var staticVariable: Int {
                     get {
                         userDefaults.integer(forKey: "staticVariable")
@@ -141,7 +141,82 @@ extension VADefaultsTests {
 
                 private let userDefaults: UserDefaults
 
-                public init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
+                fileprivate init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
+                    self.userDefaults = userDefaults
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func test_userDefaultMacro_codableRaw() throws {
+        assertMacroExpansion(
+            """
+            @UserDefault(defaults: .test)
+            private class Defaults {
+                @RawDefaultValue(rawType: Int.self)
+                var rawRepresentableValue: MyRepresentableType?
+                @CodableDefaultValue(key: "customKey")
+                var codableValue: MyCodableType?
+            }
+            """,
+            expandedSource: """
+            private class Defaults {
+                var rawRepresentableValue: MyRepresentableType? {
+                    get {
+                        (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                    }
+                    set {
+                        userDefaults.setValue(newValue?.rawValue, forKey: "rawRepresentableValue")
+                    }
+                }
+                var codableValue: MyCodableType? {
+                    get {
+                        userDefaults.data(forKey: "customKey").flatMap {
+                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                        }
+                    }
+                    set {
+                        userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
+                    }
+                }
+
+                private let userDefaults: UserDefaults
+
+                init(userDefaults: UserDefaults = UserDefaults.test) {
+                    self.userDefaults = userDefaults
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func test_userDefaultMacro_otherMacro() throws {
+        assertMacroExpansion(
+            """
+            @UserDefault(defaults: .test)
+            final class Defaults {
+                @Observable
+                var someVariable: Int
+            }
+            """,
+            expandedSource: """
+            final class Defaults {
+                @Observable
+                var someVariable: Int {
+                    get {
+                        userDefaults.integer(forKey: "someVariable")
+                    }
+                    set {
+                        userDefaults.setValue(newValue, forKey: "someVariable")
+                    }
+                }
+
+                private let userDefaults: UserDefaults
+
+                init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
             }

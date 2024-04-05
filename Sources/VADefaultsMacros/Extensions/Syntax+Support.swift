@@ -103,7 +103,9 @@ extension AttributeListSyntax {
         contains(type: UserDefaultValue.self) ||
         contains(type: RawUserDefaultValue.self) ||
         contains(type: CodableUserDefaultValue.self) ||
-        contains(type: DefaultValue.self)
+        contains(type: DefaultValue.self) ||
+        contains(type: RawDefaultValue.self) ||
+        contains(type: CodableDefaultValue.self)
     }
 
     private func contains<T>(type: T.Type) -> Bool {
