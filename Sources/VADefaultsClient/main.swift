@@ -267,6 +267,8 @@ assert(representableDefaultTest == .answer)
 
 @UserDefaultsData
 class Defaults {
+    @UserDefaultsValue
+    static var someVariable: Int
     @RawDefaultsValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
     var rawRepresentableExampleValue: ExampleEnum
     @CodableDefaultsValue(defaultValue: CodableStruct(value: 0))

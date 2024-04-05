@@ -215,5 +215,52 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
+
+    func test_userDefaultMacro_explicitStatic_notAllowed() throws {
+        assertMacroExpansion(
+            """
+            @UserDefaultsData
+            class Defaults {
+                @DefaultsValue
+                static var someVariable: Int
+                @CodableDefaultsValue
+                static var someCodableVariable: SomeCodable
+                @RawDefaultsValue
+                static var someRawVariable: SomeRaw
+                @DefaultsValue
+                class var someClassVariable: Int
+                @CodableDefaultsValue
+                class var someClassCodableVariable: SomeCodable
+                @RawDefaultsValue
+                class var someClassRawVariable: SomeRaw
+            }
+            """,
+            expandedSource: """
+            class Defaults {
+                static var someVariable: Int
+                static var someCodableVariable: SomeCodable
+                static var someRawVariable: SomeRaw
+                class var someClassVariable: Int
+                class var someClassCodableVariable: SomeCodable
+                class var someClassRawVariable: SomeRaw
+
+                private let userDefaults: UserDefaults
+
+                init(userDefaults: UserDefaults = UserDefaults.standard) {
+                    self.userDefaults = userDefaults
+                }
+            }
+            """,
+            diagnostics: [
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 3, column: 5),
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 5, column: 5),
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 7, column: 5),
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 9, column: 5),
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 11, column: 5),
+                .init(message: UserDefaultsValueError.staticVariable.description, line: 13, column: 5),
+            ],
+            macros: testMacros
+        )
+    }
 }
 #endif

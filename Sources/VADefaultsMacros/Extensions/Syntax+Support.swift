@@ -124,7 +124,8 @@ extension LabeledExprSyntax {
 
 extension VariableDeclSyntax {
     public var isVar: Bool { bindingSpecifier.tokenKind == .keyword(.var) }
-    public var isStatic: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.static) } }
+    public var isStaticVariable: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.static) } }
+    public var isClassVariable: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.class) } }
 }
 
 extension TypeSyntax {

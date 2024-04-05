@@ -39,6 +39,9 @@ public struct UserDefaultsValue: AccessorMacro {
               let typeAnnotation = firstBinding.typeAnnotation else {
             throw UserDefaultsValueError.notVariable
         }
+        if !variableDeclSyntax.isStandaloneMacro && (variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable) {
+            throw UserDefaultsValueError.staticVariable
+        }
 
         let variableType = try typeAnnotation.type.defaultsVariableType
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)

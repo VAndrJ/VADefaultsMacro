@@ -14,15 +14,17 @@ public enum UserDefaultsValueError: Error, CustomStringConvertible {
     case unsupportedType
     case typesMismatch
     case classOfStructNeeded
+    case staticVariable
 
     public var description: String {
         switch self {
         case .notVariable: "Must be `var` declaration."
         case .defaultValueNeeded: "This type requires a default value."
-        case .dictKeyType: "The Dictionary key type must be `String`"
-        case .unsupportedType: "Unsupported type"
-        case .typesMismatch: "The type of the variable and the `defaultValue` must match"
-        case .classOfStructNeeded: "Must be a `class` or `struct`"
+        case .dictKeyType: "The Dictionary key type must be `String`."
+        case .unsupportedType: "Unsupported type."
+        case .typesMismatch: "The type of the variable and the `defaultValue` must match."
+        case .classOfStructNeeded: "Must be a `class` or `struct`."
+        case .staticVariable: "Must not be a `static` variable declaration."
         }
     }
 }
