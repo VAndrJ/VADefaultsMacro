@@ -1,15 +1,6 @@
 import VADefaults
 import Foundation
 
-extension UserDefaults {
-
-    func clear() {
-        dictionaryRepresentation().forEach {
-            UserDefaults.standard.removeObject(forKey: $0.key)
-        }
-    }
-}
-
 let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
 testDefaults.clear()
 UserDefaults.standard.clear()
@@ -208,12 +199,17 @@ assert(dictOptionalTest == ["4": 42])
 
 class StaticTestClass {
     @UserDefaultsValue(defaultValue: 42)
-    static var value: Int
+    static var staticValue: Int
+    @UserDefaultsValue(defaultValue: 42)
+    class var classValue: Int
 
     static func check() {
-        assert(value == 42)
-        value = 1
-        assert(value == 1)
+        assert(staticValue == 42)
+        staticValue = 1
+        assert(staticValue == 1)
+        assert(classValue == 42)
+        classValue = 1
+        assert(classValue == 1)
     }
 }
 StaticTestClass.check()
@@ -268,7 +264,9 @@ assert(representableDefaultTest == .answer)
 @UserDefaultsData
 class Defaults {
     @UserDefaultsValue
-    static var someVariable: Int
+    static var someStaticVariable: Int
+    @UserDefaultsValue(defaultValue: 2)
+    class var someClassVariable: Int
     @RawDefaultsValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
     var rawRepresentableExampleValue: ExampleEnum
     @CodableDefaultsValue(defaultValue: CodableStruct(value: 0))
@@ -276,6 +274,13 @@ class Defaults {
     @DefaultsValue
     var defaultExampleValue: Int
 }
+
+assert(Defaults.someStaticVariable == 0)
+Defaults.someStaticVariable = 42
+assert(Defaults.someStaticVariable == 42)
+assert(Defaults.someClassVariable == 2)
+Defaults.someClassVariable = 42
+assert(Defaults.someClassVariable == 42)
 
 let defaults = Defaults()
 assert(defaults.rawRepresentableExampleValue == .undefined)
@@ -292,3 +297,12 @@ UserDefaults.standard.clear()
 testDefaults.clear()
 
 print("success")
+
+extension UserDefaults {
+
+    func clear() {
+        dictionaryRepresentation().forEach {
+            removeObject(forKey: $0.key)
+        }
+    }
+}
