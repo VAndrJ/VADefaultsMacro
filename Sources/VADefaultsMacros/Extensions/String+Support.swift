@@ -16,27 +16,27 @@ extension String {
     var quoted: String { "\"\(self)\"" }
     var asDefaults: String {
         if starts(with: ".") {
-            return "UserDefaults\(self)"
+            "UserDefaults\(self)"
         } else {
-            return self
+            self
         }
     }
     var asEncoder: String {
         if self == .initializer {
-            return .encoder
+            .encoder
         } else if starts(with: ".") {
-            return "JSONEncoder\(self)"
+            "JSONEncoder\(self)"
         } else {
-            return self
+            self
         }
     }
     var asDecoder: String {
         if self == .initializer {
-            return .decoder
+            .decoder
         } else if starts(with: ".") {
-            return "JSONDecoder\(self)"
+            "JSONDecoder\(self)"
         } else {
-            return self
+            self
         }
     }
 }

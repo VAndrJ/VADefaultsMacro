@@ -89,6 +89,30 @@ extension LabeledExprListSyntax {
     }
 }
 
+extension VariableDeclSyntax {
+    var isStandaloneMacro: Bool { attributes.isStandaloneMacro }
+}
+
+extension AttributeListSyntax {
+    var isStandaloneMacro: Bool {
+        contains(type: UserDefaultValue.self) ||
+        contains(type: RawUserDefaultValue.self) ||
+        contains(type: CodableUserDefaultValue.self)
+    }
+    var isDefaultValueMacro: Bool {
+        contains(type: UserDefaultValue.self) ||
+        contains(type: RawUserDefaultValue.self) ||
+        contains(type: CodableUserDefaultValue.self) ||
+        contains(type: DefaultValue.self) ||
+        contains(type: RawDefaultValue.self) ||
+        contains(type: CodableDefaultValue.self)
+    }
+
+    private func contains<T>(type: T.Type) -> Bool {
+        contains(where: { $0.as(AttributeSyntax.self)?.attributeName.trimmedDescription == String(describing: type) })
+    }
+}
+
 extension LabeledExprSyntax {
     var string: String? { self.expression.as(StringLiteralExprSyntax.self)?.segments.first?.trimmedDescription }
     var memberExpr: MemberAccessExprSyntax? { self.expression.as(MemberAccessExprSyntax.self) }
@@ -168,9 +192,9 @@ extension TypeAnnotationSyntax {
     var isOptional: Bool { self.type.isOptional }
     var orWrapped: String {
         if let optionalTypeSyntax = self.type.as(OptionalTypeSyntax.self) {
-            return optionalTypeSyntax.wrappedType.trimmedDescription
+            optionalTypeSyntax.wrappedType.trimmedDescription
         } else {
-            return self.type.trimmedDescription
+            self.type.trimmedDescription
         }
     }
 }

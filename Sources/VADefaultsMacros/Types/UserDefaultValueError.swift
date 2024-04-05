@@ -13,6 +13,7 @@ public enum UserDefaultValueError: Error, CustomStringConvertible {
     case dictKeyType
     case unsupportedType
     case typesMismatch
+    case classOfStructNeeded
 
     public var description: String {
         switch self {
@@ -21,6 +22,7 @@ public enum UserDefaultValueError: Error, CustomStringConvertible {
         case .dictKeyType: "The Dictionary key type must be `String`"
         case .unsupportedType: "Unsupported type"
         case .typesMismatch: "The type of the variable and the `defaultValue` must match"
+        case .classOfStructNeeded: "Must be a `class` or `struct`"
         }
     }
 }

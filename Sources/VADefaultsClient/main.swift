@@ -14,7 +14,7 @@ let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
 testDefaults.clear()
 UserDefaults.standard.clear()
 
-@UserDefaultValue()
+@UserDefaultValue
 var boolTest: Bool
 assert(boolTest == false)
 boolTest = true
@@ -56,7 +56,7 @@ assert(nsDataTest == NSData())
 nsDataTest = "a".data(using: .utf8)! as NSData
 assert(nsDataTest == "a".data(using: .utf8)! as NSData)
 
-@UserDefaultValue()
+@UserDefaultValue
 var intTest: Int
 assert(intTest == 0)
 intTest = 42
@@ -68,13 +68,13 @@ assert(intDefaultTest == 1)
 intDefaultTest = 42
 assert(intDefaultTest == 42)
 
-@UserDefaultValue()
+@UserDefaultValue
 var floatTest: Float
 assert(floatTest == 0)
 floatTest = 42
 assert(floatTest == 42)
 
-@UserDefaultValue()
+@UserDefaultValue
 var doubleTest: Double
 assert(doubleTest == 0)
 doubleTest = 42
@@ -86,7 +86,7 @@ assert(stringTest == "a")
 stringTest = "42"
 assert(stringTest == "42")
 
-@UserDefaultValue()
+@UserDefaultValue
 var stringOptionalTest: String?
 assert(stringOptionalTest == nil)
 stringOptionalTest = "42"
@@ -188,7 +188,7 @@ assert(arrTest == [4])
 arrTest = [42]
 assert(arrTest == [42])
 
-@UserDefaultValue()
+@UserDefaultValue
 var arrOptionalTest: [Int]?
 assert(arrOptionalTest == nil)
 arrOptionalTest = [42]
@@ -200,7 +200,7 @@ assert(dictTest == ["4": 4])
 dictTest = ["4": 42]
 assert(dictTest == ["4": 42])
 
-@UserDefaultValue()
+@UserDefaultValue
 var dictOptionalTest: [String: Int]?
 assert(dictOptionalTest == nil)
 dictOptionalTest = ["4": 42]
@@ -229,7 +229,7 @@ let notCodableStruct = NotCodableStruct(value: 42)
 let encoder = JSONEncoder()
 let decoder = JSONDecoder()
 
-@CodableUserDefaultValue()
+@CodableUserDefaultValue
 var codableTest: CodableStruct?
 assert(codableTest == nil)
 codableTest = CodableStruct()
@@ -264,6 +264,27 @@ var representableDefaultTest: ExampleEnum
 assert(representableDefaultTest == .undefined)
 representableDefaultTest = .answer
 assert(representableDefaultTest == .answer)
+
+@UserDefault
+class Defaults {
+    @RawDefaultValue(rawType: Int.self)
+    var rawRepresentableExampleValue: ExampleEnum?
+    @CodableDefaultValue
+    var codableExampleValue: CodableStruct?
+    @DefaultValue
+    var defaultExampleValue: Int
+}
+
+let defaults = Defaults(userDefaults: testDefaults)
+assert(defaults.rawRepresentableExampleValue == nil)
+defaults.rawRepresentableExampleValue = .question
+assert(defaults.rawRepresentableExampleValue == .question)
+assert(defaults.codableExampleValue == nil)
+defaults.codableExampleValue = CodableStruct(value: 42)
+assert(defaults.codableExampleValue == CodableStruct(value: 42))
+assert(defaults.defaultExampleValue == 0)
+defaults.defaultExampleValue = 42
+assert(defaults.defaultExampleValue == 42)
 
 UserDefaults.standard.clear()
 testDefaults.clear()

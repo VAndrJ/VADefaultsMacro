@@ -10,6 +10,20 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+public struct DefaultValue: AccessorMacro {
+    public static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+    ) throws -> [AccessorDeclSyntax] {
+        try UserDefaultValue.expansion(
+            of: node,
+            providingAccessorsOf: declaration,
+            in: context
+        )
+    }
+}
+
 public struct UserDefaultValue: AccessorMacro {
 
     public static func expansion(
@@ -41,7 +55,7 @@ public struct UserDefaultValue: AccessorMacro {
         }
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultsParam = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

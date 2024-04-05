@@ -10,6 +10,20 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+public struct CodableDefaultValue: AccessorMacro {
+    public static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+    ) throws -> [AccessorDeclSyntax] {
+        try CodableUserDefaultValue.expansion(
+            of: node,
+            providingAccessorsOf: declaration,
+            in: context
+        )
+    }
+}
+
 public struct CodableUserDefaultValue: AccessorMacro {
 
     public static func expansion(
@@ -34,10 +48,10 @@ public struct CodableUserDefaultValue: AccessorMacro {
 
         let variableType = try typeAnnotation.type.codableVariableType
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultsParam = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
         let encoderParam = labeledExprListSyntax?.encoderParam ?? .encoder
         let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
         let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
