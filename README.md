@@ -198,7 +198,6 @@ Example 2:
 ```swift
 @UserDefault(defaults: .test)
 public class Defaults {
-    static var staticVariable: Int
     @DefaultValue(key: "customKey")
     var someVariable: Int
     var computedVariable: Bool { true }
@@ -207,14 +206,6 @@ public class Defaults {
 // expands to 
 
 public class Defaults {
-    static var staticVariable: Int {
-        get {
-            userDefaults.integer(forKey: "staticVariable")
-        }
-        set {
-            userDefaults.setValue(newValue, forKey: "staticVariable")
-        }
-    }
     var someVariable: Int {
         get {
             userDefaults.integer(forKey: "customKey")

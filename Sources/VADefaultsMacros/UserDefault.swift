@@ -22,6 +22,7 @@ public struct UserDefault: MemberMacro, MemberAttributeMacro {
     ) throws -> [SwiftSyntax.AttributeSyntax] {
         guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
               variableDeclSyntax.isVar,
+              !variableDeclSyntax.isStatic,
               !variableDeclSyntax.attributes.isDefaultValueMacro,
               variableDeclSyntax.bindings.count == 1,
               !variableDeclSyntax.bindings.contains(where: {

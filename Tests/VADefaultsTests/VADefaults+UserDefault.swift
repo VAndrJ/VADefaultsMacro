@@ -109,7 +109,6 @@ extension VADefaultsTests {
             """
             @UserDefault(defaults: SomeClass.staticDefaults)
             fileprivate class Defaults {
-                static var staticVariable: Int
                 @DefaultValue(key: "customKey")
                 var someVariable: Int
                 let someConstant = true
@@ -119,14 +118,6 @@ extension VADefaultsTests {
             """,
             expandedSource: """
             fileprivate class Defaults {
-                static var staticVariable: Int {
-                    get {
-                        userDefaults.integer(forKey: "staticVariable")
-                    }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "staticVariable")
-                    }
-                }
                 var someVariable: Int {
                     get {
                         userDefaults.integer(forKey: "customKey")

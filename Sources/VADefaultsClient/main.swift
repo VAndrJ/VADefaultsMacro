@@ -267,19 +267,19 @@ assert(representableDefaultTest == .answer)
 
 @UserDefault
 class Defaults {
-    @RawDefaultValue(rawType: Int.self)
-    var rawRepresentableExampleValue: ExampleEnum?
-    @CodableDefaultValue
-    var codableExampleValue: CodableStruct?
+    @RawDefaultValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
+    var rawRepresentableExampleValue: ExampleEnum
+    @CodableDefaultValue(defaultValue: CodableStruct(value: 0))
+    var codableExampleValue: CodableStruct
     @DefaultValue
     var defaultExampleValue: Int
 }
 
-let defaults = Defaults(userDefaults: testDefaults)
-assert(defaults.rawRepresentableExampleValue == nil)
+let defaults = Defaults()
+assert(defaults.rawRepresentableExampleValue == .undefined)
 defaults.rawRepresentableExampleValue = .question
 assert(defaults.rawRepresentableExampleValue == .question)
-assert(defaults.codableExampleValue == nil)
+assert(defaults.codableExampleValue == CodableStruct(value: 0))
 defaults.codableExampleValue = CodableStruct(value: 42)
 assert(defaults.codableExampleValue == CodableStruct(value: 42))
 assert(defaults.defaultExampleValue == 0)
