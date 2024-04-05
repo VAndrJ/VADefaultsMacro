@@ -55,7 +55,7 @@ public struct UserDefaultValue: AccessorMacro {
         }
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
-        let defaultsParam = variableDeclSyntax.attributes.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
+        let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefault.variableName
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
