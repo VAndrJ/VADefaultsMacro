@@ -155,7 +155,7 @@ var value: MyRawRepresentable {
 ```
 
 
-### @UserDefault
+### @UserDefaultsData
 
 
 Adds a variable and initializer to the class, and adds getters and setters to the variables wrapping `UserDefaults`.
@@ -250,7 +250,7 @@ public class Defaults {
 - Value and `defaultValue` types comparison improvements.
 
 
-- `UserDefault` additions.
+- `UserDefaultsData` additions.
 
 
 - `Codable` check. Throwable.
