@@ -122,14 +122,18 @@ extension LabeledExprSyntax {
     var function: String? { self.expression.as(FunctionCallExprSyntax.self)?.trimmedDescription }
 }
 
+private let varKeyowrd: TokenKind = .keyword(.var)
+private let staticKeyowrd: TokenKind = .keyword(.static)
+private let classKeyowrd: TokenKind = .keyword(.class)
+
 extension VariableDeclSyntax {
-    public var isVar: Bool { bindingSpecifier.tokenKind == .keyword(.var) }
-    public var isStaticVariable: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.static) } }
-    public var isClassVariable: Bool { modifiers.contains { $0.name.tokenKind == .keyword(.class) } }
+    public var isVar: Bool { bindingSpecifier.tokenKind == varKeyowrd }
+    public var isStaticVariable: Bool { modifiers.contains { $0.name.tokenKind == staticKeyowrd } }
+    public var isClassVariable: Bool { modifiers.contains { $0.name.tokenKind == classKeyowrd } }
 }
 
 extension TypeSyntax {
-    var isOptional: Bool { self.as(OptionalTypeSyntax.self) != nil }
+    var isOptional: Bool { self.is(OptionalTypeSyntax.self) }
     var codableVariableType: String {
         get throws {
             if let identifierTypeSyntax = self.as(IdentifierTypeSyntax.self) {
@@ -191,12 +195,12 @@ extension TypeSyntax {
 }
 
 extension TypeAnnotationSyntax {
-    var isOptional: Bool { self.type.isOptional }
+    var isOptional: Bool { type.isOptional }
     var orWrapped: String {
-        if let optionalTypeSyntax = self.type.as(OptionalTypeSyntax.self) {
+        if let optionalTypeSyntax = type.as(OptionalTypeSyntax.self) {
             optionalTypeSyntax.wrappedType.trimmedDescription
         } else {
-            self.type.trimmedDescription
+            type.trimmedDescription
         }
     }
 }

@@ -20,13 +20,13 @@ indirect enum LiteralExprType {
     case float
 
     init?(expression: ExprSyntax) {
-        if expression.as(StringLiteralExprSyntax.self) != nil {
+        if expression.is(StringLiteralExprSyntax.self) {
             self = .string
-        } else if expression.as(BooleanLiteralExprSyntax.self) != nil {
+        } else if expression.is(BooleanLiteralExprSyntax.self) {
             self = .boolean
-        } else if expression.as(IntegerLiteralExprSyntax.self) != nil {
+        } else if expression.is(IntegerLiteralExprSyntax.self) {
             self = .integer
-        } else if expression.as(FloatLiteralExprSyntax.self) != nil {
+        } else if expression.is(FloatLiteralExprSyntax.self) {
             self = .float
         } else {
             return nil
