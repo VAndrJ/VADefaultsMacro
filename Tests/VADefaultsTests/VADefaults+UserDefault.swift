@@ -219,7 +219,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_explicitStatic_notAllowed() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsData
+            @UserDefaultsData()
             class Defaults {
                 @DefaultsValue
                 static var someVariable: Int

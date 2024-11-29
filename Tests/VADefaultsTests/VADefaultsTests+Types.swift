@@ -37,7 +37,7 @@ extension VADefaultsTests {
     func test_defaultMacro_bool_optional() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsValue()
+            @UserDefaultsValue
             var value: Bool?
             """,
             expandedSource: """
@@ -57,7 +57,7 @@ extension VADefaultsTests {
     func test_defaultMacro_int() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsValue()
+            @UserDefaultsValue
             var value: Int
             """,
             expandedSource: """

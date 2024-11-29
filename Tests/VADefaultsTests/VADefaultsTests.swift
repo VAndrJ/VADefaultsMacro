@@ -63,7 +63,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_nilableValue() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsValue()
+            @UserDefaultsValue
             var launchesCount: Int?
             """,
             expandedSource: """
