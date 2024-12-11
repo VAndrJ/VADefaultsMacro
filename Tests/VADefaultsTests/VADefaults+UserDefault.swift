@@ -67,7 +67,7 @@ extension VADefaultsTests {
             public enum Defaults {
             }
             """,
-            diagnostics: [.init(message: UserDefaultsValueError.classOfStructNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.classOrStructNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
