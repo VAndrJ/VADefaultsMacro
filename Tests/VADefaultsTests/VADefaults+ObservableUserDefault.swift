@@ -60,6 +60,7 @@ extension VADefaultsTests {
             internal class Defaults {
                 var someVariable: Int
                 let someConstant = true
+                var someObsVariable = 1
             }
             """,
             expandedSource: #"""
@@ -76,6 +77,8 @@ extension VADefaultsTests {
                     }
                 }
                 let someConstant = true
+                @ObservationTracked
+                var someObsVariable = 1
             
                 private let userDefaults: UserDefaults
 
