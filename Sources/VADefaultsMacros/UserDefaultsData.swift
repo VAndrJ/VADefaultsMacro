@@ -25,9 +25,8 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
               !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable) else {
             return []
         }
-        let isObservable = declaration.as(ClassDeclSyntax.self)?.attributes.contains(where: { $0.as(AttributeSyntax.self)?.attributeName.identifier == "Observable" }) ?? false
         guard !variableDeclSyntax.attributes.isDefaultsValueMacro else {
-            return isObservable ? ["@ObservationIgnored"] : []
+            return []
         }
         guard variableDeclSyntax.bindings.count == 1,
             !variableDeclSyntax.bindings.contains(where: {
@@ -36,16 +35,9 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
             return []
         }
 
-        return if isObservable {
-            [
-                "@ObservationIgnored",
-                "@\(raw: String(describing: DefaultsValue.self))",
-            ]
-        } else {
-            [
-                "@\(raw: String(describing: DefaultsValue.self))",
-            ]
-        }
+        return [
+            "@\(raw: String(describing: DefaultsValue.self))",
+        ]
     }
 
     public static func expansion(
