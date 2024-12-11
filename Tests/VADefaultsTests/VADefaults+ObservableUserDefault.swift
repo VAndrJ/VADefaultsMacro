@@ -52,22 +52,6 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
-//
-//    func test_userDefaultMacro_failure() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData(defaults: .test)
-//            public enum Defaults {
-//            }
-//            """,
-//            expandedSource: """
-//            public enum Defaults {
-//            }
-//            """,
-//            diagnostics: [.init(message: UserDefaultsValueError.classOfStructNeeded.description, line: 1, column: 1)],
-//            macros: testMacros
-//        )
-//    }
 
     func test_observableUserDefaultMacro_variable() throws {
         assertMacroExpansion(
@@ -84,7 +68,7 @@ extension VADefaultsTests {
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
-                        userDefaults.integer(forKey: "someVariable")
+                        return userDefaults.integer(forKey: "someVariable")
                     }
                     set {
                         withMutation(keyPath: \.someVariable) {
