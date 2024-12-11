@@ -255,7 +255,7 @@ extension ObservableUserDefaultsData: MemberMacro {
         if let initModifier = declaration.as(ClassDeclSyntax.self)?.modifiers.initModifier {
             modifier = initModifier
         } else {
-            throw UserDefaultsValueError.classOfStructNeeded
+            throw UserDefaultsValueError.classOrStructNeeded
         }
 
         var declarations: [DeclSyntax] = [
