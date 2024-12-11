@@ -249,19 +249,50 @@ public class Defaults {
 ```
 
 
+### Observation
+
+
+Just add `@Observable` to make `UserDefaultsData` observable.
+
+
+Example:
+
+
+```swift
+@Observable
+@UserDefaultsData
+class Defaults {
+    var someVariable: Int
+}
+
+// expands to 
+
+class Defaults {
+    var someVariable: Int {
+        get {
+            access(keyPath: \.someVariable)
+            userDefaults.integer(forKey: "someVariable")
+        }
+        set {
+            withMutation(keyPath: \.someVariable) {
+                userDefaults.setValue(newValue, forKey: "someVariable")
+            }
+        }
+    }
+
+    private let userDefaults: UserDefaults
+
+    init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.userDefaults = userDefaults
+    }
+}
+```
+
+
 #### TBD:
 
 
-- Value and `defaultValue` types comparison improvements.
-
-
-- `UserDefaultsData` additions.
-
-
 - `Codable` check. Throwable.
-
-
-- `RawRepresentable` improvements.
 
 
 ## Author
