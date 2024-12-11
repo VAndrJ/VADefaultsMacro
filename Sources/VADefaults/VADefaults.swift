@@ -21,8 +21,8 @@ public macro DefaultsValue(
     key: String? = nil
 ) = #externalMacro(module: "VADefaultsMacros", type: "DefaultsValue")
 
-@attached(accessor)
-public macro ObservationDefaultsTracked() = #externalMacro(module: "VADefaultsMacros", type: "DefaultsValue")
+@attached(peer)
+public macro ObservationDefaultsTracked() = #externalMacro(module: "VADefaultsMacros", type: "ObservationDefaultsTracked")
 
 @attached(accessor)
 public macro DefaultsValue<T>(

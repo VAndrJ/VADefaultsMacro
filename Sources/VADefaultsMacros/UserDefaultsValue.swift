@@ -10,13 +10,13 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct ObservationDefaultsTracked: AccessorMacro {
+public struct ObservationDefaultsTracked: PeerMacro {
 
     public static func expansion(
-        of node: AttributeSyntax,
-        providingAccessorsOf declaration: some DeclSyntaxProtocol,
-        in context: some MacroExpansionContext
-    ) throws -> [AccessorDeclSyntax] {
+        of node: SwiftSyntax.AttributeSyntax,
+        providingPeersOf declaration: some SwiftSyntax.DeclSyntaxProtocol,
+        in context: some SwiftSyntaxMacros.MacroExpansionContext
+    ) throws -> [SwiftSyntax.DeclSyntax] {
         []
     }
 }
