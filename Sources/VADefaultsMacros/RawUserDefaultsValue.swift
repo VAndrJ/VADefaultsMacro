@@ -63,7 +63,7 @@ public struct RawUserDefaultsValue: AccessorMacro {
                 if isObservable {
                     "access(keyPath: \\.\(identifierPatternSyntax))"
                 }
-                "(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"
+                "\(raw: isObservable ? "return " : "")(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 if isObservable {

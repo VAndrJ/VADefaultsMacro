@@ -62,7 +62,7 @@ public struct CodableUserDefaultsValue: AccessorMacro {
                 if isObservable {
                     "access(keyPath: \\.\(identifierPatternSyntax))"
                 }
-                "\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
+                "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
                 if isObservable {
