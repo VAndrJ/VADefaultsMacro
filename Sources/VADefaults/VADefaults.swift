@@ -92,3 +92,9 @@ public macro RawDefaultsValue<T: RawRepresentable, R>(
 public macro UserDefaultsData(
     defaults: UserDefaults = .standard
 ) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultsData")
+
+@attached(member, names: named(userDefaults), named(init(userDefaults:)))
+@attached(memberAttribute)
+public macro ObservableUserDefaultsData(
+    defaults: UserDefaults = .standard
+) = #externalMacro(module: "VADefaultsMacros", type: "ObservableUserDefaultsData")

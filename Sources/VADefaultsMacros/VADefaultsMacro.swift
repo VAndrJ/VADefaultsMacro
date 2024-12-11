@@ -11,5 +11,6 @@ struct VADefaultsPlugin: CompilerPlugin {
         DefaultsValue.self,
         CodableDefaultsValue.self,
         RawDefaultsValue.self,
+        ObservableUserDefaultsData.self,
     ]
 }
