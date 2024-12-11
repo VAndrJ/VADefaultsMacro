@@ -324,7 +324,6 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
         }
 
         return [
-            "@\(raw: String(describing: DefaultsValue.self))",
             AttributeSyntax(
                 attributeName: IdentifierTypeSyntax(
                     name: .identifier(
@@ -332,6 +331,7 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
                     )
                 )
             ),
+            "@\(raw: String(describing: DefaultsValue.self))",
         ]
     }
 }
