@@ -10,6 +10,17 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+public struct ObservationDefaultsTracked: AccessorMacro {
+
+    public static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+    ) throws -> [AccessorDeclSyntax] {
+        []
+    }
+}
+
 public struct DefaultsValue: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,
@@ -59,9 +70,13 @@ public struct UserDefaultsValue: AccessorMacro {
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
+        let isObservable = declaration.as(VariableDeclSyntax.self)?.attributes.contains(where: { $0.as(AttributeSyntax.self)?.attributeName.identifier == ObservableUserDefaultsData.trackedMacroName }) ?? false
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+                if isObservable {
+                    "access(keyPath: \\.\(identifierPatternSyntax))"
+                }
                 if let defaultValueParam {
                     if variableType.isDefaultsNilable {
                         "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
@@ -74,7 +89,15 @@ public struct UserDefaultsValue: AccessorMacro {
                 }
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
-                "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
+                if isObservable {
+                    """
+                    withMutation(keyPath: \\.\(identifierPatternSyntax)) {
+                        \(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))
+                    }
+                    """
+                } else {
+                    "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
+                }
             },
         ]
     }

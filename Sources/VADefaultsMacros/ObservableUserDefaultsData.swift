@@ -322,9 +322,6 @@ extension ObservableUserDefaultsData: ExtensionMacro {
     ) throws -> [ExtensionDeclSyntax] {
         // This method can be called twice - first with an empty `protocols` when
         // no conformance is needed, and second with a `MissingTypeSyntax` instance.
-        if protocols.isEmpty {
-            return []
-        }
 
         let decl: DeclSyntax = """
             extension \(raw: type.trimmedDescription): \(raw: qualifiedConformanceName) {}

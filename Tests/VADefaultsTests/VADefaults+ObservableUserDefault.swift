@@ -45,31 +45,13 @@ extension VADefaultsTests {
                     try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
                 }
             }
+            
+            extension Defaults: Observation.Observable {
+            }
             """,
             macros: testMacros
         )
     }
-//
-//    func test_userDefaultMacro_struct() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData
-//            public struct Defaults {
-//            }
-//            """,
-//            expandedSource: """
-//            public struct Defaults {
-//
-//                private let userDefaults: UserDefaults
-//
-//                public init(userDefaults: UserDefaults = UserDefaults.standard) {
-//                    self.userDefaults = userDefaults
-//                }
-//            }
-//            """,
-//            macros: testMacros
-//        )
-//    }
 //
 //    func test_userDefaultMacro_failure() throws {
 //        assertMacroExpansion(
@@ -86,38 +68,60 @@ extension VADefaultsTests {
 //            macros: testMacros
 //        )
 //    }
-//
-//    func test_userDefaultMacro_variable() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData(defaults: .test)
-//            internal class Defaults {
-//                var someVariable: Int
-//                let someConstant = true
-//            }
-//            """,
-//            expandedSource: """
-//            internal class Defaults {
-//                var someVariable: Int {
-//                    get {
-//                        userDefaults.integer(forKey: "someVariable")
-//                    }
-//                    set {
-//                        userDefaults.setValue(newValue, forKey: "someVariable")
-//                    }
-//                }
-//                let someConstant = true
-//
-//                private let userDefaults: UserDefaults
-//
-//                internal init(userDefaults: UserDefaults = UserDefaults.test) {
-//                    self.userDefaults = userDefaults
-//                }
-//            }
-//            """,
-//            macros: testMacros
-//        )
-//    }
+
+    func test_observableUserDefaultMacro_variable() throws {
+        assertMacroExpansion(
+            """
+            @ObservableUserDefaultsData(defaults: .test)
+            internal class Defaults {
+                var someVariable: Int
+                let someConstant = true
+            }
+            """,
+            expandedSource: #"""
+            internal class Defaults {
+            
+                var someVariable: Int {
+                    get {
+                        access(keyPath: \.someVariable)
+                        userDefaults.integer(forKey: "someVariable")
+                    }
+                    set {
+                        withMutation(keyPath: \.someVariable) {
+                            userDefaults.setValue(newValue, forKey: "someVariable")
+                        }
+                    }
+                }
+                let someConstant = true
+            
+                private let userDefaults: UserDefaults
+
+                internal init(userDefaults: UserDefaults = UserDefaults.test) {
+                    self.userDefaults = userDefaults
+                }
+            
+                @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
+            
+                internal nonisolated func access<Member>(
+                    keyPath: KeyPath<Defaults, Member>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+
+                internal nonisolated func withMutation<Member, MutationResult>(
+                    keyPath: KeyPath<Defaults, Member>,
+                    _ mutation: () throws -> MutationResult
+                ) rethrows -> MutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            }
+            
+            extension Defaults: Observation.Observable {
+            }
+            """#,
+            macros: testMacros
+        )
+    }
 //
 //    func test_userDefaultMacro_variableValue() throws {
 //        assertMacroExpansion(

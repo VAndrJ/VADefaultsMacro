@@ -16,6 +16,7 @@ let testMacros: [String: Macro.Type] = [
     "CodableDefaultsValue": CodableDefaultsValue.self,
     "RawDefaultsValue": RawDefaultsValue.self,
     "ObservableUserDefaultsData": ObservableUserDefaultsData.self,
+    "ObservationDefaultsTracked": ObservationDefaultsTracked.self,
 ]
 
 final class VADefaultsTests: XCTestCase {
