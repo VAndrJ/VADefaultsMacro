@@ -21,13 +21,14 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
         in context: some SwiftSyntaxMacros.MacroExpansionContext
     ) throws -> [SwiftSyntax.AttributeSyntax] {
         guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
-              variableDeclSyntax.isVar,
-              !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable),
-              !variableDeclSyntax.attributes.isDefaultsValueMacro,
-              variableDeclSyntax.bindings.count == 1,
-              !variableDeclSyntax.bindings.contains(where: {
-                  $0.initializer != nil || $0.accessorBlock != nil
-              }) else {
+            variableDeclSyntax.isVar,
+            !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable),
+            !variableDeclSyntax.attributes.isDefaultsValueMacro,
+            variableDeclSyntax.bindings.count == 1,
+            !variableDeclSyntax.bindings.contains(where: {
+                $0.initializer != nil || $0.accessorBlock != nil
+            })
+        else {
             return []
         }
 
@@ -37,7 +38,6 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
-        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
@@ -50,22 +50,22 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
         } else {
             throw UserDefaultsValueError.classOfStructNeeded
         }
-        
+
         return [
             """
-            private let \(raw: variableName): \(raw: self.defaults)
+            private let \(raw: variableName): \(raw: UserDefaultsData.defaults)
 
-            \(raw: modifier)init(\(raw: variableName): \(raw: self.defaults) = \(raw: defaults)) {
+            \(raw: modifier)init(\(raw: variableName): \(raw: UserDefaultsData.defaults) = \(raw: defaults)) {
                 self.\(raw: variableName) = \(raw: variableName)
             }
-            """,
+            """
         ]
     }
 }
 
-private extension DeclModifierListSyntax {
+extension DeclModifierListSyntax {
     var initModifier: String {
-        switch first?.as(DeclModifierSyntax.self)?.name.tokenKind {
+        switch first?.name.tokenKind {
         case let .keyword(keyword):
             switch keyword {
             case .public, .open: "public "
