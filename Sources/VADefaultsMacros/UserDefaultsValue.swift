@@ -70,7 +70,7 @@ public struct UserDefaultsValue: AccessorMacro {
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
-        let isObservable = declaration.as(VariableDeclSyntax.self)?.attributes.contains(where: { $0.as(AttributeSyntax.self)?.attributeName.identifier == ObservableUserDefaultsData.trackedMacroName }) ?? false
+        let isObservable = declaration.isObservable
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

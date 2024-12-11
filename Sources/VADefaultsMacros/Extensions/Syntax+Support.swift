@@ -204,3 +204,14 @@ extension TypeAnnotationSyntax {
         }
     }
 }
+
+extension DeclSyntaxProtocol {
+
+    var isObservable: Bool {
+        self.as(VariableDeclSyntax.self)?
+            .attributes
+            .contains(where: {
+                $0.as(AttributeSyntax.self)?.attributeName.identifier == ObservableUserDefaultsData.trackedMacroName
+            }) ?? false
+    }
+}
