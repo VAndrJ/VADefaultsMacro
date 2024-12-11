@@ -249,19 +249,48 @@ public class Defaults {
 ```
 
 
+### @ObservableUserDefaultsData
+
+
+Adds a variable and initializer to the class, getters and setters to the variables wrapping `UserDefaults`, and `Observable` conformance.
+Dependent macroses:
+- @DefaultsValue
+- @RawDefaultsValue
+- @CodableDefaultsValue
+
+
+Example 1:
+
+
+```swift
+@ObservableUserDefaultsData
+class Defaults {
+    var someVariable: Int
+}
+
+// expands to 
+
+class Defaults {
+    var someVariable: Int {
+        get {
+            access(keyPath: \.someVariable)
+            return userDefaults.integer(forKey: "someVariable")
+        }
+        set {
+            withMutation(keyPath: \.someVariable) {
+                userDefaults.setValue(newValue, forKey: "someVariable")
+            }
+        }
+    }
+    
+// Other stuff to support Observable
+```
+
+
 #### TBD:
 
 
-- Value and `defaultValue` types comparison improvements.
-
-
-- `UserDefaultsData` additions.
-
-
 - `Codable` check. Throwable.
-
-
-- `RawRepresentable` improvements.
 
 
 ## Author
