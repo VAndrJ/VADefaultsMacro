@@ -29,7 +29,6 @@ public struct ObservableUserDefaultsData {
         return "\(moduleName).\(registrarTypeName)"
     }
 
-    static let trackedMacroName = "ObservationDefaultsTracked"
     static let ignoredMacroName = "ObservationIgnored"
 
     static let registrarVariableName = "_$observationRegistrar"
@@ -297,12 +296,9 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
         }
 
         // dont apply to ignored properties or properties that are already flagged as tracked
-        if property.hasMacroApplication(ObservableUserDefaultsData.ignoredMacroName)
-            || property.hasMacroApplication(ObservableUserDefaultsData.trackedMacroName)
-        {
+        if property.hasMacroApplication(ObservableUserDefaultsData.ignoredMacroName) {
             return []
         }
-
         guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
             variableDeclSyntax.isVar,
             !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable),
@@ -312,25 +308,10 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
                 $0.initializer != nil || $0.accessorBlock != nil
             })
         else {
-            return [
-                AttributeSyntax(
-                    attributeName: IdentifierTypeSyntax(
-                        name: .identifier(
-                            ObservableUserDefaultsData.trackedMacroName
-                        )
-                    )
-                ),
-            ]
+            return []
         }
 
         return [
-            AttributeSyntax(
-                attributeName: IdentifierTypeSyntax(
-                    name: .identifier(
-                        ObservableUserDefaultsData.trackedMacroName
-                    )
-                )
-            ),
             "@\(raw: String(describing: DefaultsValue.self))",
         ]
     }

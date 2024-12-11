@@ -55,7 +55,7 @@ public struct CodableUserDefaultsValue: AccessorMacro {
         let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
         let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
-        let isObservable = declaration.isObservable
+        let isObservable = context.isObservable
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

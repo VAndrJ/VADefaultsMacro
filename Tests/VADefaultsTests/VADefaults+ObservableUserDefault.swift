@@ -64,7 +64,6 @@ extension VADefaultsTests {
             """,
             expandedSource: #"""
             internal class Defaults {
-            
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
@@ -223,7 +222,6 @@ extension VADefaultsTests {
             expandedSource: #"""
             final class Defaults {
                 @MyMacro
-            
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
