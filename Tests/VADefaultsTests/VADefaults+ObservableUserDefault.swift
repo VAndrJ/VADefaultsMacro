@@ -144,48 +144,72 @@ extension VADefaultsTests {
 //        )
 //    }
 //
-//    func test_userDefaultMacro_codableRaw() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData(defaults: .test)
-//            private class Defaults {
-//                @RawDefaultsValue(rawType: Int.self)
-//                var rawRepresentableValue: MyRepresentableType?
-//                @CodableDefaultsValue(key: "customKey")
-//                var codableValue: MyCodableType?
-//            }
-//            """,
-//            expandedSource: """
-//            private class Defaults {
-//                var rawRepresentableValue: MyRepresentableType? {
-//                    get {
-//                        (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
-//                    }
-//                    set {
-//                        userDefaults.setValue(newValue?.rawValue, forKey: "rawRepresentableValue")
-//                    }
-//                }
-//                var codableValue: MyCodableType? {
-//                    get {
-//                        userDefaults.data(forKey: "customKey").flatMap {
-//                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
-//                        }
-//                    }
-//                    set {
-//                        userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
-//                    }
-//                }
-//
-//                private let userDefaults: UserDefaults
-//
-//                init(userDefaults: UserDefaults = UserDefaults.test) {
-//                    self.userDefaults = userDefaults
-//                }
-//            }
-//            """,
-//            macros: testMacros
-//        )
-//    }
+    func test_observableUserDefaultMacro_codableRaw() throws {
+        assertMacroExpansion(
+            """
+            @ObservableUserDefaultsData(defaults: .test)
+            class Defaults {
+                @RawDefaultsValue(rawType: Int.self)
+                var rawRepresentableValue: MyRepresentableType?
+                @CodableDefaultsValue(key: "customKey")
+                var codableValue: MyCodableType?
+            }
+            """,
+            expandedSource: #"""
+            class Defaults {
+                var rawRepresentableValue: MyRepresentableType? {
+                    get {
+                        access(keyPath: \.rawRepresentableValue)
+                        return (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                    }
+                    set {
+                        withMutation(keyPath: \.rawRepresentableValue) {
+                            userDefaults.setValue(newValue?.rawValue, forKey: "rawRepresentableValue")
+                        }
+                    }
+                }
+                var codableValue: MyCodableType? {
+                    get {
+                        access(keyPath: \.codableValue)
+                        return userDefaults.data(forKey: "customKey").flatMap {
+                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                        }
+                    }
+                    set {
+                        withMutation(keyPath: \.codableValue) {
+                            userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
+                        }
+                    }
+                }
+
+                private let userDefaults: UserDefaults
+
+                init(userDefaults: UserDefaults = UserDefaults.test) {
+                    self.userDefaults = userDefaults
+                }
+            
+                @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
+            
+                internal nonisolated func access<Member>(
+                    keyPath: KeyPath<Defaults, Member>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+
+                internal nonisolated func withMutation<Member, MutationResult>(
+                    keyPath: KeyPath<Defaults, Member>,
+                    _ mutation: () throws -> MutationResult
+                ) rethrows -> MutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            }
+            
+            extension Defaults: Observation.Observable {
+            }
+            """#,
+            macros: testMacros
+        )
+    }
 //
 //    func test_userDefaultMacro_otherMacro() throws {
 //        assertMacroExpansion(

@@ -55,13 +55,25 @@ public struct CodableUserDefaultsValue: AccessorMacro {
         let decoderParam = labeledExprListSyntax?.decoderParam ?? .decoder
         let defaultValue = defaultValueParam.flatMap { " ?? \($0)" } ?? ""
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
+        let isObservable = declaration.isObservable
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-                "\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
+                if isObservable {
+                    "access(keyPath: \\.\(identifierPatternSyntax))"
+                }
+                "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).data(forKey: \(raw: keyParam)).flatMap {try? \(raw: decoderParam).decode(\(raw: variableType).self, from: $0)}\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
-                "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
+                if isObservable {
+                    """
+                    withMutation(keyPath: \\.\(identifierPatternSyntax)) {
+                        \(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))
+                    }
+                    """
+                } else {
+                    "\(raw: defaultsParam).set(try? \(raw: encoderParam).encode(newValue), forKey: \(raw: keyParam))"
+                }
             },
         ]
     }

@@ -303,11 +303,35 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
             return []
         }
 
+        guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
+            variableDeclSyntax.isVar,
+            !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable),
+            !variableDeclSyntax.attributes.isDefaultsValueMacro,
+            variableDeclSyntax.bindings.count == 1,
+            !variableDeclSyntax.bindings.contains(where: {
+                $0.initializer != nil || $0.accessorBlock != nil
+            })
+        else {
+            return [
+                AttributeSyntax(
+                    attributeName: IdentifierTypeSyntax(
+                        name: .identifier(
+                            ObservableUserDefaultsData.trackedMacroName
+                        )
+                    )
+                ),
+            ]
+        }
+
         return [
             "@\(raw: String(describing: DefaultsValue.self))",
             AttributeSyntax(
                 attributeName: IdentifierTypeSyntax(
-                    name: .identifier(ObservableUserDefaultsData.trackedMacroName))),
+                    name: .identifier(
+                        ObservableUserDefaultsData.trackedMacroName
+                    )
+                )
+            ),
         ]
     }
 }
