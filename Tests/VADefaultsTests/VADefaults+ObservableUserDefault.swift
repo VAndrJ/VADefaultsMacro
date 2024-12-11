@@ -43,7 +43,6 @@ extension VADefaultsTests {
             @Observable
             @UserDefaultsData(defaults: .test)
             internal class Defaults {
-                @ObservationIgnored
                 var someVariable: Int
                 let someConstant = true
             }
@@ -55,7 +54,7 @@ extension VADefaultsTests {
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
-                        return userDefaults.integer(forKey: "someVariable")
+                        userDefaults.integer(forKey: "someVariable")
                     }
                     set {
                         withMutation(keyPath: \.someVariable) {
@@ -82,7 +81,6 @@ extension VADefaultsTests {
             @Observable
             @UserDefaultsData(defaults: SomeClass.staticDefaults)
             fileprivate class Defaults {
-                @ObservationIgnored
                 @DefaultsValue(key: "customKey")
                 var someVariable: Int
                 let someConstant = true
@@ -97,7 +95,7 @@ extension VADefaultsTests {
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
-                        return userDefaults.integer(forKey: "customKey")
+                        userDefaults.integer(forKey: "customKey")
                     }
                     set {
                         withMutation(keyPath: \.someVariable) {
@@ -126,10 +124,8 @@ extension VADefaultsTests {
             @Observable
             @UserDefaultsData(defaults: .test)
             private class Defaults {
-                @ObservationIgnored
                 @RawDefaultsValue(rawType: Int.self)
                 var rawRepresentableValue: MyRepresentableType?
-                @ObservationIgnored
                 @CodableDefaultsValue(key: "customKey")
                 var codableValue: MyCodableType?
             }
@@ -141,7 +137,7 @@ extension VADefaultsTests {
                 var rawRepresentableValue: MyRepresentableType? {
                     get {
                         access(keyPath: \.rawRepresentableValue)
-                        return (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                        (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
                     }
                     set {
                         withMutation(keyPath: \.rawRepresentableValue) {
@@ -153,7 +149,7 @@ extension VADefaultsTests {
                 var codableValue: MyCodableType? {
                     get {
                         access(keyPath: \.codableValue)
-                        return userDefaults.data(forKey: "customKey").flatMap {
+                        userDefaults.data(forKey: "customKey").flatMap {
                             try? JSONDecoder().decode(MyCodableType.self, from: $0)
                         }
                     }
@@ -182,7 +178,6 @@ extension VADefaultsTests {
             @UserDefaultsData(defaults: .test)
             final class Defaults {
                 @SomeMacro
-                @ObservationIgnored
                 var someVariable: Int
             }
             """,
@@ -194,7 +189,7 @@ extension VADefaultsTests {
                 var someVariable: Int {
                     get {
                         access(keyPath: \.someVariable)
-                        return userDefaults.integer(forKey: "someVariable")
+                        userDefaults.integer(forKey: "someVariable")
                     }
                     set {
                         withMutation(keyPath: \.someVariable) {

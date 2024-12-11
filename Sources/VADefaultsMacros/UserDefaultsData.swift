@@ -53,7 +53,7 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
         } else if let initModifier = declaration.as(StructDeclSyntax.self)?.modifiers.initModifier {
             modifier = initModifier
         } else {
-            throw UserDefaultsValueError.classOrStructNeeded
+            throw UserDefaultsValueError.classOfStructNeeded
         }
 
         return [

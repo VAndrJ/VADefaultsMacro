@@ -68,13 +68,13 @@ public struct UserDefaultsValue: AccessorMacro {
                 }
                 if let defaultValueParam {
                     if variableType.isDefaultsNilable {
-                        "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
+                        "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
                     } else  {
                         "\(raw: defaultsParam).register(defaults: [\(raw: keyParam): \(raw: defaultValueParam)])"
                         "return \(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
                     }
                 } else {
-                    "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
+                    "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
                 }
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
