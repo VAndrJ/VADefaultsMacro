@@ -13,7 +13,8 @@ public enum UserDefaultsValueError: Error, CustomStringConvertible {
     case dictKeyType
     case unsupportedType
     case typesMismatch
-    case classOfStructNeeded
+    case classOrStructNeeded
+    case classNeeded
     case staticVariable
 
     public var description: String {
@@ -23,7 +24,8 @@ public enum UserDefaultsValueError: Error, CustomStringConvertible {
         case .dictKeyType: "The Dictionary key type must be `String`."
         case .unsupportedType: "Unsupported type."
         case .typesMismatch: "The type of the variable and the `defaultValue` must match."
-        case .classOfStructNeeded: "Must be a `class` or `struct`."
+        case .classOrStructNeeded: "Must be a `class` or `struct`."
+        case .classNeeded: "Must be a `class`."
         case .staticVariable: "Must not be a `static` variable declaration."
         }
     }

@@ -17,7 +17,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultsValue()
+            @CodableUserDefaultsValue
             var value: MyCodable?
             """,
             expandedSource: """
@@ -193,7 +193,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_failure() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultsValue()
+            @CodableUserDefaultsValue
             var value: MyCodable
             """,
             expandedSource: """
@@ -207,7 +207,7 @@ extension VADefaultsTests {
     func test_defaultMacro_codable_notVariable() throws {
         assertMacroExpansion(
             """
-            @CodableUserDefaultsValue()
+            @CodableUserDefaultsValue
             var (a, b): MyCodable
             """,
             expandedSource: """

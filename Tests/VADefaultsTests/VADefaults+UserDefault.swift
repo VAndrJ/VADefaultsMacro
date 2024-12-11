@@ -67,7 +67,7 @@ extension VADefaultsTests {
             public enum Defaults {
             }
             """,
-            diagnostics: [.init(message: UserDefaultsValueError.classOfStructNeeded.description, line: 1, column: 1)],
+            diagnostics: [.init(message: UserDefaultsValueError.classOrStructNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
     }
@@ -219,7 +219,7 @@ extension VADefaultsTests {
     func test_userDefaultMacro_explicitStatic_notAllowed() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsData
+            @UserDefaultsData()
             class Defaults {
                 @DefaultsValue
                 static var someVariable: Int

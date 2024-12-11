@@ -15,6 +15,7 @@ let testMacros: [String: Macro.Type] = [
     "DefaultsValue": DefaultsValue.self,
     "CodableDefaultsValue": CodableDefaultsValue.self,
     "RawDefaultsValue": RawDefaultsValue.self,
+    "ObservableUserDefaultsData": ObservableUserDefaultsData.self,
 ]
 
 final class VADefaultsTests: XCTestCase {
@@ -63,7 +64,7 @@ final class VADefaultsTests: XCTestCase {
     func test_defaultMacro_standard_nilableValue() throws {
         assertMacroExpansion(
             """
-            @UserDefaultsValue()
+            @UserDefaultsValue
             var launchesCount: Int?
             """,
             expandedSource: """

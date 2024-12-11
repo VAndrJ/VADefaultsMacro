@@ -6,6 +6,7 @@
 //
 
 import SwiftSyntax
+import SwiftSyntaxMacros
 
 extension LabeledExprListSyntax {
     var defaultsParam: String? {
@@ -202,5 +203,17 @@ extension TypeAnnotationSyntax {
         } else {
             type.trimmedDescription
         }
+    }
+}
+
+extension MacroExpansionContext {
+    var isObservable: Bool {
+        self.lexicalContext
+            .first?
+            .as(ClassDeclSyntax.self)?
+            .attributes
+            .contains(where: {
+                $0.as(AttributeSyntax.self)?.attributeName.identifier == "ObservableUserDefaultsData"
+            }) ?? false
     }
 }

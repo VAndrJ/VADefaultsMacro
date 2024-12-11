@@ -59,22 +59,34 @@ public struct UserDefaultsValue: AccessorMacro {
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
+        let isObservable = context.isObservable
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
+                if isObservable {
+                    "access(keyPath: \\.\(identifierPatternSyntax))"
+                }
                 if let defaultValueParam {
                     if variableType.isDefaultsNilable {
-                        "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
+                        "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
                     } else  {
                         "\(raw: defaultsParam).register(defaults: [\(raw: keyParam): \(raw: defaultValueParam)])"
                         "return \(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
                     }
                 } else {
-                    "\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
+                    "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
                 }
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
-                "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
+                if isObservable {
+                    """
+                    withMutation(keyPath: \\.\(identifierPatternSyntax)) {
+                        \(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))
+                    }
+                    """
+                } else {
+                    "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue, forKey: \(raw: keyParam))"
+                }
             },
         ]
     }

@@ -56,13 +56,25 @@ public struct RawUserDefaultsValue: AccessorMacro {
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultValue = defaultValueParam.map { " ?? \($0)" } ?? ""
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
+        let isObservable = context.isObservable
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-                "(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"
+                if isObservable {
+                    "access(keyPath: \\.\(identifierPatternSyntax))"
+                }
+                "\(raw: isObservable ? "return " : "")(\(raw: defaultsParam).object(forKey: \(raw: keyParam)) as? \(raw: variableType.nativeType)).flatMap(\(raw: typeAnnotation.orWrapped).init(rawValue:))\(raw: defaultValue)"
             },
             AccessorDeclSyntax(accessorSpecifier: .keyword(.set)) {
-                "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue\(raw: typeAnnotation.isOptional ? "?" : "").rawValue, forKey: \(raw: keyParam))"
+                if isObservable {
+                    """
+                    withMutation(keyPath: \\.\(identifierPatternSyntax)) {
+                        \(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue\(raw: typeAnnotation.isOptional ? "?" : "").rawValue, forKey: \(raw: keyParam))
+                    }
+                    """
+                } else {
+                    "\(raw: defaultsParam).\(raw: variableType.defaultsSetter)(newValue\(raw: typeAnnotation.isOptional ? "?" : "").rawValue, forKey: \(raw: keyParam))"
+                }
             },
         ]
     }
