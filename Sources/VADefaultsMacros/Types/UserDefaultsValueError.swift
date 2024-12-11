@@ -14,6 +14,7 @@ public enum UserDefaultsValueError: Error, CustomStringConvertible {
     case unsupportedType
     case typesMismatch
     case classOfStructNeeded
+    case classNeeded
     case staticVariable
 
     public var description: String {
@@ -24,6 +25,7 @@ public enum UserDefaultsValueError: Error, CustomStringConvertible {
         case .unsupportedType: "Unsupported type."
         case .typesMismatch: "The type of the variable and the `defaultValue` must match."
         case .classOfStructNeeded: "Must be a `class` or `struct`."
+        case .classNeeded: "Must be a `class`."
         case .staticVariable: "Must not be a `static` variable declaration."
         }
     }
