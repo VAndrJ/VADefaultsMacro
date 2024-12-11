@@ -252,7 +252,7 @@ public class Defaults {
 ### Observation
 
 
-Just add `@Observable` to make `UserDefaultsData` observable. And `ObservationIgnored` to variables
+Just add `@Observable` to make `UserDefaultsData` observable.
 
 
 Example:
@@ -262,7 +262,6 @@ Example:
 @Observable
 @UserDefaultsData
 class Defaults {
-    @ObservationIgnored
     var someVariable: Int
 }
 
