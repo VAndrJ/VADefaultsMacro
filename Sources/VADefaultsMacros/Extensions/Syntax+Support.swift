@@ -192,18 +192,6 @@ extension TypeSyntax {
             throw UserDefaultsValueError.notVariable
         }
     }
-    var identifier: String? {
-        for token in tokens(viewMode: .all) {
-            switch token.tokenKind {
-            case let .identifier(identifier):
-                return identifier
-            default:
-                break
-            }
-        }
-
-        return nil
-    }
 }
 
 extension TypeAnnotationSyntax {
@@ -214,17 +202,5 @@ extension TypeAnnotationSyntax {
         } else {
             type.trimmedDescription
         }
-    }
-}
-
-
-extension DeclSyntaxProtocol {
-
-    var isObservable: Bool {
-        self.as(VariableDeclSyntax.self)?
-            .attributes
-            .contains(where: {
-                $0.as(AttributeSyntax.self)?.attributeName.identifier == "ObservationIgnored"
-            }) ?? false
     }
 }

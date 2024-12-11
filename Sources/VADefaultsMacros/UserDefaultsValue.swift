@@ -10,6 +10,17 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+public struct ObservationDefaultsTracked: AccessorMacro {
+
+    public static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+    ) throws -> [AccessorDeclSyntax] {
+        []
+    }
+}
+
 public struct DefaultsValue: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,
@@ -59,7 +70,7 @@ public struct UserDefaultsValue: AccessorMacro {
 
         let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
-        let isObservable = declaration.isObservable
+        let isObservable = declaration.as(VariableDeclSyntax.self)?.attributes.contains(where: { $0.as(AttributeSyntax.self)?.attributeName.identifier == ObservableUserDefaultsData.trackedMacroName }) ?? false
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

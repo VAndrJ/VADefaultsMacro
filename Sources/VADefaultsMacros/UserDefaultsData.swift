@@ -21,31 +21,18 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
         in context: some SwiftSyntaxMacros.MacroExpansionContext
     ) throws -> [SwiftSyntax.AttributeSyntax] {
         guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),
-              variableDeclSyntax.isVar,
-              !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable) else {
-            return []
-        }
-        let isObservable = declaration.as(ClassDeclSyntax.self)?.attributes.contains(where: { $0.as(AttributeSyntax.self)?.attributeName.identifier == "Observable" }) ?? false
-        guard !variableDeclSyntax.attributes.isDefaultsValueMacro else {
-            return isObservable ? ["@ObservationIgnored"] : []
-        }
-        guard variableDeclSyntax.bindings.count == 1,
+            variableDeclSyntax.isVar,
+            !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable),
+            !variableDeclSyntax.attributes.isDefaultsValueMacro,
+            variableDeclSyntax.bindings.count == 1,
             !variableDeclSyntax.bindings.contains(where: {
                 $0.initializer != nil || $0.accessorBlock != nil
-            }) else {
+            })
+        else {
             return []
         }
 
-        return if isObservable {
-            [
-                "@ObservationIgnored",
-                "@\(raw: String(describing: DefaultsValue.self))",
-            ]
-        } else {
-            [
-                "@\(raw: String(describing: DefaultsValue.self))",
-            ]
-        }
+        return ["@\(raw: String(describing: DefaultsValue.self))"]
     }
 
     public static func expansion(
