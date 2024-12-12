@@ -92,6 +92,7 @@ extension ObservableUserDefaultsData: MemberMacro {
 }
 
 extension ObservableUserDefaultsData: MemberAttributeMacro {
+
     public static func expansion<
         Declaration: DeclGroupSyntax,
         MemberDeclaration: DeclSyntaxProtocol,
@@ -306,7 +307,7 @@ extension FunctionDeclSyntax {
                 }
             }
         }
-        
+
         return true
     }
 
@@ -329,8 +330,11 @@ extension FunctionDeclSyntax {
             signature.returnClause?.type.genericSubstitution(genericParameterClause?.parameters)
             ?? "Void"
         return SignatureStandin(
-            isInstance: isInstance, identifier: name.text, parameters: parameters,
-            returnType: returnType)
+            isInstance: isInstance,
+            identifier: name.text,
+            parameters: parameters,
+            returnType: returnType
+        )
     }
 
     func isEquivalent(to other: FunctionDeclSyntax) -> Bool {
