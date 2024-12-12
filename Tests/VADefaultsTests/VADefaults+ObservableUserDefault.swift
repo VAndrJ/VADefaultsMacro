@@ -17,15 +17,17 @@ extension VADefaultsTests {
     func test_observableUserDefaultMacro_class() throws {
         assertMacroExpansion(
             """
+            @available(iOS 17.0, *)
             @ObservableUserDefaultsData(defaults: .test)
             open class Defaults {
             }
             """,
             expandedSource: """
+            @available(iOS 17.0, *)
             open class Defaults {
-
+            
                 private let userDefaults: UserDefaults
-
+            
                 public init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -37,7 +39,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -46,6 +48,7 @@ extension VADefaultsTests {
                 }
             }
             
+            @available(iOS 17.0, *)
             extension Defaults: Observation.Observable {
             }
             """,
@@ -53,14 +56,35 @@ extension VADefaultsTests {
         )
     }
 
+    func test_observableUserDefaultMacro_struct() throws {
+        assertMacroExpansion(
+            """
+            @ObservableUserDefaultsData
+            public struct Defaults {
+            }
+            """,
+            expandedSource: """
+            public struct Defaults {
+            }
+            """,
+            diagnostics: [
+                .init(message: UserDefaultsValueError.classNeeded.description, line: 1, column: 1),
+                .init(message: UserDefaultsValueError.classNeeded.description, line: 1, column: 1),
+            ],
+            macros: testMacros
+        )
+    }
+
     func test_observableUserDefaultMacro_variable() throws {
         assertMacroExpansion(
             """
-            @ObservableUserDefaultsData(defaults: .test)
+            @ObservableUserDefaultsData
             internal class Defaults {
                 var someVariable: Int
                 let someConstant = true
                 var someObsVariable = 1
+                @ObservationIgnored
+                var someBool = true
             }
             """,
             expandedSource: #"""
@@ -79,10 +103,12 @@ extension VADefaultsTests {
                 let someConstant = true
                 @ObservationTracked
                 var someObsVariable = 1
+                @ObservationIgnored
+                var someBool = true
             
                 private let userDefaults: UserDefaults
-
-                internal init(userDefaults: UserDefaults = UserDefaults.test) {
+            
+                internal init(userDefaults: UserDefaults = UserDefaults.standard) {
                     self.userDefaults = userDefaults
                 }
             
@@ -93,7 +119,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -108,44 +134,7 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
-//
-//    func test_userDefaultMacro_variableValue() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData(defaults: SomeClass.staticDefaults)
-//            fileprivate class Defaults {
-//                @DefaultsValue(key: "customKey")
-//                var someVariable: Int
-//                let someConstant = true
-//                var someStandardVariable = true
-//                var computedVariable: Bool { true }
-//            }
-//            """,
-//            expandedSource: """
-//            fileprivate class Defaults {
-//                var someVariable: Int {
-//                    get {
-//                        userDefaults.integer(forKey: "customKey")
-//                    }
-//                    set {
-//                        userDefaults.setValue(newValue, forKey: "customKey")
-//                    }
-//                }
-//                let someConstant = true
-//                var someStandardVariable = true
-//                var computedVariable: Bool { true }
-//
-//                private let userDefaults: UserDefaults
-//
-//                fileprivate init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
-//                    self.userDefaults = userDefaults
-//                }
-//            }
-//            """,
-//            macros: testMacros
-//        )
-//    }
-//
+
     func test_observableUserDefaultMacro_codableRaw() throws {
         assertMacroExpansion(
             """
@@ -183,9 +172,9 @@ extension VADefaultsTests {
                         }
                     }
                 }
-
+            
                 private let userDefaults: UserDefaults
-
+            
                 init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -197,7 +186,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -238,7 +227,7 @@ extension VADefaultsTests {
                 }
             
                 private let userDefaults: UserDefaults
-
+            
                 init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -250,7 +239,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult

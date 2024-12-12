@@ -123,14 +123,30 @@ extension LabeledExprSyntax {
     var function: String? { self.expression.as(FunctionCallExprSyntax.self)?.trimmedDescription }
 }
 
-private let varKeyowrd: TokenKind = .keyword(.var)
-private let staticKeyowrd: TokenKind = .keyword(.static)
-private let classKeyowrd: TokenKind = .keyword(.class)
-
 extension VariableDeclSyntax {
-    public var isVar: Bool { bindingSpecifier.tokenKind == varKeyowrd }
-    public var isStaticVariable: Bool { modifiers.contains { $0.name.tokenKind == staticKeyowrd } }
-    public var isClassVariable: Bool { modifiers.contains { $0.name.tokenKind == classKeyowrd } }
+    public var isVar: Bool { bindingSpecifier.tokenKind == .keyword(.var) }
+    public var isStaticVariable: Bool {
+        for modifier in modifiers {
+            for token in modifier.tokens(viewMode: .all) {
+                if token.tokenKind == .keyword(.static) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+    public var isClassVariable: Bool {
+        for modifier in modifiers {
+            for token in modifier.tokens(viewMode: .all) {
+                if token.tokenKind == .keyword(.class) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
 }
 
 extension TypeSyntax {
