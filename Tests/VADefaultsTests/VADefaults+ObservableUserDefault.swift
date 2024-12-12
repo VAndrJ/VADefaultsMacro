@@ -23,9 +23,9 @@ extension VADefaultsTests {
             """,
             expandedSource: """
             open class Defaults {
-
+            
                 private let userDefaults: UserDefaults
-
+            
                 public init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -37,7 +37,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -56,7 +56,7 @@ extension VADefaultsTests {
     func test_observableUserDefaultMacro_variable() throws {
         assertMacroExpansion(
             """
-            @ObservableUserDefaultsData(defaults: .test)
+            @ObservableUserDefaultsData
             internal class Defaults {
                 var someVariable: Int
                 let someConstant = true
@@ -81,8 +81,8 @@ extension VADefaultsTests {
                 var someObsVariable = 1
             
                 private let userDefaults: UserDefaults
-
-                internal init(userDefaults: UserDefaults = UserDefaults.test) {
+            
+                internal init(userDefaults: UserDefaults = UserDefaults.standard) {
                     self.userDefaults = userDefaults
                 }
             
@@ -93,7 +93,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -146,9 +146,9 @@ extension VADefaultsTests {
                         }
                     }
                 }
-
+            
                 private let userDefaults: UserDefaults
-
+            
                 init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -160,7 +160,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult
@@ -201,7 +201,7 @@ extension VADefaultsTests {
                 }
             
                 private let userDefaults: UserDefaults
-
+            
                 init(userDefaults: UserDefaults = UserDefaults.test) {
                     self.userDefaults = userDefaults
                 }
@@ -213,7 +213,7 @@ extension VADefaultsTests {
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
-
+            
                 internal nonisolated func withMutation<Member, MutationResult>(
                     keyPath: KeyPath<Defaults, Member>,
                     _ mutation: () throws -> MutationResult

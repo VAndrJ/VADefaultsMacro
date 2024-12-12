@@ -12,202 +12,45 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
 public struct ObservableUserDefaultsData {
-    // https://github.com/swiftlang/swift/blob/252a57a3fddb5da502d5bae1b780d1d3aa999df0/lib/Macros/Sources/ObservationMacros/ObservableMacro.swift#L17
     static let moduleName = "Observation"
-
     static let conformanceName = "Observable"
-    static var qualifiedConformanceName: String {
-        return "\(moduleName).\(conformanceName)"
-    }
-
-    static var observableConformanceType: TypeSyntax {
-        "\(raw: qualifiedConformanceName)"
-    }
-
+    static var qualifiedConformanceName: String { "\(moduleName).\(conformanceName)" }
     static let registrarTypeName = "ObservationRegistrar"
-    static var qualifiedRegistrarTypeName: String {
-        return "\(moduleName).\(registrarTypeName)"
-    }
-
+    static var qualifiedRegistrarTypeName: String { "\(moduleName).\(registrarTypeName)" }
     static let trackedMacroName = "ObservationTracked"
     static let ignoredMacroName = "ObservationIgnored"
-
     static let registrarVariableName = "_$observationRegistrar"
 
     static func registrarVariable(_ observableType: TokenSyntax) -> DeclSyntax {
-        return
-            """
-            @\(raw: ignoredMacroName) private let \(raw: registrarVariableName) = \(raw: qualifiedRegistrarTypeName)()
-            """
+        """
+        @\(raw: ignoredMacroName) private let \(raw: registrarVariableName) = \(raw: qualifiedRegistrarTypeName)()
+        """
     }
 
     static func accessFunction(_ observableType: TokenSyntax) -> DeclSyntax {
-        return
-            """
-            internal nonisolated func access<Member>(
-            keyPath: KeyPath<\(observableType), Member>
-            ) {
-            \(raw: registrarVariableName).access(self, keyPath: keyPath)
-            }
-            """
+        """
+        internal nonisolated func access<Member>(
+        keyPath: KeyPath<\(observableType), Member>
+        ) {
+        \(raw: registrarVariableName).access(self, keyPath: keyPath)
+        }
+        """
     }
 
     static func withMutationFunction(_ observableType: TokenSyntax) -> DeclSyntax {
-        return
-            """
-            internal nonisolated func withMutation<Member, MutationResult>(
-            keyPath: KeyPath<\(observableType), Member>,
-            _ mutation: () throws -> MutationResult
-            ) rethrows -> MutationResult {
-            try \(raw: registrarVariableName).withMutation(of: self, keyPath: keyPath, mutation)
-            }
-            """
-    }
-
-    static var ignoredAttribute: AttributeSyntax {
-        AttributeSyntax(
-            leadingTrivia: .space,
-            atSign: .atSignToken(),
-            attributeName: IdentifierTypeSyntax(name: .identifier(ignoredMacroName)),
-            trailingTrivia: .space
-        )
-    }
-}
-
-struct ObservationDiagnostic: DiagnosticMessage {
-    enum ID: String {
-        case invalidApplication = "invalid type"
-        case missingInitializer = "missing initializer"
-    }
-
-    var message: String
-    var diagnosticID: MessageID
-    var severity: DiagnosticSeverity
-
-    init(
-        message: String, diagnosticID: SwiftDiagnostics.MessageID,
-        severity: SwiftDiagnostics.DiagnosticSeverity = .error
-    ) {
-        self.message = message
-        self.diagnosticID = diagnosticID
-        self.severity = severity
-    }
-
-    init(
-        message: String, domain: String, id: ID,
-        severity: SwiftDiagnostics.DiagnosticSeverity = .error
-    ) {
-        self.message = message
-        self.diagnosticID = MessageID(domain: domain, id: id.rawValue)
-        self.severity = severity
-    }
-}
-
-extension DiagnosticsError {
-    init<S: SyntaxProtocol>(
-        syntax: S, message: String, domain: String = "Observation", id: ObservationDiagnostic.ID,
-        severity: SwiftDiagnostics.DiagnosticSeverity = .error
-    ) {
-        self.init(diagnostics: [
-            Diagnostic(
-                node: Syntax(syntax),
-                message: ObservationDiagnostic(
-                    message: message, domain: domain, id: id, severity: severity))
-        ])
-    }
-}
-
-extension DeclModifierListSyntax {
-    func privatePrefixed(_ prefix: String) -> DeclModifierListSyntax {
-        let modifier: DeclModifierSyntax = DeclModifierSyntax(
-            name: "private", trailingTrivia: .space)
-        return [modifier]
-            + filter {
-                switch $0.name.tokenKind {
-                case .keyword(let keyword):
-                    switch keyword {
-                    case .fileprivate, .private, .internal, .package, .public:
-                        return false
-                    default:
-                        return true
-                    }
-                default:
-                    return true
-                }
-            }
-    }
-
-    init(keyword: Keyword) {
-        self.init([DeclModifierSyntax(name: .keyword(keyword))])
-    }
-}
-
-extension TokenSyntax {
-
-    func privatePrefixed(_ prefix: String) -> TokenSyntax {
-        switch tokenKind {
-        case .identifier(let identifier):
-            return TokenSyntax(
-                .identifier(prefix + identifier), leadingTrivia: leadingTrivia,
-                trailingTrivia: trailingTrivia, presence: presence)
-        default:
-            return self
+        """
+        internal nonisolated func withMutation<Member, MutationResult>(
+        keyPath: KeyPath<\(observableType), Member>,
+        _ mutation: () throws -> MutationResult
+        ) rethrows -> MutationResult {
+        try \(raw: registrarVariableName).withMutation(of: self, keyPath: keyPath, mutation)
         }
-    }
-}
-
-extension PatternBindingListSyntax {
-
-    func privatePrefixed(_ prefix: String) -> PatternBindingListSyntax {
-        var bindings = self.map { $0 }
-        for index in 0..<bindings.count {
-            let binding = bindings[index]
-            if let identifier = binding.pattern.as(IdentifierPatternSyntax.self) {
-                bindings[index] = PatternBindingSyntax(
-                    leadingTrivia: binding.leadingTrivia,
-                    pattern: IdentifierPatternSyntax(
-                        leadingTrivia: identifier.leadingTrivia,
-                        identifier: identifier.identifier.privatePrefixed(prefix),
-                        trailingTrivia: identifier.trailingTrivia
-                    ),
-                    typeAnnotation: binding.typeAnnotation,
-                    initializer: binding.initializer,
-                    accessorBlock: binding.accessorBlock,
-                    trailingComma: binding.trailingComma,
-                    trailingTrivia: binding.trailingTrivia
-                )
-            }
-        }
-
-        return PatternBindingListSyntax(bindings)
+        """
     }
 }
 
 extension VariableDeclSyntax {
-    func privatePrefixed(
-        _ prefix: String,
-        addingAttribute attribute: AttributeSyntax
-    ) -> VariableDeclSyntax {
-        let newAttributes = attributes + [.attribute(attribute)]
-
-        return VariableDeclSyntax(
-            leadingTrivia: leadingTrivia,
-            attributes: newAttributes,
-            modifiers: modifiers.privatePrefixed(prefix),
-            bindingSpecifier: TokenSyntax(
-                bindingSpecifier.tokenKind,
-                leadingTrivia: .space,
-                trailingTrivia: .space,
-                presence: .present
-            ),
-            bindings: bindings.privatePrefixed(prefix),
-            trailingTrivia: trailingTrivia
-        )
-    }
-
-    var isValidForObservation: Bool {
-        !isComputed && isInstance && !isImmutable && identifier != nil
-    }
+    var isValidForObservation: Bool { !isComputed && isInstance && !isImmutable && identifier != nil }
 }
 
 extension ObservableUserDefaultsData: MemberMacro {
@@ -220,44 +63,14 @@ extension ObservableUserDefaultsData: MemberMacro {
         conformingTo protocols: [TypeSyntax],
         in context: Context
     ) throws -> [DeclSyntax] {
-        guard let identified = declaration.asProtocol(NamedDeclSyntax.self) else {
-            return []
+        guard let identified = declaration.as(ClassDeclSyntax.self) else {
+            throw UserDefaultsValueError.classNeeded
         }
 
         let observableType = identified.name.trimmed
-
-        if declaration.isEnum {
-            // enumerations cannot store properties
-            throw DiagnosticsError(
-                syntax: node,
-                message:
-                    "'@Observable' cannot be applied to enumeration type '\(observableType.text)'",
-                id: .invalidApplication)
-        }
-        if declaration.isStruct {
-            // structs are not yet supported; copying/mutation semantics tbd
-            throw DiagnosticsError(
-                syntax: node,
-                message: "'@Observable' cannot be applied to struct type '\(observableType.text)'",
-                id: .invalidApplication)
-        }
-        if declaration.isActor {
-            // actors cannot yet be supported for their isolation
-            throw DiagnosticsError(
-                syntax: node,
-                message: "'@Observable' cannot be applied to actor type '\(observableType.text)'",
-                id: .invalidApplication)
-        }
-
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
         let defaults = labeledExprListSyntax?.defaultsParam ?? .standardDefaults
-        let modifier: String
-        if let initModifier = declaration.as(ClassDeclSyntax.self)?.modifiers.initModifier {
-            modifier = initModifier
-        } else {
-            throw UserDefaultsValueError.classOrStructNeeded
-        }
-
+        let modifier = identified.modifiers.initModifier
         var declarations: [DeclSyntax] = [
             """
             private let \(raw: UserDefaultsData.variableName): \(raw: UserDefaultsData.defaults)
@@ -267,7 +80,6 @@ extension ObservableUserDefaultsData: MemberMacro {
             }
             """
         ]
-
         declaration.addIfNeeded(
             ObservableUserDefaultsData.registrarVariable(observableType), to: &declarations)
         declaration.addIfNeeded(
@@ -319,6 +131,7 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
 }
 
 extension ObservableUserDefaultsData: ExtensionMacro {
+
     public static func expansion(
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,
@@ -414,10 +227,6 @@ extension VariableDeclSyntax {
             return false
         }
         return identifier?.text == other.identifier?.text
-    }
-
-    var initializer: InitializerClauseSyntax? {
-        bindings.first?.initializer
     }
 
     func hasMacroApplication(_ name: String) -> Bool {
@@ -538,15 +347,6 @@ extension FunctionDeclSyntax {
 }
 
 extension DeclGroupSyntax {
-    var memberFunctionStandins: [FunctionDeclSyntax.SignatureStandin] {
-        var standins = [FunctionDeclSyntax.SignatureStandin]()
-        for member in memberBlock.members {
-            if let function = member.decl.as(FunctionDeclSyntax.self) {
-                standins.append(function.signatureStandin)
-            }
-        }
-        return standins
-    }
 
     func hasMemberFunction(equvalentTo other: FunctionDeclSyntax) -> Bool {
         for member in memberBlock.members {
@@ -570,17 +370,9 @@ extension DeclGroupSyntax {
         return false
     }
 
-    var definedVariables: [VariableDeclSyntax] {
-        memberBlock.members.compactMap { member in
-            if let variableDecl = member.decl.as(VariableDeclSyntax.self) {
-                return variableDecl
-            }
-            return nil
-        }
-    }
-
     func addIfNeeded(_ decl: DeclSyntax?, to declarations: inout [DeclSyntax]) {
         guard let decl else { return }
+
         if let fn = decl.as(FunctionDeclSyntax.self) {
             if !hasMemberFunction(equvalentTo: fn) {
                 declarations.append(decl)
@@ -590,22 +382,6 @@ extension DeclGroupSyntax {
                 declarations.append(decl)
             }
         }
-    }
-
-    var isClass: Bool {
-        return self.is(ClassDeclSyntax.self)
-    }
-
-    var isActor: Bool {
-        return self.is(ActorDeclSyntax.self)
-    }
-
-    var isEnum: Bool {
-        return self.is(EnumDeclSyntax.self)
-    }
-
-    var isStruct: Bool {
-        return self.is(StructDeclSyntax.self)
     }
 }
 
