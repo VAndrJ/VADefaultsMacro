@@ -108,44 +108,7 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
-//
-//    func test_userDefaultMacro_variableValue() throws {
-//        assertMacroExpansion(
-//            """
-//            @UserDefaultsData(defaults: SomeClass.staticDefaults)
-//            fileprivate class Defaults {
-//                @DefaultsValue(key: "customKey")
-//                var someVariable: Int
-//                let someConstant = true
-//                var someStandardVariable = true
-//                var computedVariable: Bool { true }
-//            }
-//            """,
-//            expandedSource: """
-//            fileprivate class Defaults {
-//                var someVariable: Int {
-//                    get {
-//                        userDefaults.integer(forKey: "customKey")
-//                    }
-//                    set {
-//                        userDefaults.setValue(newValue, forKey: "customKey")
-//                    }
-//                }
-//                let someConstant = true
-//                var someStandardVariable = true
-//                var computedVariable: Bool { true }
-//
-//                private let userDefaults: UserDefaults
-//
-//                fileprivate init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
-//                    self.userDefaults = userDefaults
-//                }
-//            }
-//            """,
-//            macros: testMacros
-//        )
-//    }
-//
+
     func test_observableUserDefaultMacro_codableRaw() throws {
         assertMacroExpansion(
             """
