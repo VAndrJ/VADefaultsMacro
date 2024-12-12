@@ -17,11 +17,13 @@ extension VADefaultsTests {
     func test_observableUserDefaultMacro_class() throws {
         assertMacroExpansion(
             """
+            @available(iOS 17.0, *)
             @ObservableUserDefaultsData(defaults: .test)
             open class Defaults {
             }
             """,
             expandedSource: """
+            @available(iOS 17.0, *)
             open class Defaults {
             
                 private let userDefaults: UserDefaults
@@ -46,9 +48,29 @@ extension VADefaultsTests {
                 }
             }
             
+            @available(iOS 17.0, *)
             extension Defaults: Observation.Observable {
             }
             """,
+            macros: testMacros
+        )
+    }
+
+    func test_observableUserDefaultMacro_struct() throws {
+        assertMacroExpansion(
+            """
+            @ObservableUserDefaultsData
+            public struct Defaults {
+            }
+            """,
+            expandedSource: """
+            public struct Defaults {
+            }
+            """,
+            diagnostics: [
+                .init(message: UserDefaultsValueError.classNeeded.description, line: 1, column: 1),
+                .init(message: UserDefaultsValueError.classNeeded.description, line: 1, column: 1),
+            ],
             macros: testMacros
         )
     }
@@ -61,6 +83,8 @@ extension VADefaultsTests {
                 var someVariable: Int
                 let someConstant = true
                 var someObsVariable = 1
+                @ObservationIgnored
+                var someBool = true
             }
             """,
             expandedSource: #"""
@@ -79,6 +103,8 @@ extension VADefaultsTests {
                 let someConstant = true
                 @ObservationTracked
                 var someObsVariable = 1
+                @ObservationIgnored
+                var someBool = true
             
                 private let userDefaults: UserDefaults
             

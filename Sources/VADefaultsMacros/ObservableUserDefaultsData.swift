@@ -139,15 +139,19 @@ extension ObservableUserDefaultsData: ExtensionMacro {
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
-        // This method can be called twice - first with an empty `protocols` when
-        // no conformance is needed, and second with a `MissingTypeSyntax` instance.
+        guard declaration.is(ClassDeclSyntax.self) else {
+            throw UserDefaultsValueError.classNeeded
+        }
 
         let decl: DeclSyntax = """
             extension \(raw: type.trimmedDescription): \(raw: qualifiedConformanceName) {}
             """
         let ext = decl.cast(ExtensionDeclSyntax.self)
 
-        if let availability = declaration.attributes.availability {
+        if var availability = declaration.attributes.availability {
+            if availability.trailingTrivia != .newline {
+                availability = availability.with(\.trailingTrivia, .newline)
+            }
             return [ext.with(\.attributes, availability)]
         } else {
             return [ext]
@@ -156,10 +160,7 @@ extension ObservableUserDefaultsData: ExtensionMacro {
 }
 
 extension VariableDeclSyntax {
-    var identifierPattern: IdentifierPatternSyntax? {
-        bindings.first?.pattern.as(IdentifierPatternSyntax.self)
-    }
-
+    var identifierPattern: IdentifierPatternSyntax? { bindings.first?.pattern.as(IdentifierPatternSyntax.self) }
     var isInstance: Bool {
         for modifier in modifiers {
             for token in modifier.tokens(viewMode: .all) {
@@ -168,16 +169,11 @@ extension VariableDeclSyntax {
                 }
             }
         }
+
         return true
     }
-
-    var identifier: TokenSyntax? {
-        identifierPattern?.identifier
-    }
-
-    var type: TypeSyntax? {
-        bindings.first?.typeAnnotation?.type
-    }
+    var identifier: TokenSyntax? { identifierPattern?.identifier }
+    var type: TypeSyntax? { bindings.first?.typeAnnotation?.type }
 
     func accessorsMatching(_ predicate: (TokenKind) -> Bool) -> [AccessorDeclSyntax] {
         let accessors: [AccessorDeclListSyntax.Element] = bindings.compactMap { patternBinding in
@@ -188,6 +184,7 @@ extension VariableDeclSyntax {
                 return nil
             }
         }.flatMap { $0 }
+
         return accessors.compactMap { accessor in
             if predicate(accessor.accessorSpecifier.tokenKind) {
                 return accessor
@@ -195,13 +192,6 @@ extension VariableDeclSyntax {
                 return nil
             }
         }
-    }
-
-    var willSetAccessors: [AccessorDeclSyntax] {
-        accessorsMatching { $0 == .keyword(.willSet) }
-    }
-    var didSetAccessors: [AccessorDeclSyntax] {
-        accessorsMatching { $0 == .keyword(.didSet) }
     }
 
     var isComputed: Bool {
@@ -218,14 +208,13 @@ extension VariableDeclSyntax {
         }
     }
 
-    var isImmutable: Bool {
-        return bindingSpecifier.tokenKind == .keyword(.let)
-    }
+    var isImmutable: Bool { bindingSpecifier.tokenKind == .keyword(.let) }
 
     func isEquivalent(to other: VariableDeclSyntax) -> Bool {
         if isInstance != other.isInstance {
             return false
         }
+
         return identifier?.text == other.identifier?.text
     }
 
@@ -242,6 +231,7 @@ extension VariableDeclSyntax {
                 break
             }
         }
+
         return false
     }
 }
@@ -256,6 +246,7 @@ extension TypeSyntax {
                 break
             }
         }
+
         return nil
     }
 
@@ -315,6 +306,7 @@ extension FunctionDeclSyntax {
                 }
             }
         }
+        
         return true
     }
 
@@ -342,7 +334,7 @@ extension FunctionDeclSyntax {
     }
 
     func isEquivalent(to other: FunctionDeclSyntax) -> Bool {
-        return signatureStandin == other.signatureStandin
+        signatureStandin == other.signatureStandin
     }
 }
 
@@ -441,7 +433,6 @@ extension IfConfigDeclSyntax {
         } else {
             return with(\.clauses, IfConfigClauseListSyntax(elements))
         }
-
     }
 }
 
@@ -459,6 +450,7 @@ extension AttributeListSyntax.Element {
         @unknown default:
             break
         }
+
         return nil
     }
 }
@@ -474,6 +466,7 @@ extension AttributeListSyntax {
         if elements.isEmpty {
             return nil
         }
+
         return AttributeListSyntax(elements)
     }
 }
