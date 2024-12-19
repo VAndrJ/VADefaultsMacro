@@ -53,7 +53,8 @@ public struct RawUserDefaultsValue: AccessorMacro {
             throw UserDefaultsValueError.defaultValueNeeded
         }
 
-        let keyParam = labeledExprListSyntax?.keyParam ?? identifierPatternSyntax.identifier.text.quoted
+        let keyPrefix = variableDeclSyntax.isStandaloneMacro ? "" : context.prefix
+        let keyParam = labeledExprListSyntax?.keyParam ?? "\(keyPrefix)\(identifierPatternSyntax.identifier.text)".quoted
         let defaultValue = defaultValueParam.map { " ?? \($0)" } ?? ""
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
         let isObservable = context.isObservable
