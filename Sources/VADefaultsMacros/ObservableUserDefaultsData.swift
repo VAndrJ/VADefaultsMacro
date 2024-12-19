@@ -174,7 +174,6 @@ extension VariableDeclSyntax {
         return true
     }
     var identifier: TokenSyntax? { identifierPattern?.identifier }
-    var type: TypeSyntax? { bindings.first?.typeAnnotation?.type }
 
     func accessorsMatching(_ predicate: (TokenKind) -> Bool) -> [AccessorDeclSyntax] {
         let accessors: [AccessorDeclListSyntax.Element] = bindings.compactMap { patternBinding in
