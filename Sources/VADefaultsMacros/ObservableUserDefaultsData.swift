@@ -29,8 +29,8 @@ public struct ObservableUserDefaultsData {
 
     static func accessFunction(_ observableType: TokenSyntax) -> DeclSyntax {
         """
-        internal nonisolated func access<Member>(
-        keyPath: KeyPath<\(observableType), Member>
+        internal nonisolated func access<_TMember>(
+        keyPath: KeyPath<\(observableType), _TMember>
         ) {
         \(raw: registrarVariableName).access(self, keyPath: keyPath)
         }
@@ -39,10 +39,10 @@ public struct ObservableUserDefaultsData {
 
     static func withMutationFunction(_ observableType: TokenSyntax) -> DeclSyntax {
         """
-        internal nonisolated func withMutation<Member, MutationResult>(
-        keyPath: KeyPath<\(observableType), Member>,
-        _ mutation: () throws -> MutationResult
-        ) rethrows -> MutationResult {
+        internal nonisolated func withMutation<_TMember, _TMutationResult>(
+        keyPath: KeyPath<\(observableType), _TMember>,
+        _ mutation: () throws -> _TMutationResult
+        ) rethrows -> _TMutationResult {
         try \(raw: registrarVariableName).withMutation(of: self, keyPath: keyPath, mutation)
         }
         """

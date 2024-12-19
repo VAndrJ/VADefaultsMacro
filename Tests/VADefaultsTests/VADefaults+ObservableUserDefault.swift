@@ -34,16 +34,16 @@ extension VADefaultsTests {
             
                 @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
             
-                internal nonisolated func access<Member>(
-                    keyPath: KeyPath<Defaults, Member>
+                internal nonisolated func access<_TMember>(
+                    keyPath: KeyPath<Defaults, _TMember>
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
             
-                internal nonisolated func withMutation<Member, MutationResult>(
-                    keyPath: KeyPath<Defaults, Member>,
-                    _ mutation: () throws -> MutationResult
-                ) rethrows -> MutationResult {
+                internal nonisolated func withMutation<_TMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
                     try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
                 }
             }
@@ -114,16 +114,16 @@ extension VADefaultsTests {
             
                 @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
             
-                internal nonisolated func access<Member>(
-                    keyPath: KeyPath<Defaults, Member>
+                internal nonisolated func access<_TMember>(
+                    keyPath: KeyPath<Defaults, _TMember>
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
             
-                internal nonisolated func withMutation<Member, MutationResult>(
-                    keyPath: KeyPath<Defaults, Member>,
-                    _ mutation: () throws -> MutationResult
-                ) rethrows -> MutationResult {
+                internal nonisolated func withMutation<_TMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
                     try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
                 }
             }
@@ -181,16 +181,16 @@ extension VADefaultsTests {
             
                 @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
             
-                internal nonisolated func access<Member>(
-                    keyPath: KeyPath<Defaults, Member>
+                internal nonisolated func access<_TMember>(
+                    keyPath: KeyPath<Defaults, _TMember>
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
             
-                internal nonisolated func withMutation<Member, MutationResult>(
-                    keyPath: KeyPath<Defaults, Member>,
-                    _ mutation: () throws -> MutationResult
-                ) rethrows -> MutationResult {
+                internal nonisolated func withMutation<_TMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
                     try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
                 }
             }
@@ -234,16 +234,16 @@ extension VADefaultsTests {
             
                 @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
             
-                internal nonisolated func access<Member>(
-                    keyPath: KeyPath<Defaults, Member>
+                internal nonisolated func access<_TMember>(
+                    keyPath: KeyPath<Defaults, _TMember>
                 ) {
                     _$observationRegistrar.access(self, keyPath: keyPath)
                 }
             
-                internal nonisolated func withMutation<Member, MutationResult>(
-                    keyPath: KeyPath<Defaults, Member>,
-                    _ mutation: () throws -> MutationResult
-                ) rethrows -> MutationResult {
+                internal nonisolated func withMutation<_TMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
                     try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
                 }
             }
