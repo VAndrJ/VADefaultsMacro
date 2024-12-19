@@ -254,5 +254,70 @@ extension VADefaultsTests {
             macros: testMacros
         )
     }
+
+    func test_observableUserDefaultMacro_values() throws {
+        assertMacroExpansion(
+            """
+            @available(iOS 17.0, *)
+            @ObservableUserDefaultsData(defaults: .test)
+            open class Defaults {
+                @UserDefaultsValue(defaultValue: "a")
+                var value: String
+                @UserDefaultsValue(defaultValue: "a")
+                static var staticValue: String
+            }
+            """,
+            expandedSource: #"""
+            @available(iOS 17.0, *)
+            open class Defaults {
+                var value: String {
+                    get {
+                        access(keyPath: \.value)
+                        return UserDefaults.standard.string(forKey: "value") ?? "a"
+                    }
+                    set {
+                        withMutation(keyPath: \.value) {
+                            UserDefaults.standard.setValue(newValue, forKey: "value")
+                        }
+                    }
+                }
+                static var staticValue: String {
+                    get {
+                        UserDefaults.standard.string(forKey: "staticValue") ?? "a"
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "staticValue")
+                    }
+                }
+            
+                private let userDefaults: UserDefaults
+            
+                public init(userDefaults: UserDefaults = UserDefaults.test) {
+                    self.userDefaults = userDefaults
+                }
+            
+                @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
+            
+                internal nonisolated func access<_TMember>(
+                    keyPath: KeyPath<Defaults, _TMember>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+            
+                internal nonisolated func withMutation<_TMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            }
+            
+            @available(iOS 17.0, *)
+            extension Defaults: Observation.Observable {
+            }
+            """#,
+            macros: testMacros
+        )
+    }
 }
 #endif
