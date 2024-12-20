@@ -114,6 +114,10 @@ extension VADefaultsTests {
                 let someConstant = true
                 var someStandardVariable = true
                 var computedVariable: Bool { true }
+                var computedVariable1: Bool { 
+                    get { true }
+                    set { _ = newValue }
+                }
             }
             """,
             expandedSource: """
@@ -129,6 +133,10 @@ extension VADefaultsTests {
                 let someConstant = true
                 var someStandardVariable = true
                 var computedVariable: Bool { true }
+                var computedVariable1: Bool { 
+                    get { true }
+                    set { _ = newValue }
+                }
 
                 private let userDefaults: UserDefaults
 
