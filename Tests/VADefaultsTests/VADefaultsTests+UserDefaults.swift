@@ -28,20 +28,20 @@ class VAObservableDefaultsTests: XCTestCase {
 
         XCTAssertEqual(0, defaults.value)
         XCTAssertEqual(0, UserDefaults.testDefaults.integer(forKey: "com.vandrj.value"))
-        observeChange(of: defaults.value) {
+        verifyObservableChange(of: defaults.value) {
             defaults.value = 1
         }
         XCTAssertEqual(1, defaults.value)
         XCTAssertEqual(1, UserDefaults.testDefaults.integer(forKey: "com.vandrj.value"))
 
         XCTAssertEqual(.init(value: 0), defaults.codableValue)
-        observeChange(of: defaults.codableValue) {
+        verifyObservableChange(of: defaults.codableValue) {
             defaults.codableValue = .init(value: 1)
         }
         XCTAssertEqual(.init(value: 1), defaults.codableValue)
 
         XCTAssertEqual(.foo, defaults.rawValue)
-        observeChange(of: defaults.rawValue) {
+        verifyObservableChange(of: defaults.rawValue) {
             defaults.rawValue = .bar
         }
         XCTAssertEqual(.bar, defaults.rawValue)
@@ -71,11 +71,11 @@ struct TestCodableStruct: Codable, Equatable {
 extension XCTestCase {
 
     @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-    func observeChange<T>(
+    func verifyObservableChange<T>(
         of value: @autoclosure () -> T,
         change: () -> Void
     ) {
-        let expectation = XCTestExpectation(description: "Observation should change")
+        let expectation = XCTestExpectation(description: "Observable should change")
         withObservationTracking {
             _ = value()
         } onChange: {
