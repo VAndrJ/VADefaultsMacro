@@ -220,7 +220,8 @@ extension MacroExpansionContext {
             .as(ClassDeclSyntax.self)?
             .attributes
             .contains(where: {
-                $0.as(AttributeSyntax.self)?.attributeName.identifier == "ObservableUserDefaultsData"
+                ["ObservableUserDefaultsData", "Observable"]
+                    .contains($0.as(AttributeSyntax.self)?.attributeName.identifier)
             }) ?? false
     }
     var prefix: String {

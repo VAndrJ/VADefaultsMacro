@@ -23,7 +23,7 @@ class VAObservableDefaultsTests: XCTestCase {
         UserDefaults.testDefaults.clear()
     }
 
-    func test_defaultsValues() {
+    func test_observableDefaultsValues() {
         let defaults = ObservableDefaults()
 
         XCTAssertEqual(0, defaults.value)
@@ -66,6 +66,44 @@ class VAObservableDefaultsTests: XCTestCase {
         }
         XCTAssertEqual(.bar, defaults.defaultsRawValue)
     }
+
+    func test_observableUserDefaultsValues() {
+        let store = ObservableStore()
+
+        XCTAssertEqual(0, store.defaultsValue)
+        XCTAssertEqual(0, UserDefaults.testDefaults.integer(forKey: "defaultsValue"))
+        verifyObservableChange(of: store.defaultsValue) {
+            store.defaultsValue = 1
+        }
+        XCTAssertEqual(1, store.defaultsValue)
+        XCTAssertEqual(1, UserDefaults.testDefaults.integer(forKey: "defaultsValue"))
+
+        XCTAssertEqual(.init(value: 0), store.defaultsCodableValue)
+        verifyObservableChange(of: store.defaultsCodableValue) {
+            store.defaultsCodableValue = .init(value: 1)
+        }
+        XCTAssertEqual(.init(value: 1), store.defaultsCodableValue)
+
+        XCTAssertEqual(.foo, store.defaultsRawValue)
+        verifyObservableChange(of: store.defaultsRawValue) {
+            store.defaultsRawValue = .bar
+        }
+        XCTAssertEqual(.bar, store.defaultsRawValue)
+    }
+}
+
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@Observable
+private class ObservableStore {
+    @UserDefaultsValue(defaults: .testDefaults)
+    @ObservationIgnored
+    var defaultsValue: Int
+    @CodableUserDefaultsValue(defaultValue: TestCodableStruct(value: 0), defaults: .testDefaults)
+    @ObservationIgnored
+    var defaultsCodableValue: TestCodableStruct
+    @RawUserDefaultsValue(rawType: Int.self, defaultValue: TestRawEnum.foo, defaults: .testDefaults)
+    @ObservationIgnored
+    var defaultsRawValue: TestRawEnum
 }
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
@@ -73,9 +111,9 @@ class VAObservableDefaultsTests: XCTestCase {
 private class ObservableDefaults {
     @UserDefaultsValue(defaults: .testDefaults)
     var defaultsValue: Int
-    @CodableUserDefaultsValue(defaultValue: TestCodableStruct(value: 0))
+    @CodableUserDefaultsValue(defaultValue: TestCodableStruct(value: 0), defaults: .testDefaults)
     var defaultsCodableValue: TestCodableStruct
-    @RawUserDefaultsValue(rawType: Int.self, defaultValue: TestRawEnum.foo)
+    @RawUserDefaultsValue(rawType: Int.self, defaultValue: TestRawEnum.foo, defaults: .testDefaults)
     var defaultsRawValue: TestRawEnum
     @DefaultsValue
     var value: Int
@@ -99,6 +137,7 @@ extension XCTestCase {
     @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
     func verifyObservableChange<T>(
         of value: @autoclosure () -> T,
+        timeout: TimeInterval = 1,
         change: () -> Void
     ) {
         let expectation = XCTestExpectation(description: "Observable should change")
@@ -110,7 +149,7 @@ extension XCTestCase {
             }
         }
         change()
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: timeout)
     }
 }
 
