@@ -45,12 +45,38 @@ class VAObservableDefaultsTests: XCTestCase {
             defaults.rawValue = .bar
         }
         XCTAssertEqual(.bar, defaults.rawValue)
+
+        XCTAssertEqual(0, defaults.defaultsValue)
+        XCTAssertEqual(0, UserDefaults.testDefaults.integer(forKey: "defaultsValue"))
+        verifyObservableChange(of: defaults.defaultsValue) {
+            defaults.defaultsValue = 1
+        }
+        XCTAssertEqual(1, defaults.defaultsValue)
+        XCTAssertEqual(1, UserDefaults.testDefaults.integer(forKey: "defaultsValue"))
+
+        XCTAssertEqual(.init(value: 0), defaults.defaultsCodableValue)
+        verifyObservableChange(of: defaults.defaultsCodableValue) {
+            defaults.defaultsCodableValue = .init(value: 1)
+        }
+        XCTAssertEqual(.init(value: 1), defaults.defaultsCodableValue)
+
+        XCTAssertEqual(.foo, defaults.defaultsRawValue)
+        verifyObservableChange(of: defaults.defaultsRawValue) {
+            defaults.defaultsRawValue = .bar
+        }
+        XCTAssertEqual(.bar, defaults.defaultsRawValue)
     }
 }
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @ObservableUserDefaultsData(defaults: .testDefaults, keyPrefix: "com.vandrj.")
-private class ObservableDefaults: @unchecked Sendable {
+private class ObservableDefaults {
+    @UserDefaultsValue(defaults: .testDefaults)
+    var defaultsValue: Int
+    @CodableUserDefaultsValue(defaultValue: TestCodableStruct(value: 0))
+    var defaultsCodableValue: TestCodableStruct
+    @RawUserDefaultsValue(rawType: Int.self, defaultValue: TestRawEnum.foo)
+    var defaultsRawValue: TestRawEnum
     @DefaultsValue
     var value: Int
     @CodableDefaultsValue(defaultValue: TestCodableStruct(value: 0))
