@@ -14,33 +14,32 @@ extension LabeledExprListSyntax {
             return nil
         }
 
-        if let member = defaults.member {
+        return if let member = defaults.member {
             if member == ".standard" {
-                return nil
+                nil
             } else {
-                return member.asDefaults
+                member.asDefaults
             }
-        } else if let decl = defaults.decl {
-            return decl
-        } 
-
-        return nil
+        } else {
+            defaults.decl
+        }
     }
-    var keyParam: String? {
-        guard let key = getLabeledExprSyntax("key") else {
+    var keyParam: String? { getLabeledExprString(name: "key") }
+
+    func getLabeledExprString(name: String, quoted: Bool = true) -> String? {
+        guard let key = getLabeledExprSyntax(name) else {
             return nil
         }
 
-        if let string = key.string {
-            return string.quoted
+        return if let string = key.string {
+            quoted ? string.quoted : string
         } else if let member = key.member {
-            return member
-        } else if let decl = key.decl {
-            return decl
+            member
+        } else {
+            key.decl
         }
-
-        return nil
     }
+
     var defaultValueExpr: LabeledExprSyntax? { getLabeledExprSyntax("defaultValue") }
     var defaultValueParam: String? { defaultValueExpr?.expression.trimmedDescription }
     var encoderParam: String? {
@@ -48,41 +47,33 @@ extension LabeledExprListSyntax {
             return nil
         }
 
-        if let member = encoder.member {
-            return member.asEncoder
+        return if let member = encoder.member {
+            member.asEncoder
         } else if let decl = encoder.decl {
-            return decl
-        } else if let function = encoder.function {
-            return function.asEncoder
-        } 
-
-        return nil
+            decl
+        } else {
+            encoder.function?.asEncoder
+        }
     }
     var decoderParam: String? {
         guard let decoder = getLabeledExprSyntax("decoder") else {
             return nil
         }
 
-        if let member = decoder.member {
-            return member.asDecoder
+        return if let member = decoder.member {
+            member.asDecoder
         } else if let decl = decoder.decl {
-            return decl
-        } else if let function = decoder.function {
-            return function.asDecoder
+            decl
+        } else {
+            decoder.function?.asDecoder
         }
-
-        return nil
     }
     var rawTypeParam: String? {
         guard let rawType = getLabeledExprSyntax("rawType") else {
             return nil
         }
 
-        if let member = rawType.memberBase {
-            return member
-        } 
-
-        return nil
+        return rawType.memberBase
     }
 
     private func getLabeledExprSyntax(_ text: String) -> LabeledExprSyntax? {
@@ -224,12 +215,27 @@ extension TypeAnnotationSyntax {
 
 extension MacroExpansionContext {
     var isObservable: Bool {
-        self.lexicalContext
+        lexicalContext
             .first?
             .as(ClassDeclSyntax.self)?
             .attributes
             .contains(where: {
-                $0.as(AttributeSyntax.self)?.attributeName.identifier == "ObservableUserDefaultsData"
+                ["ObservableUserDefaultsData", "Observable"]
+                    .contains($0.as(AttributeSyntax.self)?.attributeName.identifier)
             }) ?? false
+    }
+    var prefix: String {
+        lexicalContext
+            .first?
+            .as(ClassDeclSyntax.self)?
+            .attributes
+            .first(where: {
+                ["UserDefaultsData", "ObservableUserDefaultsData"]
+                    .contains($0.as(AttributeSyntax.self)?.attributeName.identifier)
+            })?
+            .as(AttributeSyntax.self)?
+            .arguments?
+            .as(LabeledExprListSyntax.self)?
+            .getLabeledExprString(name: "keyPrefix", quoted: false) ?? ""
     }
 }

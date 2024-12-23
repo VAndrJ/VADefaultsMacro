@@ -26,8 +26,9 @@ public struct UserDefaultsData: MemberMacro, MemberAttributeMacro {
             !variableDeclSyntax.attributes.isDefaultsValueMacro,
             variableDeclSyntax.bindings.count == 1,
             !variableDeclSyntax.bindings.contains(where: {
-                $0.initializer != nil || $0.accessorBlock != nil
-            })
+                $0.initializer != nil
+            }),
+            !variableDeclSyntax.isComputed
         else {
             return []
         }

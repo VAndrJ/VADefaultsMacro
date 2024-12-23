@@ -1,5 +1,6 @@
 import VADefaults
 import Foundation
+import Observation
 
 let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
 testDefaults.clear()
@@ -292,6 +293,30 @@ assert(defaults.codableExampleValue == CodableStruct(value: 42))
 assert(defaults.defaultExampleValue == 0)
 defaults.defaultExampleValue = 42
 assert(defaults.defaultExampleValue == 42)
+
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@ObservableUserDefaultsData
+class ObservableDefaults {
+    @RawDefaultsValue(rawType: Int.self, defaultValue: ExampleEnum.undefined)
+    var rawRepresentableExample1Value: ExampleEnum
+    @CodableDefaultsValue(defaultValue: CodableStruct(value: 0))
+    var codableExample1Value: CodableStruct
+    @DefaultsValue
+    var defaultExample1Value: Int
+}
+
+if #available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *) {
+    let observableDefaults = ObservableDefaults()
+    assert(observableDefaults.rawRepresentableExample1Value == .undefined)
+    observableDefaults.rawRepresentableExample1Value = .question
+    assert(observableDefaults.rawRepresentableExample1Value == .question)
+    assert(observableDefaults.codableExample1Value == CodableStruct(value: 0))
+    observableDefaults.codableExample1Value = CodableStruct(value: 42)
+    assert(observableDefaults.codableExample1Value == CodableStruct(value: 42))
+    assert(observableDefaults.defaultExample1Value == 0)
+    observableDefaults.defaultExample1Value = 42
+    assert(observableDefaults.defaultExample1Value == 42)
+}
 
 UserDefaults.standard.clear()
 testDefaults.clear()

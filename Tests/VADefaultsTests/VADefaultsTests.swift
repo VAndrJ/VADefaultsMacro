@@ -5,8 +5,6 @@ import XCTest
 import Foundation
 import VADefaultsMacros
 
-import VADefaultsMacros
-
 let testMacros: [String: Macro.Type] = [
     "UserDefaultsValue": UserDefaultsValue.self,
     "CodableUserDefaultsValue": CodableUserDefaultsValue.self,
@@ -19,7 +17,6 @@ let testMacros: [String: Macro.Type] = [
 ]
 
 final class VADefaultsTests: XCTestCase {
-    let testDefaults = UserDefaults(suiteName: "com.vandrj.test")
 
     func test_defaultMacro_standard() throws {
         assertMacroExpansion(

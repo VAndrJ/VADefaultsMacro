@@ -29,8 +29,8 @@ public struct ObservableUserDefaultsData {
 
     static func accessFunction(_ observableType: TokenSyntax) -> DeclSyntax {
         """
-        internal nonisolated func access<Member>(
-        keyPath: KeyPath<\(observableType), Member>
+        internal nonisolated func access<_TMember>(
+        keyPath: KeyPath<\(observableType), _TMember>
         ) {
         \(raw: registrarVariableName).access(self, keyPath: keyPath)
         }
@@ -39,10 +39,10 @@ public struct ObservableUserDefaultsData {
 
     static func withMutationFunction(_ observableType: TokenSyntax) -> DeclSyntax {
         """
-        internal nonisolated func withMutation<Member, MutationResult>(
-        keyPath: KeyPath<\(observableType), Member>,
-        _ mutation: () throws -> MutationResult
-        ) rethrows -> MutationResult {
+        internal nonisolated func withMutation<_TMember, _TMutationResult>(
+        keyPath: KeyPath<\(observableType), _TMember>,
+        _ mutation: () throws -> _TMutationResult
+        ) rethrows -> _TMutationResult {
         try \(raw: registrarVariableName).withMutation(of: self, keyPath: keyPath, mutation)
         }
         """
@@ -174,7 +174,6 @@ extension VariableDeclSyntax {
         return true
     }
     var identifier: TokenSyntax? { identifierPattern?.identifier }
-    var type: TypeSyntax? { bindings.first?.typeAnnotation?.type }
 
     func accessorsMatching(_ predicate: (TokenKind) -> Bool) -> [AccessorDeclSyntax] {
         let accessors: [AccessorDeclListSyntax.Element] = bindings.compactMap { patternBinding in
@@ -352,6 +351,7 @@ extension DeclGroupSyntax {
                 }
             }
         }
+
         return false
     }
 
@@ -363,12 +363,11 @@ extension DeclGroupSyntax {
                 }
             }
         }
+
         return false
     }
 
-    func addIfNeeded(_ decl: DeclSyntax?, to declarations: inout [DeclSyntax]) {
-        guard let decl else { return }
-
+    func addIfNeeded(_ decl: DeclSyntax, to declarations: inout [DeclSyntax]) {
         if let fn = decl.as(FunctionDeclSyntax.self) {
             if !hasMemberFunction(equvalentTo: fn) {
                 declarations.append(decl)

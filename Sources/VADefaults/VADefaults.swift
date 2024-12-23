@@ -90,7 +90,8 @@ public macro RawDefaultsValue<T: RawRepresentable, R>(
 @attached(member, names: named(userDefaults), named(init(userDefaults:)))
 @attached(memberAttribute)
 public macro UserDefaultsData(
-    defaults: UserDefaults = .standard
+    defaults: UserDefaults = .standard,
+    keyPrefix: String = ""
 ) = #externalMacro(module: "VADefaultsMacros", type: "UserDefaultsData")
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
@@ -105,5 +106,6 @@ public macro UserDefaultsData(
 @attached(memberAttribute)
 @attached(extension, conformances: Observable)
 public macro ObservableUserDefaultsData(
-    defaults: UserDefaults = .standard
+    defaults: UserDefaults = .standard,
+    keyPrefix: String = ""
 ) = #externalMacro(module: "VADefaultsMacros", type: "ObservableUserDefaultsData")
