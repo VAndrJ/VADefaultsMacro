@@ -56,6 +56,61 @@ extension VADefaultsTests {
         )
     }
 
+    func test_observableUserDefaultMacro_implementedFunctions() throws {
+        assertMacroExpansion(
+            """
+            @available(iOS 17.0, *)
+            @ObservableUserDefaultsData(defaults: .test)
+            open class Defaults {
+                @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
+            
+                internal nonisolated func access<_TObservableMember>(
+                    keyPath: KeyPath<Defaults, _TObservableMember>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+            
+                internal nonisolated func withMutation<_TObservableMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TObservableMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            }
+            """,
+            expandedSource: """
+            @available(iOS 17.0, *)
+            open class Defaults {
+                @ObservationIgnored private let _$observationRegistrar = Observation.ObservationRegistrar()
+            
+                internal nonisolated func access<_TObservableMember>(
+                    keyPath: KeyPath<Defaults, _TObservableMember>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+            
+                internal nonisolated func withMutation<_TObservableMember, _TMutationResult>(
+                    keyPath: KeyPath<Defaults, _TObservableMember>,
+                    _ mutation: () throws -> _TMutationResult
+                ) rethrows -> _TMutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            
+                private let userDefaults: UserDefaults
+            
+                public init(userDefaults: UserDefaults = UserDefaults.test) {
+                    self.userDefaults = userDefaults
+                }
+            }
+            
+            @available(iOS 17.0, *)
+            extension Defaults: Observation.Observable {
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
     func test_observableUserDefaultMacro_struct() throws {
         assertMacroExpansion(
             """

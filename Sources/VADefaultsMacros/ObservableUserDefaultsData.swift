@@ -351,6 +351,7 @@ extension DeclGroupSyntax {
                 }
             }
         }
+
         return false
     }
 
@@ -362,12 +363,11 @@ extension DeclGroupSyntax {
                 }
             }
         }
+
         return false
     }
 
-    func addIfNeeded(_ decl: DeclSyntax?, to declarations: inout [DeclSyntax]) {
-        guard let decl else { return }
-
+    func addIfNeeded(_ decl: DeclSyntax, to declarations: inout [DeclSyntax]) {
         if let fn = decl.as(FunctionDeclSyntax.self) {
             if !hasMemberFunction(equvalentTo: fn) {
                 declarations.append(decl)
