@@ -10,12 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20macOS%20%7C%20macCatalyst-lightgray.svg?style=flat)](https://developer.apple.com/discover)
 
 
-### VADefaults introduces macro to simplify `UserDefaults` usage and errors prevention.
-
-
-2.x.x - Swift 6
-
-1.3.1 - Swift 5.9
+### VADefaults introduces macro to simplify `UserDefaults` usage and error prevention.
 
 
 ### @UserDefaultsValue
@@ -290,7 +285,7 @@ class Defaults {
 #### TBD:
 
 
-- `Codable` check. Throwable.
+- Example.
 
 
 ## Author
