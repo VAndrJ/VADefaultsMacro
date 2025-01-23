@@ -136,6 +136,19 @@ extension TypeSyntax {
                 return wrappedType
             }
 
+            if let arrayTypeSyntax = self.as(ArrayTypeSyntax.self) {
+                let elementTypeName = try arrayTypeSyntax.element.codableVariableType
+
+                return "[\(elementTypeName)]"
+            }
+
+            if let dictionaryTypeSyntax = self.as(DictionaryTypeSyntax.self) {
+                let keyType = try dictionaryTypeSyntax.key.codableVariableType
+                let valueType = try dictionaryTypeSyntax.value.codableVariableType
+
+                return "[\(keyType): \(valueType)]"
+            }
+
             throw UserDefaultsValueError.notVariable
         }
     }
