@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct VADefaultsExampleApp: App {
-    @State var observableDefaults = ObservableDefaults()
+    @State private var observableDefaults = ObservableDefaults()
 
     var body: some Scene {
         WindowGroup {
@@ -17,10 +17,19 @@ struct VADefaultsExampleApp: App {
                 List {
                     NavigationLink("Observable defaults counter") {
                         ObservableDefaultsCounterView()
+                            .navigationTitle("Observable defaults counter")
+                    }
+                    NavigationLink("Defaults values") {
+                        DefaultsValuesView()
+                            .navigationTitle("Defaults values")
                     }
                 }
             }
             .environment(observableDefaults)
         }
     }
+}
+
+extension EnvironmentValues {
+    @Entry var defaults = Defaults()
 }

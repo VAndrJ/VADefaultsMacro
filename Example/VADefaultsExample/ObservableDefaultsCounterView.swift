@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ObservableDefaultsCounterView: View {
-    @Environment(ObservableDefaults.self) var defaults
-    @State var counter = 0
+    @Environment(ObservableDefaults.self) private var defaults
+    @State private var counter = 0
 
     var body: some View {
         VStack {
@@ -24,6 +24,7 @@ struct ObservableDefaultsCounterView: View {
                 counter += 1
             }
         }
+        .padding()
     }
 }
 

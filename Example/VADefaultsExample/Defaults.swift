@@ -12,3 +12,8 @@ import VADefaults
 class ObservableDefaults {
     var counter: Int
 }
+
+@UserDefaultsData
+class Defaults {
+    var string: String?
+}
