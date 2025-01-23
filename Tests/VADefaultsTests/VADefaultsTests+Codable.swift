@@ -146,6 +146,50 @@ extension VADefaultsTests {
         )
     }
 
+    func test_defaultMacro_codable_array_defaultValue() throws {
+        assertMacroExpansion(
+            """
+            @CodableUserDefaultsValue(defaultValue: [MyCodable()])
+            var value: [MyCodable]
+            """,
+            expandedSource: """
+            var value: [MyCodable] {
+                get {
+                    UserDefaults.standard.data(forKey: "value").flatMap {
+                        try? JSONDecoder().decode([MyCodable].self, from: $0)
+                    } ?? [MyCodable()]
+                }
+                set {
+                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
+    func test_defaultMacro_codable_dictionary_defaultValue() throws {
+        assertMacroExpansion(
+            """
+            @CodableUserDefaultsValue(defaultValue: ["a": MyCodable()])
+            var value: [String: MyCodable]
+            """,
+            expandedSource: """
+            var value: [String: MyCodable] {
+                get {
+                    UserDefaults.standard.data(forKey: "value").flatMap {
+                        try? JSONDecoder().decode([String: MyCodable].self, from: $0)
+                    } ?? ["a": MyCodable()]
+                }
+                set {
+                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                }
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
     func test_defaultMacro_codable_defaultValueMember() throws {
         assertMacroExpansion(
             """

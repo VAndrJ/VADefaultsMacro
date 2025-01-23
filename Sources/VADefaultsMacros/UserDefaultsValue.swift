@@ -40,7 +40,7 @@ public struct UserDefaultsValue: AccessorMacro {
               let typeAnnotation = firstBinding.typeAnnotation else {
             throw UserDefaultsValueError.notVariable
         }
-        if !variableDeclSyntax.isStandaloneMacro && (variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable) {
+        if !(variableDeclSyntax.isStandaloneMacro || variableDeclSyntax.isInstance) {
             throw UserDefaultsValueError.staticVariable
         }
 
@@ -61,7 +61,7 @@ public struct UserDefaultsValue: AccessorMacro {
         let keyPrefix = variableDeclSyntax.isStandaloneMacro ? "" : context.prefix
         let keyParam = labeledExprListSyntax?.keyParam ?? "\(keyPrefix)\(identifierPatternSyntax.identifier.text)".quoted
         let defaultsParam = variableDeclSyntax.isStandaloneMacro ? (labeledExprListSyntax?.defaultsParam ?? .standardDefaults) : UserDefaultsData.variableName
-        let isObservable = context.isObservable && !(variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable)
+        let isObservable = context.isObservable && variableDeclSyntax.isInstance
 
         return [
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
@@ -71,7 +71,7 @@ public struct UserDefaultsValue: AccessorMacro {
                 if let defaultValueParam {
                     if variableType.isDefaultsNilable {
                         "\(raw: isObservable ? "return " : "")\(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam)) ?? \(raw: defaultValueParam)"
-                    } else  {
+                    } else {
                         "\(raw: defaultsParam).register(defaults: [\(raw: keyParam): \(raw: defaultValueParam)])"
                         "return \(raw: defaultsParam).\(raw: variableType.userDefaultsMethod)(forKey: \(raw: keyParam))\(raw: variableType.addingCastIfNeeded(defaultValue: defaultValueParam))"
                     }

@@ -197,8 +197,12 @@ extension VADefaultsTests {
             class Defaults {
                 @RawDefaultsValue(rawType: Int.self)
                 var rawRepresentableValue: MyRepresentableType?
+                @RawDefaultsValue(rawType: Int.self, defaultValue: MyRepresentableType.one)
+                var rawRepresentableWithDefaultValue: MyRepresentableType
                 @CodableDefaultsValue(key: "customKey")
                 var codableValue: MyCodableType?
+                @CodableDefaultsValue(key: "customKey", defaultValue: MyCodableType())
+                var codableWithDefaultValue: MyCodableType
             }
             """,
             expandedSource: #"""
@@ -214,6 +218,17 @@ extension VADefaultsTests {
                         }
                     }
                 }
+                var rawRepresentableWithDefaultValue: MyRepresentableType {
+                    get {
+                        access(keyPath: \.rawRepresentableWithDefaultValue)
+                        return (userDefaults.object(forKey: "rawRepresentableWithDefaultValue") as? Int).flatMap(MyRepresentableType.init(rawValue:)) ?? MyRepresentableType.one
+                    }
+                    set {
+                        withMutation(keyPath: \.rawRepresentableWithDefaultValue) {
+                            userDefaults.setValue(newValue.rawValue, forKey: "rawRepresentableWithDefaultValue")
+                        }
+                    }
+                }
                 var codableValue: MyCodableType? {
                     get {
                         access(keyPath: \.codableValue)
@@ -223,6 +238,19 @@ extension VADefaultsTests {
                     }
                     set {
                         withMutation(keyPath: \.codableValue) {
+                            userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
+                        }
+                    }
+                }
+                var codableWithDefaultValue: MyCodableType {
+                    get {
+                        access(keyPath: \.codableWithDefaultValue)
+                        return userDefaults.data(forKey: "customKey").flatMap {
+                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                        } ?? MyCodableType()
+                    }
+                    set {
+                        withMutation(keyPath: \.codableWithDefaultValue) {
                             userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
                         }
                     }

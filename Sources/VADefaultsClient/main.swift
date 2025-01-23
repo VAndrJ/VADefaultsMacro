@@ -238,6 +238,22 @@ assert(codableDefaultTest == codableStruct)
 codableDefaultTest = CodableStruct()
 assert(codableDefaultTest == CodableStruct())
 
+@CodableUserDefaultsValue(defaultValue: [codableStruct])
+var codableArrayDefaultTest: [CodableStruct]
+assert(codableArrayDefaultTest == [codableStruct])
+let newCodableArray = [CodableStruct(value: 5)]
+codableArrayDefaultTest = newCodableArray
+assert(codableArrayDefaultTest == newCodableArray)
+
+@CodableUserDefaultsValue(defaultValue: ["a": codableStruct])
+var codableDictionaryDefaultTest: [String: CodableStruct]
+assert(codableDictionaryDefaultTest == ["a": codableStruct])
+let newCodableDictionary = ["b": codableStruct]
+codableDictionaryDefaultTest = newCodableDictionary
+assert(codableDictionaryDefaultTest == newCodableDictionary)
+codableDictionaryDefaultTest["c"] = codableStruct
+assert(codableDictionaryDefaultTest == newCodableDictionary.merging(["c": codableStruct], uniquingKeysWith: { $1 }))
+
 @CodableUserDefaultsValue(key: "customKey", defaultValue: codableStruct, encoder: encoder, decoder: decoder)
 var codableEncoderDecoderTest: CodableStruct
 assert(codableEncoderDecoderTest == codableStruct)

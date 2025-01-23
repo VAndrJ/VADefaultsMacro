@@ -39,7 +39,7 @@ public struct RawUserDefaultsValue: AccessorMacro {
               let typeAnnotation = firstBinding.typeAnnotation else {
             throw UserDefaultsValueError.notVariable
         }
-        if !variableDeclSyntax.isStandaloneMacro && (variableDeclSyntax.isStaticVariable || variableDeclSyntax.isClassVariable) {
+        if !(variableDeclSyntax.isStandaloneMacro || variableDeclSyntax.isInstance) {
             throw UserDefaultsValueError.staticVariable
         }
 
