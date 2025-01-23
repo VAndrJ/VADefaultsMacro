@@ -116,28 +116,6 @@ extension LabeledExprSyntax {
 
 extension VariableDeclSyntax {
     public var isVar: Bool { bindingSpecifier.tokenKind == .keyword(.var) }
-    public var isStaticVariable: Bool {
-        for modifier in modifiers {
-            for token in modifier.tokens(viewMode: .all) {
-                if token.tokenKind == .keyword(.static) {
-                    return true
-                }
-            }
-        }
-
-        return false
-    }
-    public var isClassVariable: Bool {
-        for modifier in modifiers {
-            for token in modifier.tokens(viewMode: .all) {
-                if token.tokenKind == .keyword(.class) {
-                    return true
-                }
-            }
-        }
-
-        return false
-    }
 }
 
 extension TypeSyntax {
