@@ -1,6 +1,6 @@
 //
 //  VADefaultsTests+Types.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
@@ -21,15 +21,15 @@ extension VADefaultsTests {
             var value: Bool
             """,
             expandedSource: """
-            var value: Bool {
-                get {
-                    UserDefaults.standard.bool(forKey: "value")
+                var value: Bool {
+                    get {
+                        UserDefaults.standard.bool(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -41,15 +41,15 @@ extension VADefaultsTests {
             var value: Bool?
             """,
             expandedSource: """
-            var value: Bool? {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Bool
+                var value: Bool? {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Bool
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -61,15 +61,15 @@ extension VADefaultsTests {
             var value: Int
             """,
             expandedSource: """
-            var value: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: "value")
+                var value: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -81,15 +81,15 @@ extension VADefaultsTests {
             var value: Float
             """,
             expandedSource: """
-            var value: Float {
-                get {
-                    UserDefaults.standard.float(forKey: "value")
+                var value: Float {
+                    get {
+                        UserDefaults.standard.float(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -101,15 +101,15 @@ extension VADefaultsTests {
             var value: Double
             """,
             expandedSource: """
-            var value: Double {
-                get {
-                    UserDefaults.standard.double(forKey: "value")
+                var value: Double {
+                    get {
+                        UserDefaults.standard.double(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -121,8 +121,8 @@ extension VADefaultsTests {
             var value: String
             """,
             expandedSource: """
-            var value: String
-            """,
+                var value: String
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -135,15 +135,15 @@ extension VADefaultsTests {
             var value: String
             """,
             expandedSource: """
-            var value: String {
-                get {
-                    UserDefaults.standard.string(forKey: "value") ?? "a"
+                var value: String {
+                    get {
+                        UserDefaults.standard.string(forKey: "value") ?? "a"
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -155,8 +155,8 @@ extension VADefaultsTests {
             var value: NSString
             """,
             expandedSource: """
-            var value: NSString
-            """,
+                var value: NSString
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -169,15 +169,15 @@ extension VADefaultsTests {
             var value: NSString
             """,
             expandedSource: """
-            var value: NSString {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? NSString ?? "a"
+                var value: NSString {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? NSString ?? "a"
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -189,8 +189,8 @@ extension VADefaultsTests {
             var value: NSNumber
             """,
             expandedSource: """
-            var value: NSNumber
-            """,
+                var value: NSNumber
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -203,15 +203,15 @@ extension VADefaultsTests {
             var value: NSNumber
             """,
             expandedSource: """
-            var value: NSNumber {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? NSNumber ?? 42
+                var value: NSNumber {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? NSNumber ?? 42
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -223,8 +223,8 @@ extension VADefaultsTests {
             var value: URL
             """,
             expandedSource: """
-            var value: URL
-            """,
+                var value: URL
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -237,15 +237,15 @@ extension VADefaultsTests {
             var value: URL
             """,
             expandedSource: """
-            var value: URL {
-                get {
-                    UserDefaults.standard.url(forKey: "value") ?? someURL
+                var value: URL {
+                    get {
+                        UserDefaults.standard.url(forKey: "value") ?? someURL
+                    }
+                    set {
+                        UserDefaults.standard.set(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -257,8 +257,8 @@ extension VADefaultsTests {
             var value: Date
             """,
             expandedSource: """
-            var value: Date
-            """,
+                var value: Date
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -271,15 +271,15 @@ extension VADefaultsTests {
             var value: Date
             """,
             expandedSource: """
-            var value: Date {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Date ?? Date(timeIntervalSince1970: 23)
+                var value: Date {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Date ?? Date(timeIntervalSince1970: 23)
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -291,8 +291,8 @@ extension VADefaultsTests {
             var value: NSDate
             """,
             expandedSource: """
-            var value: NSDate
-            """,
+                var value: NSDate
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -305,15 +305,15 @@ extension VADefaultsTests {
             var value: NSDate
             """,
             expandedSource: """
-            var value: NSDate {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? NSDate ?? NSDate(timeIntervalSince1970: 23)
+                var value: NSDate {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? NSDate ?? NSDate(timeIntervalSince1970: 23)
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -325,8 +325,8 @@ extension VADefaultsTests {
             var value: Data
             """,
             expandedSource: """
-            var value: Data
-            """,
+                var value: Data
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -339,15 +339,15 @@ extension VADefaultsTests {
             var value: Data
             """,
             expandedSource: """
-            var value: Data {
-                get {
-                    UserDefaults.standard.data(forKey: "value") ?? Data()
+                var value: Data {
+                    get {
+                        UserDefaults.standard.data(forKey: "value") ?? Data()
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -359,8 +359,8 @@ extension VADefaultsTests {
             var value: NSData
             """,
             expandedSource: """
-            var value: NSData
-            """,
+                var value: NSData
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -373,15 +373,15 @@ extension VADefaultsTests {
             var value: NSData
             """,
             expandedSource: """
-            var value: NSData {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? NSData ?? NSData()
+                var value: NSData {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? NSData ?? NSData()
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -393,8 +393,8 @@ extension VADefaultsTests {
             var value: UInt
             """,
             expandedSource: """
-            var value: UInt
-            """,
+                var value: UInt
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -407,15 +407,15 @@ extension VADefaultsTests {
             var value: UInt
             """,
             expandedSource: """
-            var value: UInt {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? UInt ?? 4
+                var value: UInt {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? UInt ?? 4
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -427,8 +427,8 @@ extension VADefaultsTests {
             var value: Int8
             """,
             expandedSource: """
-            var value: Int8
-            """,
+                var value: Int8
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -441,15 +441,15 @@ extension VADefaultsTests {
             var value: Int8
             """,
             expandedSource: """
-            var value: Int8 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Int8 ?? 0
+                var value: Int8 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Int8 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -461,8 +461,8 @@ extension VADefaultsTests {
             var value: Int16
             """,
             expandedSource: """
-            var value: Int16
-            """,
+                var value: Int16
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -475,15 +475,15 @@ extension VADefaultsTests {
             var value: Int16
             """,
             expandedSource: """
-            var value: Int16 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Int16 ?? 0
+                var value: Int16 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Int16 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -495,8 +495,8 @@ extension VADefaultsTests {
             var value: Int32
             """,
             expandedSource: """
-            var value: Int32
-            """,
+                var value: Int32
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -509,15 +509,15 @@ extension VADefaultsTests {
             var value: Int32
             """,
             expandedSource: """
-            var value: Int32 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Int32 ?? 0
+                var value: Int32 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Int32 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -529,8 +529,8 @@ extension VADefaultsTests {
             var value: Int64
             """,
             expandedSource: """
-            var value: Int64
-            """,
+                var value: Int64
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -543,15 +543,15 @@ extension VADefaultsTests {
             var value: Int64
             """,
             expandedSource: """
-            var value: Int64 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Int64 ?? 0
+                var value: Int64 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Int64 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -563,8 +563,8 @@ extension VADefaultsTests {
             var value: UInt8
             """,
             expandedSource: """
-            var value: UInt8
-            """,
+                var value: UInt8
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -577,15 +577,15 @@ extension VADefaultsTests {
             var value: UInt8
             """,
             expandedSource: """
-            var value: UInt8 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? UInt8 ?? 0
+                var value: UInt8 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? UInt8 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -597,8 +597,8 @@ extension VADefaultsTests {
             var value: UInt16
             """,
             expandedSource: """
-            var value: UInt16
-            """,
+                var value: UInt16
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -611,15 +611,15 @@ extension VADefaultsTests {
             var value: UInt16
             """,
             expandedSource: """
-            var value: UInt16 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? UInt16 ?? 0
+                var value: UInt16 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? UInt16 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -631,8 +631,8 @@ extension VADefaultsTests {
             var value: UInt32
             """,
             expandedSource: """
-            var value: UInt32
-            """,
+                var value: UInt32
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -645,15 +645,15 @@ extension VADefaultsTests {
             var value: UInt32
             """,
             expandedSource: """
-            var value: UInt32 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? UInt32 ?? 0
+                var value: UInt32 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? UInt32 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -665,8 +665,8 @@ extension VADefaultsTests {
             var value: UInt64
             """,
             expandedSource: """
-            var value: UInt64
-            """,
+                var value: UInt64
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -679,15 +679,15 @@ extension VADefaultsTests {
             var value: UInt64
             """,
             expandedSource: """
-            var value: UInt64 {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? UInt64 ?? 0
+                var value: UInt64 {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? UInt64 ?? 0
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -699,8 +699,8 @@ extension VADefaultsTests {
             var value: [Int]
             """,
             expandedSource: """
-            var value: [Int]
-            """,
+                var value: [Int]
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -713,15 +713,15 @@ extension VADefaultsTests {
             var value: [Int]
             """,
             expandedSource: """
-            var value: [Int] {
-                get {
-                    UserDefaults.standard.array(forKey: "value") as? [Int] ?? [0]
+                var value: [Int] {
+                    get {
+                        UserDefaults.standard.array(forKey: "value") as? [Int] ?? [0]
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -733,8 +733,8 @@ extension VADefaultsTests {
             var value: [String: Int]
             """,
             expandedSource: """
-            var value: [String: Int]
-            """,
+                var value: [String: Int]
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -747,8 +747,8 @@ extension VADefaultsTests {
             var value: [Int: Int]
             """,
             expandedSource: """
-            var value: [Int: Int]
-            """,
+                var value: [Int: Int]
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.dictKeyType.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -761,15 +761,15 @@ extension VADefaultsTests {
             var value: [String: Int]
             """,
             expandedSource: """
-            var value: [String: Int] {
-                get {
-                    UserDefaults.standard.dictionary(forKey: "value") as? [String: Int] ?? ["2": 42]
+                var value: [String: Int] {
+                    get {
+                        UserDefaults.standard.dictionary(forKey: "value") as? [String: Int] ?? ["2": 42]
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -781,15 +781,15 @@ extension VADefaultsTests {
             var value: [String: Int]?
             """,
             expandedSource: """
-            var value: [String: Int]? {
-                get {
-                    UserDefaults.standard.dictionary(forKey: "value") as? [String: Int]
+                var value: [String: Int]? {
+                    get {
+                        UserDefaults.standard.dictionary(forKey: "value") as? [String: Int]
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -802,8 +802,8 @@ extension VADefaultsTests {
             var value: CustomType
             """#,
             expandedSource: #"""
-            var value: CustomType
-            """#,
+                var value: CustomType
+                """#,
             diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )

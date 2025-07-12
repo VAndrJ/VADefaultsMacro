@@ -1,6 +1,6 @@
 //
 //  VADefaultsTests+RawRepresentable.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 23.03.2024.
 //
@@ -21,15 +21,15 @@ extension VADefaultsTests {
             var value: ExampleEnum?
             """,
             expandedSource: """
-            var value: ExampleEnum? {
-                get {
-                    (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:))
+                var value: ExampleEnum? {
+                    get {
+                        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:))
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue?.rawValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue?.rawValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -41,8 +41,8 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum
-            """,
+                var value: ExampleEnum
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -55,15 +55,15 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum {
-                get {
-                    (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? ExampleEnum.undefined
+                var value: ExampleEnum {
+                    get {
+                        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? ExampleEnum.undefined
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -75,15 +75,15 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum {
-                get {
-                    (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? parameter
+                var value: ExampleEnum {
+                    get {
+                        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? parameter
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -95,15 +95,15 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum {
-                get {
-                    (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? Self.parameter
+                var value: ExampleEnum {
+                    get {
+                        (UserDefaults.standard.object(forKey: "value") as? Int).flatMap(ExampleEnum.init(rawValue:)) ?? Self.parameter
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue.rawValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -115,8 +115,8 @@ extension VADefaultsTests {
             var (a, b): ExampleEnum
             """,
             expandedSource: """
-            var (a, b): ExampleEnum
-            """,
+                var (a, b): ExampleEnum
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -129,8 +129,8 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum
-            """,
+                var value: ExampleEnum
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -143,8 +143,8 @@ extension VADefaultsTests {
             var value: ExampleEnum
             """,
             expandedSource: """
-            var value: ExampleEnum
-            """,
+                var value: ExampleEnum
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.unsupportedType.description, line: 1, column: 1)],
             macros: testMacros
         )

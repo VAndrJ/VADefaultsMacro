@@ -1,6 +1,6 @@
-import VADefaults
 import Foundation
 import Observation
+import VADefaults
 
 let testDefaults = UserDefaults(suiteName: "com.vandrj.test")!
 testDefaults.clear()

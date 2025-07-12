@@ -1,6 +1,6 @@
 //
 //  VariableType.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 23.03.2024.
 //

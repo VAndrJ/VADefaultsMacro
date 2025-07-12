@@ -32,11 +32,12 @@ public struct CodableUserDefaultsValue: AccessorMacro {
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
         guard let variableDeclSyntax = declaration.as(VariableDeclSyntax.self),
-              variableDeclSyntax.isVar,
-              variableDeclSyntax.bindings.count == 1,
-              let firstBinding = variableDeclSyntax.bindings.first,
-              let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
-              let typeAnnotation = firstBinding.typeAnnotation else {
+            variableDeclSyntax.isVar,
+            variableDeclSyntax.bindings.count == 1,
+            let firstBinding = variableDeclSyntax.bindings.first,
+            let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
+            let typeAnnotation = firstBinding.typeAnnotation
+        else {
             throw UserDefaultsValueError.notVariable
         }
         if !(variableDeclSyntax.isStandaloneMacro || variableDeclSyntax.isInstance) {

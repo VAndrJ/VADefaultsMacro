@@ -87,17 +87,11 @@ extension VariableDeclSyntax {
 
 extension AttributeListSyntax {
     var isStandaloneMacro: Bool {
-        contains(type: UserDefaultsValue.self) ||
-        contains(type: RawUserDefaultsValue.self) ||
-        contains(type: CodableUserDefaultsValue.self)
+        contains(type: UserDefaultsValue.self) || contains(type: RawUserDefaultsValue.self) || contains(type: CodableUserDefaultsValue.self)
     }
     var isDefaultsValueMacro: Bool {
-        contains(type: UserDefaultsValue.self) ||
-        contains(type: RawUserDefaultsValue.self) ||
-        contains(type: CodableUserDefaultsValue.self) ||
-        contains(type: DefaultsValue.self) ||
-        contains(type: RawDefaultsValue.self) ||
-        contains(type: CodableDefaultsValue.self)
+        contains(type: UserDefaultsValue.self) || contains(type: RawUserDefaultsValue.self) || contains(type: CodableUserDefaultsValue.self)
+            || contains(type: DefaultsValue.self) || contains(type: RawDefaultsValue.self) || contains(type: CodableDefaultsValue.self)
     }
 
     private func contains<T>(type: T.Type) -> Bool {

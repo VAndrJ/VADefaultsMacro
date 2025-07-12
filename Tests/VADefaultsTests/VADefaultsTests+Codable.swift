@@ -1,6 +1,6 @@
 //
 //  VADefaultsTests+Codable.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
@@ -21,17 +21,17 @@ extension VADefaultsTests {
             var value: MyCodable?
             """,
             expandedSource: """
-            var value: MyCodable? {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
+                var value: MyCodable? {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        }
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
                     }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -43,17 +43,17 @@ extension VADefaultsTests {
             var value: MyCodable?
             """,
             expandedSource: """
-            var value: MyCodable? {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
+                var value: MyCodable? {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        }
+                    }
+                    set {
+                        UserDefaults.standard.set(try? myEncoder.encode(newValue), forKey: "value")
                     }
                 }
-                set {
-                    UserDefaults.standard.set(try? myEncoder.encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -65,17 +65,17 @@ extension VADefaultsTests {
             var value: MyCodable?
             """,
             expandedSource: """
-            var value: MyCodable? {
-                get {
-                    UserDefaults.standard.data(forKey: "customKey").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
+                var value: MyCodable? {
+                    get {
+                        UserDefaults.standard.data(forKey: "customKey").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        }
+                    }
+                    set {
+                        UserDefaults.standard.set(try? Self.myEncoder.encode(newValue), forKey: "customKey")
                     }
                 }
-                set {
-                    UserDefaults.standard.set(try? Self.myEncoder.encode(newValue), forKey: "customKey")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -87,17 +87,17 @@ extension VADefaultsTests {
             var value: MyCodable?
             """,
             expandedSource: """
-            var value: MyCodable? {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? myDecoder.decode(MyCodable.self, from: $0)
+                var value: MyCodable? {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? myDecoder.decode(MyCodable.self, from: $0)
+                        }
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
                     }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -109,17 +109,17 @@ extension VADefaultsTests {
             var value: MyCodable?
             """,
             expandedSource: """
-            var value: MyCodable? {
-                get {
-                    UserDefaults.testDefaults.data(forKey: "value").flatMap {
-                        try? SomeClass.myDecoder.decode(MyCodable.self, from: $0)
+                var value: MyCodable? {
+                    get {
+                        UserDefaults.testDefaults.data(forKey: "value").flatMap {
+                            try? SomeClass.myDecoder.decode(MyCodable.self, from: $0)
+                        }
+                    }
+                    set {
+                        UserDefaults.testDefaults.set(try? JSONEncoder().encode(newValue), forKey: "value")
                     }
                 }
-                set {
-                    UserDefaults.testDefaults.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -131,17 +131,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -153,17 +153,17 @@ extension VADefaultsTests {
             var value: [MyCodable]
             """,
             expandedSource: """
-            var value: [MyCodable] {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode([MyCodable].self, from: $0)
-                    } ?? [MyCodable()]
+                var value: [MyCodable] {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode([MyCodable].self, from: $0)
+                        } ?? [MyCodable()]
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -175,17 +175,17 @@ extension VADefaultsTests {
             var value: [String: MyCodable]
             """,
             expandedSource: """
-            var value: [String: MyCodable] {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode([String: MyCodable].self, from: $0)
-                    } ?? ["a": MyCodable()]
+                var value: [String: MyCodable] {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode([String: MyCodable].self, from: $0)
+                        } ?? ["a": MyCodable()]
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -197,17 +197,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? myCodable
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? myCodable
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -219,17 +219,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? Self.myCodable
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? Self.myCodable
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -241,8 +241,8 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable
-            """,
+                var value: MyCodable
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.defaultValueNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -255,8 +255,8 @@ extension VADefaultsTests {
             var (a, b): MyCodable
             """,
             expandedSource: """
-            var (a, b): MyCodable
-            """,
+                var (a, b): MyCodable
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -269,8 +269,8 @@ extension VADefaultsTests {
             var value
             """,
             expandedSource: """
-            var value
-            """,
+                var value
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -283,17 +283,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -305,17 +305,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder.custom.encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder.custom.encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -327,17 +327,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -349,17 +349,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder.custom.decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder.custom.decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -371,17 +371,17 @@ extension VADefaultsTests {
             var value: MyCodable
             """,
             expandedSource: """
-            var value: MyCodable {
-                get {
-                    UserDefaults.standard.data(forKey: "value").flatMap {
-                        try? JSONDecoder().decode(MyCodable.self, from: $0)
-                    } ?? MyCodable()
+                var value: MyCodable {
+                    get {
+                        UserDefaults.standard.data(forKey: "value").flatMap {
+                            try? JSONDecoder().decode(MyCodable.self, from: $0)
+                        } ?? MyCodable()
+                    }
+                    set {
+                        UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
