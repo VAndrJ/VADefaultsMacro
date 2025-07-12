@@ -31,5 +31,7 @@ struct VADefaultsExampleApp: App {
 }
 
 extension EnvironmentValues {
-    @Entry var defaults = Defaults()
+    nonisolated(unsafe) private static let _defaults = Defaults()
+
+    @Entry var defaults = _defaults
 }
