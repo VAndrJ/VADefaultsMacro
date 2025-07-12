@@ -25,15 +25,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -45,15 +45,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -65,15 +65,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int?
             """,
             expandedSource: """
-            var launchesCount: Int? {
-                get {
-                    UserDefaults.standard.object(forKey: "launchesCount") as? Int
+                var launchesCount: Int? {
+                    get {
+                        UserDefaults.standard.object(forKey: "launchesCount") as? Int
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -85,15 +85,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int?
             """,
             expandedSource: """
-            var launchesCount: Int? {
-                get {
-                    UserDefaults.standard.object(forKey: "launchesCount") as? Int ?? 42
+                var launchesCount: Int? {
+                    get {
+                        UserDefaults.standard.object(forKey: "launchesCount") as? Int ?? 42
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -105,15 +105,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: "key")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: "key")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "key")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "key")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -125,15 +125,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: key)
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: key)
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: key)
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: key)
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -145,15 +145,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: Self.key)
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: Self.key)
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: Self.key)
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: Self.key)
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -165,15 +165,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.integer(forKey: SomeClass.key)
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.integer(forKey: SomeClass.key)
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: SomeClass.key)
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: SomeClass.key)
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -185,16 +185,16 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.register(defaults: ["launchesCount": 42])
-                    return UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.register(defaults: ["launchesCount": 42])
+                        return UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -206,16 +206,16 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.register(defaults: ["launchesCount": value])
-                    return UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.register(defaults: ["launchesCount": value])
+                        return UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -227,16 +227,16 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.register(defaults: ["launchesCount": Self.value])
-                    return UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.register(defaults: ["launchesCount": Self.value])
+                        return UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -248,16 +248,16 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """,
             expandedSource: """
-            var launchesCount: Int {
-                get {
-                    UserDefaults.standard.register(defaults: ["launchesCount": SomeAwesomeClass.value])
-                    return UserDefaults.standard.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.standard.register(defaults: ["launchesCount": SomeAwesomeClass.value])
+                        return UserDefaults.standard.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -269,15 +269,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """#,
             expandedSource: #"""
-            var launchesCount: Int {
-                get {
-                    testDefaults.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        testDefaults.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        testDefaults.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    testDefaults.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -289,15 +289,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """#,
             expandedSource: #"""
-            var launchesCount: Int {
-                get {
-                    UserDefaults.testDefaults.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.testDefaults.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -309,15 +309,15 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """#,
             expandedSource: #"""
-            var launchesCount: Int {
-                get {
-                    UserDefaults.testDefaults.integer(forKey: "launchesCount")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.testDefaults.integer(forKey: "launchesCount")
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "launchesCount")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "launchesCount")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -329,15 +329,15 @@ final class VADefaultsTests: XCTestCase {
             var value: NSNumber
             """#,
             expandedSource: #"""
-            var value: NSNumber {
-                get {
-                    UserDefaults.testDefaults.object(forKey: "value") as? NSNumber ?? 3.14
+                var value: NSNumber {
+                    get {
+                        UserDefaults.testDefaults.object(forKey: "value") as? NSNumber ?? 3.14
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -349,15 +349,15 @@ final class VADefaultsTests: XCTestCase {
             var value: NSString?
             """#,
             expandedSource: #"""
-            var value: NSString? {
-                get {
-                    UserDefaults.testDefaults.object(forKey: "value") as? NSString ?? "A"
+                var value: NSString? {
+                    get {
+                        UserDefaults.testDefaults.object(forKey: "value") as? NSString ?? "A"
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -369,15 +369,15 @@ final class VADefaultsTests: XCTestCase {
             var value: Double?
             """#,
             expandedSource: #"""
-            var value: Double? {
-                get {
-                    UserDefaults.testDefaults.object(forKey: "value") as? Double ?? 3.14
+                var value: Double? {
+                    get {
+                        UserDefaults.testDefaults.object(forKey: "value") as? Double ?? 3.14
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -389,16 +389,16 @@ final class VADefaultsTests: XCTestCase {
             var value: Float
             """#,
             expandedSource: #"""
-            var value: Float {
-                get {
-                    UserDefaults.testDefaults.register(defaults: ["value": 3.14])
-                    return UserDefaults.testDefaults.float(forKey: "value")
+                var value: Float {
+                    get {
+                        UserDefaults.testDefaults.register(defaults: ["value": 3.14])
+                        return UserDefaults.testDefaults.float(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "value")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -410,8 +410,8 @@ final class VADefaultsTests: XCTestCase {
             var value: Int
             """#,
             expandedSource: #"""
-            var value: Int
-            """#,
+                var value: Int
+                """#,
             diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -424,16 +424,16 @@ final class VADefaultsTests: XCTestCase {
             var launchesCount: Int
             """#,
             expandedSource: #"""
-            var launchesCount: Int {
-                get {
-                    UserDefaults.testDefaults.register(defaults: ["customKey": 3])
-                    return UserDefaults.testDefaults.integer(forKey: "customKey")
+                var launchesCount: Int {
+                    get {
+                        UserDefaults.testDefaults.register(defaults: ["customKey": 3])
+                        return UserDefaults.testDefaults.integer(forKey: "customKey")
+                    }
+                    set {
+                        UserDefaults.testDefaults.setValue(newValue, forKey: "customKey")
+                    }
                 }
-                set {
-                    UserDefaults.testDefaults.setValue(newValue, forKey: "customKey")
-                }
-            }
-            """#,
+                """#,
             macros: testMacros
         )
     }
@@ -445,8 +445,8 @@ final class VADefaultsTests: XCTestCase {
             var (a, b): Int
             """,
             expandedSource: """
-            var (a, b): Int
-            """,
+                var (a, b): Int
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.notVariable.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -459,8 +459,8 @@ final class VADefaultsTests: XCTestCase {
             var value: String
             """,
             expandedSource: """
-            var value: String
-            """,
+                var value: String
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )

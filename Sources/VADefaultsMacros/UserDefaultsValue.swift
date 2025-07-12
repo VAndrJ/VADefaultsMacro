@@ -33,11 +33,12 @@ public struct UserDefaultsValue: AccessorMacro {
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
         guard let variableDeclSyntax = declaration.as(VariableDeclSyntax.self),
-              variableDeclSyntax.isVar,
-              variableDeclSyntax.bindings.count == 1,
-              let firstBinding = variableDeclSyntax.bindings.first,
-              let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
-              let typeAnnotation = firstBinding.typeAnnotation else {
+            variableDeclSyntax.isVar,
+            variableDeclSyntax.bindings.count == 1,
+            let firstBinding = variableDeclSyntax.bindings.first,
+            let identifierPatternSyntax = firstBinding.pattern.as(IdentifierPatternSyntax.self),
+            let typeAnnotation = firstBinding.typeAnnotation
+        else {
             throw UserDefaultsValueError.notVariable
         }
         if !(variableDeclSyntax.isStandaloneMacro || variableDeclSyntax.isInstance) {
@@ -48,8 +49,9 @@ public struct UserDefaultsValue: AccessorMacro {
         let labeledExprListSyntax = node.arguments?.as(LabeledExprListSyntax.self)
         let defaultValueExpr = labeledExprListSyntax?.defaultValueExpr
         if let defaultValueExpr,
-           let literalType = LiteralExprType(expression: defaultValueExpr.expression),
-           literalType.checkTypeMathing(variableType: variableType) == .doesNotMatch {
+            let literalType = LiteralExprType(expression: defaultValueExpr.expression),
+            literalType.checkTypeMathing(variableType: variableType) == .doesNotMatch
+        {
             throw UserDefaultsValueError.typesMismatch
         }
 

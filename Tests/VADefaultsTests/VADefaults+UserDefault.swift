@@ -1,6 +1,6 @@
 //
 //  VADefaults+UserDefault.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 05.04.2024.
 //
@@ -22,15 +22,15 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            open class Defaults {
+                open class Defaults {
 
-                private let userDefaults: UserDefaults
+                    private let userDefaults: UserDefaults
 
-                public init(userDefaults: UserDefaults = UserDefaults.test) {
-                    self.userDefaults = userDefaults
+                    public init(userDefaults: UserDefaults = UserDefaults.test) {
+                        self.userDefaults = userDefaults
+                    }
                 }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -43,15 +43,15 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            public struct Defaults {
+                public struct Defaults {
 
-                private let userDefaults: UserDefaults
+                    private let userDefaults: UserDefaults
 
-                public init(userDefaults: UserDefaults = UserDefaults.standard) {
-                    self.userDefaults = userDefaults
+                    public init(userDefaults: UserDefaults = UserDefaults.standard) {
+                        self.userDefaults = userDefaults
+                    }
                 }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -64,9 +64,9 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            public enum Defaults {
-            }
-            """,
+                public enum Defaults {
+                }
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.classOrStructNeeded.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -82,24 +82,24 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            internal class Defaults {
-                var someVariable: Int {
-                    get {
-                        userDefaults.integer(forKey: "someVariable")
+                internal class Defaults {
+                    var someVariable: Int {
+                        get {
+                            userDefaults.integer(forKey: "someVariable")
+                        }
+                        set {
+                            userDefaults.setValue(newValue, forKey: "someVariable")
+                        }
                     }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "someVariable")
+                    let someConstant = true
+
+                    private let userDefaults: UserDefaults
+
+                    internal init(userDefaults: UserDefaults = UserDefaults.test) {
+                        self.userDefaults = userDefaults
                     }
                 }
-                let someConstant = true
-
-                private let userDefaults: UserDefaults
-
-                internal init(userDefaults: UserDefaults = UserDefaults.test) {
-                    self.userDefaults = userDefaults
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -121,30 +121,30 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            fileprivate class Defaults {
-                var someVariable: Int {
-                    get {
-                        userDefaults.integer(forKey: "customKey")
+                fileprivate class Defaults {
+                    var someVariable: Int {
+                        get {
+                            userDefaults.integer(forKey: "customKey")
+                        }
+                        set {
+                            userDefaults.setValue(newValue, forKey: "customKey")
+                        }
                     }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "customKey")
+                    let someConstant = true
+                    var someStandardVariable = true
+                    var computedVariable: Bool { true }
+                    var computedVariable1: Bool { 
+                        get { true }
+                        set { _ = newValue }
+                    }
+
+                    private let userDefaults: UserDefaults
+
+                    fileprivate init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
+                        self.userDefaults = userDefaults
                     }
                 }
-                let someConstant = true
-                var someStandardVariable = true
-                var computedVariable: Bool { true }
-                var computedVariable1: Bool { 
-                    get { true }
-                    set { _ = newValue }
-                }
-
-                private let userDefaults: UserDefaults
-
-                fileprivate init(userDefaults: UserDefaults = SomeClass.staticDefaults) {
-                    self.userDefaults = userDefaults
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -161,33 +161,33 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            private class Defaults {
-                var rawRepresentableValue: MyRepresentableType? {
-                    get {
-                        (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
-                    }
-                    set {
-                        userDefaults.setValue(newValue?.rawValue, forKey: "rawRepresentableValue")
-                    }
-                }
-                var codableValue: MyCodableType? {
-                    get {
-                        userDefaults.data(forKey: "customKey").flatMap {
-                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                private class Defaults {
+                    var rawRepresentableValue: MyRepresentableType? {
+                        get {
+                            (userDefaults.object(forKey: "rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                        }
+                        set {
+                            userDefaults.setValue(newValue?.rawValue, forKey: "rawRepresentableValue")
                         }
                     }
-                    set {
-                        userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
+                    var codableValue: MyCodableType? {
+                        get {
+                            userDefaults.data(forKey: "customKey").flatMap {
+                                try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                            }
+                        }
+                        set {
+                            userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "customKey")
+                        }
+                    }
+
+                    private let userDefaults: UserDefaults
+
+                    init(userDefaults: UserDefaults = UserDefaults.test) {
+                        self.userDefaults = userDefaults
                     }
                 }
-
-                private let userDefaults: UserDefaults
-
-                init(userDefaults: UserDefaults = UserDefaults.test) {
-                    self.userDefaults = userDefaults
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -202,24 +202,24 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            final class Defaults {
-                @Observable
-                var someVariable: Int {
-                    get {
-                        userDefaults.integer(forKey: "someVariable")
+                final class Defaults {
+                    @Observable
+                    var someVariable: Int {
+                        get {
+                            userDefaults.integer(forKey: "someVariable")
+                        }
+                        set {
+                            userDefaults.setValue(newValue, forKey: "someVariable")
+                        }
                     }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "someVariable")
+
+                    private let userDefaults: UserDefaults
+
+                    init(userDefaults: UserDefaults = UserDefaults.test) {
+                        self.userDefaults = userDefaults
                     }
                 }
-
-                private let userDefaults: UserDefaults
-
-                init(userDefaults: UserDefaults = UserDefaults.test) {
-                    self.userDefaults = userDefaults
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -244,21 +244,21 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            class Defaults {
-                static var someVariable: Int
-                static var someCodableVariable: SomeCodable
-                static var someRawVariable: SomeRaw
-                class var someClassVariable: Int
-                class var someClassCodableVariable: SomeCodable
-                class var someClassRawVariable: SomeRaw
+                class Defaults {
+                    static var someVariable: Int
+                    static var someCodableVariable: SomeCodable
+                    static var someRawVariable: SomeRaw
+                    class var someClassVariable: Int
+                    class var someClassCodableVariable: SomeCodable
+                    class var someClassRawVariable: SomeRaw
 
-                private let userDefaults: UserDefaults
+                    private let userDefaults: UserDefaults
 
-                init(userDefaults: UserDefaults = UserDefaults.standard) {
-                    self.userDefaults = userDefaults
+                    init(userDefaults: UserDefaults = UserDefaults.standard) {
+                        self.userDefaults = userDefaults
+                    }
                 }
-            }
-            """,
+                """,
             diagnostics: [
                 .init(message: UserDefaultsValueError.staticVariable.description, line: 3, column: 5),
                 .init(message: UserDefaultsValueError.staticVariable.description, line: 5, column: 5),
@@ -293,75 +293,75 @@ extension VADefaultsTests {
             }
             """,
             expandedSource: """
-            internal class Defaults {
-                var codableValue: MyCodableType? {
-                    get {
-                        userDefaults.data(forKey: "codableCustomKey").flatMap {
-                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                internal class Defaults {
+                    var codableValue: MyCodableType? {
+                        get {
+                            userDefaults.data(forKey: "codableCustomKey").flatMap {
+                                try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                            }
+                        }
+                        set {
+                            userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "codableCustomKey")
                         }
                     }
-                    set {
-                        userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "codableCustomKey")
-                    }
-                }
-                var codableValue1: MyCodableType? {
-                    get {
-                        userDefaults.data(forKey: "com.vandrj.codableValue1").flatMap {
-                            try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                    var codableValue1: MyCodableType? {
+                        get {
+                            userDefaults.data(forKey: "com.vandrj.codableValue1").flatMap {
+                                try? JSONDecoder().decode(MyCodableType.self, from: $0)
+                            }
+                        }
+                        set {
+                            userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "com.vandrj.codableValue1")
                         }
                     }
-                    set {
-                        userDefaults.set(try? JSONEncoder().encode(newValue), forKey: "com.vandrj.codableValue1")
+                    var rawRepresentableValue: MyRepresentableType? {
+                        get {
+                            (userDefaults.object(forKey: "com.vandrj.rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                        }
+                        set {
+                            userDefaults.setValue(newValue?.rawValue, forKey: "com.vandrj.rawRepresentableValue")
+                        }
                     }
-                }
-                var rawRepresentableValue: MyRepresentableType? {
-                    get {
-                        (userDefaults.object(forKey: "com.vandrj.rawRepresentableValue") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                    var rawRepresentableValue1: MyRepresentableType? {
+                        get {
+                            (userDefaults.object(forKey: "rawCustomKey") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                        }
+                        set {
+                            userDefaults.setValue(newValue?.rawValue, forKey: "rawCustomKey")
+                        }
                     }
-                    set {
-                        userDefaults.setValue(newValue?.rawValue, forKey: "com.vandrj.rawRepresentableValue")
+                    var someVariable: Int {
+                        get {
+                            userDefaults.integer(forKey: "com.vandrj.someVariable")
+                        }
+                        set {
+                            userDefaults.setValue(newValue, forKey: "com.vandrj.someVariable")
+                        }
                     }
-                }
-                var rawRepresentableValue1: MyRepresentableType? {
-                    get {
-                        (userDefaults.object(forKey: "rawCustomKey") as? Int).flatMap(MyRepresentableType.init(rawValue:))
+                    var someVariable1: Int {
+                        get {
+                            UserDefaults.standard.integer(forKey: "someVariable1")
+                        }
+                        set {
+                            UserDefaults.standard.setValue(newValue, forKey: "someVariable1")
+                        }
                     }
-                    set {
-                        userDefaults.setValue(newValue?.rawValue, forKey: "rawCustomKey")
+                    var someVariable2: Int {
+                        get {
+                            userDefaults.integer(forKey: "customKey")
+                        }
+                        set {
+                            userDefaults.setValue(newValue, forKey: "customKey")
+                        }
                     }
-                }
-                var someVariable: Int {
-                    get {
-                        userDefaults.integer(forKey: "com.vandrj.someVariable")
-                    }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "com.vandrj.someVariable")
-                    }
-                }
-                var someVariable1: Int {
-                    get {
-                        UserDefaults.standard.integer(forKey: "someVariable1")
-                    }
-                    set {
-                        UserDefaults.standard.setValue(newValue, forKey: "someVariable1")
-                    }
-                }
-                var someVariable2: Int {
-                    get {
-                        userDefaults.integer(forKey: "customKey")
-                    }
-                    set {
-                        userDefaults.setValue(newValue, forKey: "customKey")
-                    }
-                }
 
-                private let userDefaults: UserDefaults
+                    private let userDefaults: UserDefaults
 
-                internal init(userDefaults: UserDefaults = UserDefaults.test) {
-                    self.userDefaults = userDefaults
+                    internal init(userDefaults: UserDefaults = UserDefaults.test) {
+                        self.userDefaults = userDefaults
+                    }
                 }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }

@@ -1,6 +1,6 @@
 //
 //  VADefaultsTests+TypesMatch.swift
-//  
+//
 //
 //  Created by Volodymyr Andriienko on 22.03.2024.
 //
@@ -21,16 +21,16 @@ extension VADefaultsTests {
             var value: Bool
             """,
             expandedSource: """
-            var value: Bool {
-                get {
-                    UserDefaults.standard.register(defaults: ["value": true])
-                    return UserDefaults.standard.bool(forKey: "value")
+                var value: Bool {
+                    get {
+                        UserDefaults.standard.register(defaults: ["value": true])
+                        return UserDefaults.standard.bool(forKey: "value")
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -42,15 +42,15 @@ extension VADefaultsTests {
             var value: Bool?
             """,
             expandedSource: """
-            var value: Bool? {
-                get {
-                    UserDefaults.standard.object(forKey: "value") as? Bool ?? true
+                var value: Bool? {
+                    get {
+                        UserDefaults.standard.object(forKey: "value") as? Bool ?? true
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -62,8 +62,8 @@ extension VADefaultsTests {
             var value: String
             """,
             expandedSource: """
-            var value: String
-            """,
+                var value: String
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )
@@ -77,15 +77,15 @@ extension VADefaultsTests {
             var value: String
             """,
             expandedSource: """
-            var value: String {
-                get {
-                    UserDefaults.standard.string(forKey: "value") ?? "A"
+                var value: String {
+                    get {
+                        UserDefaults.standard.string(forKey: "value") ?? "A"
+                    }
+                    set {
+                        UserDefaults.standard.setValue(newValue, forKey: "value")
+                    }
                 }
-                set {
-                    UserDefaults.standard.setValue(newValue, forKey: "value")
-                }
-            }
-            """,
+                """,
             macros: testMacros
         )
     }
@@ -98,8 +98,8 @@ extension VADefaultsTests {
             var value: Int
             """,
             expandedSource: """
-            var value: Int
-            """,
+                var value: Int
+                """,
             diagnostics: [.init(message: UserDefaultsValueError.typesMismatch.description, line: 1, column: 1)],
             macros: testMacros
         )

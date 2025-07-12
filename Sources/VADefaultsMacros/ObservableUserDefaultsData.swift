@@ -81,11 +81,17 @@ extension ObservableUserDefaultsData: MemberMacro {
             """
         ]
         declaration.addIfNeeded(
-            ObservableUserDefaultsData.registrarVariable(observableType), to: &declarations)
+            ObservableUserDefaultsData.registrarVariable(observableType),
+            to: &declarations
+        )
         declaration.addIfNeeded(
-            ObservableUserDefaultsData.accessFunction(observableType), to: &declarations)
+            ObservableUserDefaultsData.accessFunction(observableType),
+            to: &declarations
+        )
         declaration.addIfNeeded(
-            ObservableUserDefaultsData.withMutationFunction(observableType), to: &declarations)
+            ObservableUserDefaultsData.withMutationFunction(observableType),
+            to: &declarations
+        )
 
         return declarations
     }
@@ -103,15 +109,16 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
         providingAttributesFor member: MemberDeclaration,
         in context: Context
     ) throws -> [AttributeSyntax] {
-        guard let variableDeclSyntax = member.as(VariableDeclSyntax.self),         variableDeclSyntax.isValidForObservation,
-              variableDeclSyntax.identifier != nil
+        guard let variableDeclSyntax = member.as(VariableDeclSyntax.self), variableDeclSyntax.isValidForObservation,
+            variableDeclSyntax.identifier != nil
         else {
             return []
         }
 
         // dont apply to ignored properties or properties that are already flagged as tracked
-        if variableDeclSyntax.hasMacroApplication(ObservableUserDefaultsData.ignoredMacroName) ||
-            variableDeclSyntax.hasMacroApplication(ObservableUserDefaultsData.trackedMacroName) {
+        if variableDeclSyntax.hasMacroApplication(ObservableUserDefaultsData.ignoredMacroName)
+            || variableDeclSyntax.hasMacroApplication(ObservableUserDefaultsData.trackedMacroName)
+        {
             return []
         }
         guard !variableDeclSyntax.attributes.isDefaultsValueMacro else {
@@ -125,9 +132,7 @@ extension ObservableUserDefaultsData: MemberAttributeMacro {
             return [AttributeSyntax(attributeName: IdentifierTypeSyntax(name: .identifier(ObservableUserDefaultsData.trackedMacroName)))]
         }
 
-        return [
-            "@\(raw: String(describing: DefaultsValue.self))",
-        ]
+        return ["@\(raw: String(describing: DefaultsValue.self))"]
     }
 }
 
